@@ -13,6 +13,7 @@
 
 import os
 import html
+import shutil
 from email.utils import format_datetime
 from datetime import datetime, timezone
 
@@ -24,15 +25,26 @@ def _paragraphs_html(body: str) -> str:
     return "".join(f"<p>{html.escape(p)}</p>" for p in parts)
 
 
+def _links_html(links: dict) -> str:
+    if not links:
+        return ""
+    out = []
+    if links.get("wb"):
+        out.append(f'<a href="{html.escape(links["wb"])}">Wildberries</a>')
+    if links.get("ozon"):
+        out.append(f'<a href="{html.escape(links["ozon"])}">Ozon</a>')
+    return f'<p>Где купить: {" · ".join(out)}</p>' if out else ""
+
+
 def _post_url(post: dict) -> str:
     return f"{config.SITE_BASE_URL.rstrip('/')}/posts/{post['id']}.html"
 
 
 def _render_article_page(post: dict) -> str:
     img = ""
-    if post.get("image_url"):
+    if post.get("_image_url"):
         img = (
-            f'<figure><img src="{html.escape(post["image_url"])}" '
+            f'<figure><img src="{html.escape(post["_image_url"])}" '
             f'alt="{html.escape(post["title"])}" width="700"></figure>'
         )
     return f"""<!DOCTYPE html>
@@ -48,6 +60,7 @@ def _render_article_page(post: dict) -> str:
 <h1>{html.escape(post['title'])}</h1>
 {img}
 {_paragraphs_html(post.get('body_long',''))}
+{_links_html(post.get('links'))}
 </article>
 </body>
 </html>"""
@@ -72,11 +85,12 @@ def _render_feed(posts: list) -> str:
     for p in posts:
         url = _post_url(p)
         content_html = _paragraphs_html(p.get("body_long", ""))
-        if p.get("image_url"):
+        if p.get("_image_url"):
             content_html = (
-                f'<figure><img src="{html.escape(p["image_url"])}" width="700"></figure>'
+                f'<figure><img src="{html.escape(p["_image_url"])}" width="700"></figure>'
                 + content_html
             )
+        content_html += _links_html(p.get("links"))
         items_xml.append(f"""    <item>
       <title>{html.escape(p['title'])}</title>
       <link>{html.escape(url)}</link>
@@ -102,7 +116,20 @@ def build_site(posts: list, docs_dir: str = None) -> dict:
     """Перестраивает статический сайт и RSS-фид. Возвращает пути и счётчики."""
     docs_dir = docs_dir or config.DOCS_DIR
     posts_dir = os.path.join(docs_dir, "posts")
+    images_dir = os.path.join(docs_dir, "images")
     os.makedirs(posts_dir, exist_ok=True)
+    os.makedirs(images_dir, exist_ok=True)
+    repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+    # Копируем картинки постов на сайт и проставляем публичный URL.
+    for p in posts:
+        img = p.get("image")
+        if img:
+            src = img if os.path.isabs(img) else os.path.join(repo_root, img)
+            if os.path.exists(src):
+                name = os.path.basename(src)
+                shutil.copyfile(src, os.path.join(images_dir, name))
+                p["_image_url"] = f"{config.SITE_BASE_URL.rstrip('/')}/images/{name}"
 
     for p in posts:
         with open(os.path.join(posts_dir, f"{p['id']}.html"), "w", encoding="utf-8") as f:

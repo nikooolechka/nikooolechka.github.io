@@ -13,9 +13,19 @@
 канал пропускается, пока не выдержан интервал, даже если workflow запустился раньше.
 """
 
+import os
 import sys
 import argparse
 from datetime import datetime, timezone, timedelta
+
+REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def _abs_image(rel):
+    if not rel:
+        return None
+    p = rel if os.path.isabs(rel) else os.path.join(REPO_ROOT, rel)
+    return p if os.path.exists(p) else None
 
 from . import queue as q
 from . import validator
@@ -129,7 +139,11 @@ def do_channel_post(posts, channel, ClientCls, body_field, force=False):
         return False
 
     try:
-        out = ClientCls().publish(post["title"], body)
+        out = ClientCls().publish(
+            post["title"], body,
+            image_path=_abs_image(post.get("image")),
+            links=post.get("links"),
+        )
     except Exception as e:
         print(f"{channel}: ошибка публикации «{post['id']}»: {e}")
         return False

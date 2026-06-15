@@ -31,8 +31,20 @@ class VCClient:
         r.raise_for_status()
         return r.json()
 
-    def publish(self, title: str, text: str) -> dict:
+    @staticmethod
+    def _with_links(text: str, links: dict) -> str:
+        if not links:
+            return text
+        tail = []
+        if links.get("wb"):
+            tail.append(f"Wildberries: {links['wb']}")
+        if links.get("ozon"):
+            tail.append(f"Ozon: {links['ozon']}")
+        return text + ("\n\n" + "\n".join(tail) if tail else "")
+
+    def publish(self, title: str, text: str, image_path: str = None, links: dict = None) -> dict:
         self._check_creds()
+        text = self._with_links(text, links)  # image_path в VC пока не используем
         r = requests.post(
             f"{self.base}/entry/create",
             headers=self.headers,

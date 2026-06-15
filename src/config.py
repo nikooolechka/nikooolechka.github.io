@@ -21,7 +21,7 @@ VK_API_VERSION = os.environ.get("VK_API_VERSION", "5.199")
 # --- Дзен (через RSS-импорт) ---
 # Дзен не имеет API публикации: мы генерим статические страницы + RSS-фид,
 # хостим на GitHub Pages, а в Дзен Студио добавляем URL фида.
-SITE_BASE_URL = os.environ.get("SITE_BASE_URL", "https://example.github.io/vc-asfarm-poster")
+SITE_BASE_URL = os.environ.get("SITE_BASE_URL", "https://nikooolechka.github.io/asfarm-poster")
 SITE_TITLE = "АС Фарм — уход за полостью рта"
 SITE_DESCRIPTION = "Полезные материалы об уходе за зубами, дёснами и гигиене полости рта."
 DOCS_DIR = os.environ.get(
