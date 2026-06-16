@@ -21,8 +21,16 @@ from .. import config
 
 
 def _paragraphs_html(body: str) -> str:
-    parts = [p.strip() for p in body.split("\n\n") if p.strip()]
-    return "".join(f"<p>{html.escape(p)}</p>" for p in parts)
+    out = []
+    for p in body.split("\n\n"):
+        p = p.strip()
+        if not p:
+            continue
+        if p.startswith("## "):
+            out.append(f"<h2>{html.escape(p[3:].strip())}</h2>")
+        else:
+            out.append(f"<p>{html.escape(p)}</p>")
+    return "".join(out)
 
 
 def _links_html(links: dict) -> str:
@@ -54,6 +62,16 @@ def _render_article_page(post: dict) -> str:
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(post['title'])}</title>
 <meta name="description" content="{html.escape(post.get('body_long','')[:160])}">
+<style>
+  body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;background:#fff;color:#1a1a1a;line-height:1.65;}}
+  article{{max-width:720px;margin:0 auto;padding:24px 20px 64px;font-size:18px;}}
+  h1{{font-size:30px;line-height:1.25;margin:8px 0 20px;}}
+  h2{{font-size:22px;margin:32px 0 10px;}}
+  figure{{margin:0 0 24px;}}
+  figure img{{width:100%;border-radius:14px;display:block;}}
+  p{{margin:0 0 16px;}}
+  a{{color:#2a5885;}}
+</style>
 </head>
 <body>
 <article>
@@ -67,15 +85,37 @@ def _render_article_page(post: dict) -> str:
 
 
 def _render_index(posts: list) -> str:
-    items = "".join(
-        f'<li><a href="posts/{p["id"]}.html">{html.escape(p["title"])}</a></li>'
-        for p in posts
-    )
+    cards = []
+    for p in posts:
+        img = p.get("_image_url", "")
+        thumb = f'<img src="{html.escape(img)}" alt="">' if img else ""
+        cards.append(
+            f'<a class="card" href="posts/{p["id"]}.html">{thumb}'
+            f'<div class="t">{html.escape(p["title"])}</div></a>'
+        )
     return f"""<!DOCTYPE html>
 <html lang="ru">
-<head><meta charset="utf-8"><title>{html.escape(config.SITE_TITLE)}</title>
-<meta name="description" content="{html.escape(config.SITE_DESCRIPTION)}"></head>
-<body><h1>{html.escape(config.SITE_TITLE)}</h1><ul>{items}</ul></body>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{html.escape(config.SITE_TITLE)}</title>
+<meta name="description" content="{html.escape(config.SITE_DESCRIPTION)}">
+<style>
+  body{{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin:0;background:#fafafa;color:#1a1a1a;}}
+  header{{padding:32px 20px;text-align:center;}}
+  header h1{{margin:0 0 6px;font-size:24px;}}
+  header p{{margin:0;color:#666;}}
+  .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;max-width:1100px;margin:0 auto;padding:0 20px 48px;}}
+  .card{{display:block;background:#fff;border-radius:14px;overflow:hidden;text-decoration:none;color:inherit;box-shadow:0 2px 10px rgba(0,0,0,.06);transition:transform .15s;}}
+  .card:hover{{transform:translateY(-3px);}}
+  .card img{{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;}}
+  .card .t{{padding:12px 14px;font-size:15px;font-weight:600;line-height:1.35;}}
+</style>
+</head>
+<body>
+  <header><h1>{html.escape(config.SITE_TITLE)}</h1><p>{html.escape(config.SITE_DESCRIPTION)}</p></header>
+  <div class="grid">{"".join(cards)}</div>
+</body>
 </html>"""
 
 

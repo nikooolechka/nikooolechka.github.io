@@ -44,6 +44,7 @@ class VCClient:
 
     def publish(self, title: str, text: str, image_path: str = None, links: dict = None) -> dict:
         self._check_creds()
+        text = text.replace("## ", "")  # убираем markdown-подзаголовки (в VC текст плоский)
         text = self._with_links(text, links)  # image_path в VC пока не используем
         r = requests.post(
             f"{self.base}/entry/create",
