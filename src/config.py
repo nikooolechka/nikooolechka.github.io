@@ -6,10 +6,10 @@ import os
 # --- VC / Osnova API ---
 # Токен берётся в настройках аккаунта VC -> «Инструменты для разработчика».
 # В GitHub Actions кладётся в Secrets, локально — в .env (не коммитить!).
-VC_TOKEN = os.environ.get("VC_TOKEN", "")
-VC_SUBSITE_ID = os.environ.get("VC_SUBSITE_ID", "")  # ID блога/аккаунта, куда постим
-VC_PLATFORM = os.environ.get("VC_PLATFORM", "vc")     # vc | dtf | tjournal
-VC_API_VERSION = os.environ.get("VC_API_VERSION", "1.9")  # entry/create живёт в 1.9
+VC_SUBSITE_ID = os.environ.get("VC_SUBSITE_ID", "6010646")
+# Durable refresh-токен VC. НЕ хранить в публичном репо — только env или локальный файл.
+VC_REFRESH_TOKEN = os.environ.get("VC_REFRESH_TOKEN", "")
+VC_CREDS_PATH = os.environ.get("VC_CREDS_PATH", "/Users/nikol/Desktop/files/vc_creds.txt")
 USER_AGENT = "asfarm-poster/1.0"
 
 # --- ВКонтакте API ---
