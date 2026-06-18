@@ -22,7 +22,7 @@
         "released_at": "2026-06-15T19:28:04.500733+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/asfarm-poster/images/zdorovaya-ulybka.jpg"
+    "_image_url": "/images/zdorovaya-ulybka.jpg"
   },
   {
     "id": "bez-slez",
@@ -46,7 +46,8 @@
       "dzen": {
         "released_at": "2026-06-15T19:28:04.500862+00:00"
       }
-    }
+    },
+    "_image_url": "/images/leto_cvety_rebenok.jpg"
   },
   {
     "id": "kalendar-zubki",
@@ -64,14 +65,14 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-06-18T12:28:20.733318+00:00",
+        "url": "https://vk.com/wall-239602265_4"
       },
       "dzen": {
         "released_at": "2026-06-15T19:28:04.500865+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/asfarm-poster/images/kalendar-zubki.jpg"
+    "_image_url": "/images/kalendar-zubki.jpg"
   },
   {
     "id": "detskaya-pasta",
@@ -96,7 +97,7 @@
         "released_at": "2026-06-15T19:28:04.500866+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/asfarm-poster/images/detskaya-pasta.jpg"
+    "_image_url": "/images/detskaya-pasta.jpg"
   },
   {
     "id": "vkusy-vybor",
@@ -120,7 +121,8 @@
       "dzen": {
         "released_at": "2026-06-15T19:28:04.500867+00:00"
       }
-    }
+    },
+    "_image_url": "/images/leto_morozhenoe.jpg"
   },
   {
     "id": "vzroslye-doroga",
@@ -145,7 +147,7 @@
         "released_at": "2026-06-15T19:28:04.500869+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/asfarm-poster/images/vzroslye-doroga.jpg"
+    "_image_url": "/images/vzroslye-doroga.jpg"
   },
   {
     "id": "lezhachie-zabota",
@@ -170,7 +172,7 @@
         "released_at": "2026-06-15T19:28:04.500870+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/asfarm-poster/images/lezhachie-zabota.jpg"
+    "_image_url": "/images/lezhachie-zabota.jpg"
   },
   {
     "id": "irrigator-zhidkost",
@@ -195,7 +197,7 @@
         "released_at": "2026-06-15T19:28:04.500872+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/asfarm-poster/images/irrigator.jpg"
+    "_image_url": "/images/irrigator.jpg"
   },
   {
     "id": "svezhest-dyhaniya",
@@ -219,7 +221,8 @@
       "dzen": {
         "released_at": "2026-06-15T19:28:04.500873+00:00"
       }
-    }
+    },
+    "_image_url": "/images/leto_more_zhenshchina.jpg"
   },
   {
     "id": "privychka-s-detstva",
@@ -243,6 +246,7 @@
       "dzen": {
         "released_at": "2026-06-15T19:28:04.500874+00:00"
       }
-    }
+    },
+    "_image_url": "/images/leto_mama_park.jpg"
   }
 ]
