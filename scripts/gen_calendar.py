@@ -318,7 +318,6 @@ HTML = """<!DOCTYPE html>
 </head>
 <body>
 <div class="wrap">
-  <div class="brand"><img src="images/asfarm_logo.png" alt="АС Фарм"><span class="wm">ас-фарм</span></div>
   <div class="kicker"><span class="live"></span>АС&nbsp;Фарм · контент-план</div>
   <h1>Календарь публикаций</h1>
   <div class="sub">Живой график на текущий и следующий месяц. Обновлено <b>__GEN__</b></div>
