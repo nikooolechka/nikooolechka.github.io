@@ -7,8 +7,20 @@
 import sys, os, json, base64, ssl, urllib.request
 
 FILES = "/Users/nikol/Desktop/files"
-TOKEN = open(f"{FILES}/cloudflare_token.txt").read().strip()
-ACCOUNT = open(f"{FILES}/cloudflare_account.txt").read().strip()
+
+
+def _cred(envname, fname):
+    v = os.environ.get(envname)
+    if v:
+        return v.strip()
+    try:
+        return open(f"{FILES}/{fname}").read().strip()
+    except FileNotFoundError:
+        return ""
+
+
+TOKEN = _cred("CF_TOKEN", "cloudflare_token.txt")
+ACCOUNT = _cred("CF_ACCOUNT", "cloudflare_account.txt")
 DEFAULT_MODEL = "@cf/black-forest-labs/flux-1-schnell"
 _SSL = ssl._create_unverified_context()
 

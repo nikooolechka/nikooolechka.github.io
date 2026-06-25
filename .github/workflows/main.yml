@@ -6,6 +6,9 @@ on:
       channel:
         description: "Канал: all | vc | vk | dzen"
         default: "all"
+      force_fill:
+        description: "Сколько постов сгенерить принудительно (тест автодолива; 0 = обычная логика)"
+        default: "0"
   schedule:
     - cron: "0 9 * * *"
 
@@ -24,6 +27,14 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      - name: Auto-fill content (держит план до конца следующего месяца)
+        env:
+          GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
+          CF_TOKEN: ${{ secrets.CF_TOKEN }}
+          CF_ACCOUNT: ${{ secrets.CF_ACCOUNT }}
+          GEN_FORCE: ${{ github.event.inputs.force_fill || '0' }}
+        run: python scripts/gen_month.py || echo "автодолив пропущен (не критично)"
+
       - name: Validate (pytest)
         run: python -m pytest -q
 
@@ -40,6 +51,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add content/queue.json docs/ || true
-          git commit -m "chore: update queue and dzen feed [skip ci]" || echo "nothing to commit"
+          git add -A || true
+          git commit -m "chore: update queue, covers and dzen feed [skip ci]" || echo "nothing to commit"
           git push || echo "nothing to push"
