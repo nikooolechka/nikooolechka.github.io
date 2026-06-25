@@ -41,10 +41,14 @@ def _now_iso():
 
 
 def _cadence_ok(last_dt, channel, force=False):
-    """True, если интервал между постами в канал выдержан."""
+    """True, если интервал между постами выдержан.
+
+    Запас 6ч компенсирует плавающее время запуска GitHub Actions: иначе при
+    интервале ровно N*24ч запуск, случившийся чуть раньше, пропускал день.
+    """
     if force or last_dt is None:
         return True
-    interval = timedelta(days=config.CADENCE_DAYS.get(channel, 1))
+    interval = timedelta(days=config.CADENCE_DAYS.get(channel, 1)) - timedelta(hours=6)
     return _now() - last_dt >= interval
 
 
