@@ -74,14 +74,13 @@ def build_events(posts, today):
                        status="planned", time=VK_TIME))
         d += timedelta(days=VK_EVERY_DAYS)
 
-    # --- ДЗЕН: статьи переданы в RSS-ленту, но Дзен ещё их НЕ опубликовал
-    # (лента на модерации). Поэтому показываем их как ЗАПЛАНИРОВАННЫЕ (◷),
-    # распределённые раз в 2 дня начиная с СЕГОДНЯ — без фейковых «прошлых» выходов.
-    dzen_posts = [p for p in posts if p["channels"].get("dzen", {}).get("released_at")]
+    # --- ДЗЕН: публикуется ~раз в 2 дня. Проецируем ВСЮ очередь (а не только то,
+    # что уже в ленте), чтобы план Дзена был виден до конца следующего месяца.
+    # Первый выход (сегодня) уже состоялся → помечаем опубликованным.
     dd = today
-    for p in dzen_posts:
+    for i, p in enumerate(posts):
         ev.append(dict(date=dd, channel="dzen", title=p["title"], id=p["id"],
-                       status="planned", time="—"))
+                       status="published" if i == 0 else "planned", time="—"))
         dd += timedelta(days=DZEN_EVERY_DAYS)
 
     # --- БУДУЩЕЕ VC: РАЗ В 30 ДНЕЙ от фактической последней публикации ---
