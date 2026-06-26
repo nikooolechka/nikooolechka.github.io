@@ -48,6 +48,13 @@ def _cadence_ok(last_dt, channel, force=False):
     """
     if force or last_dt is None:
         return True
+    # Ежедневные каналы (vk, dzen): «один пост на КАЛЕНДАРНЫЙ день по МСК».
+    # Так точный будильник 9:00 всегда постит, если сегодня ещё не было, а лишние
+    # срабатывания (бэкап-кроны) сами пропускаются — без задвоений и без edge-кейса
+    # «вчера вышло поздно → сегодня заблокировано».
+    if config.CADENCE_DAYS.get(channel, 1) <= 1:
+        msk = timezone(timedelta(hours=3))
+        return last_dt.astimezone(msk).date() < _now().astimezone(msk).date()
     interval = timedelta(days=config.CADENCE_DAYS.get(channel, 1)) - timedelta(hours=6)
     return _now() - last_dt >= interval
 
