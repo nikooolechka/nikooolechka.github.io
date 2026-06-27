@@ -22,7 +22,7 @@
         "released_at": "2026-06-15T19:28:04.500733+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/images/zdorovaya-ulybka.jpg"
+    "_image_url": "/images/zdorovaya-ulybka.jpg"
   },
   {
     "id": "bez-slez",
@@ -47,7 +47,7 @@
         "released_at": "2026-06-15T19:28:04.500862+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/images/leto_cvety_rebenok.jpg"
+    "_image_url": "/images/leto_cvety_rebenok.jpg"
   },
   {
     "id": "kalendar-zubki",
@@ -72,7 +72,7 @@
         "released_at": "2026-06-15T19:28:04.500865+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/images/kalendar-zubki.jpg"
+    "_image_url": "/images/kalendar-zubki.jpg"
   },
   {
     "id": "detskaya-pasta",
@@ -97,7 +97,7 @@
         "released_at": "2026-06-15T19:28:04.500866+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/images/detskaya-pasta.jpg"
+    "_image_url": "/images/detskaya-pasta.jpg"
   },
   {
     "id": "vkusy-vybor",
@@ -122,7 +122,7 @@
         "released_at": "2026-06-15T19:28:04.500867+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/images/leto_morozhenoe.jpg"
+    "_image_url": "/images/leto_morozhenoe.jpg"
   },
   {
     "id": "vzroslye-doroga",
@@ -147,7 +147,7 @@
         "released_at": "2026-06-15T19:28:04.500869+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/images/vzroslye-doroga.jpg"
+    "_image_url": "/images/vzroslye-doroga.jpg"
   },
   {
     "id": "lezhachie-zabota",
@@ -172,7 +172,7 @@
         "released_at": "2026-06-15T19:28:04.500870+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/images/lezhachie-zabota.jpg"
+    "_image_url": "/images/lezhachie-zabota.jpg"
   },
   {
     "id": "irrigator-zhidkost",
@@ -197,7 +197,7 @@
         "released_at": "2026-06-15T19:28:04.500872+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/images/irrigator.jpg"
+    "_image_url": "/images/irrigator.jpg"
   },
   {
     "id": "svezhest-dyhaniya",
@@ -222,7 +222,7 @@
         "released_at": "2026-06-15T19:28:04.500873+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/images/leto_more_zhenshchina.jpg"
+    "_image_url": "/images/leto_more_zhenshchina.jpg"
   },
   {
     "id": "privychka-s-detstva",
@@ -240,14 +240,14 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-06-27T06:00:25.731474+00:00",
+        "url": "https://vk.com/wall-239602265_11"
       },
       "dzen": {
         "released_at": "2026-06-15T19:28:04.500874+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/images/leto_mama_park.jpg"
+    "_image_url": "/images/leto_mama_park.jpg"
   },
   {
     "id": "pervyy-stomatolog",
@@ -272,7 +272,7 @@
         "released_at": "2026-06-25T11:06:26.424540+00:00"
       }
     },
-    "_image_url": "https://nikooolechka.github.io/images/pervyy-stomatolog.jpg"
+    "_image_url": "/images/pervyy-stomatolog.jpg"
   },
   {
     "id": "desny-grudnichka",
@@ -294,9 +294,10 @@
         "url": null
       },
       "dzen": {
-        "released_at": null
+        "released_at": "2026-06-27T06:00:14.219243+00:00"
       }
-    }
+    },
+    "_image_url": "/images/desny-grudnichka.jpg"
   },
   {
     "id": "sladkoe-i-zuby",
