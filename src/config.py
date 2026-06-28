@@ -18,6 +18,13 @@ VK_TOKEN = os.environ.get("VK_TOKEN", "")
 VK_OWNER_ID = os.environ.get("VK_OWNER_ID", "")   # напр. -123456789 (минус = группа)
 VK_API_VERSION = os.environ.get("VK_API_VERSION", "5.199")
 
+# --- Одноклассники (OK API) ---
+# Группа бренда: https://ok.ru/group/70000052376502
+OK_ACCESS_TOKEN = os.environ.get("OK_ACCESS_TOKEN", "")
+OK_APP_KEY = os.environ.get("OK_APP_KEY", "")          # публичный Application key
+OK_APP_SECRET = os.environ.get("OK_APP_SECRET", "")    # секретный Application secret key
+OK_GROUP_ID = os.environ.get("OK_GROUP_ID", "70000052376502")
+
 # --- Дзен (через RSS-импорт) ---
 # Дзен не имеет API публикации: мы генерим статические страницы + RSS-фид,
 # хостим на GitHub Pages, а в Дзен Студио добавляем URL фида.
