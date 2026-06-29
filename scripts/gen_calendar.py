@@ -30,9 +30,11 @@ OUT = os.path.join(REPO_ROOT, "docs", "calendar.html")
 # реальные параметры расписания
 VK_TIME = "12:00"     # МСК, плановое (фактическое берём из posted_at)
 VC_TIME = "10:00"     # МСК, плановое
+OK_TIME = "10:00"     # МСК, плановое (ручная выкладка владельцем)
 VK_EVERY_DAYS = 1
 DZEN_EVERY_DAYS = 2
 VC_EVERY_DAYS = 30
+OK_EVERY_DAYS = 1     # подготовленные посты OK — по одному в день
 MSK = timezone(timedelta(hours=3))
 
 
@@ -105,6 +107,24 @@ def build_events(posts, today):
                        status="planned", time=VC_TIME))
         vc_date += timedelta(days=VC_EVERY_DAYS)
 
+    # --- ОДНОКЛАССНИКИ: постинг РУЧНОЙ (готовим пакет, выкладывает владелец —
+    # авто-API у OK закрыт). В трекинге показываем ТОЛЬКО реальные посты, помеченные
+    # в очереди channels.ok. Опубликованные — по факту channels.ok.published_at (без
+    # выдумок, как у Дзена); подготовленные (channels.ok.planned) — план по одному в
+    # день от сегодня. Когда выложишь — проставим published_at, и встанет ✓.
+    ok_pub = [p for p in posts if p["channels"].get("ok", {}).get("published_at")]
+    for p in ok_pub:
+        ev.append(dict(date=_d(p["channels"]["ok"]["published_at"]), channel="ok",
+                       title=p["title"], id=p["id"], status="published", time=OK_TIME))
+    ok_plan = [p for p in posts
+               if p["channels"].get("ok", {}).get("planned")
+               and not p["channels"].get("ok", {}).get("published_at")]
+    od = today
+    for p in ok_plan:
+        ev.append(dict(date=od, channel="ok", title=p["title"], id=p["id"],
+                       status="planned", time=OK_TIME))
+        od += timedelta(days=OK_EVERY_DAYS)
+
     return ev
 
 
@@ -126,9 +146,10 @@ def _fmt(n):
 def _networks_html(stats):
     """Карточки соцсетей с живыми счётчиками и кликабельным названием-ссылкой."""
     meta = [
-        ("vk",   "ВКонтакте", "g-vk"),
-        ("dzen", "Дзен",      "g-dz"),
-        ("vc",   "VC.ru",     "g-vc"),
+        ("vk",   "ВКонтакте",     "g-vk"),
+        ("dzen", "Дзен",          "g-dz"),
+        ("vc",   "VC.ru",         "g-vc"),
+        ("ok",   "Одноклассники", "g-ok"),
     ]
     cards = []
     for key, name, dotcls in meta:
@@ -161,6 +182,7 @@ def render(posts, today=None):
     # статистика для верхних плашек
     vk_left = len([e for e in events if e["channel"] == "vk" and e["status"] == "planned"])
     dzen_left = len([e for e in events if e["channel"] == "dzen" and e["status"] == "planned"])
+    ok_left = len([e for e in events if e["channel"] == "ok" and e["status"] == "planned"])
     pub_total = len([e for e in events if e["status"] == "published"])
     vc_planned = sorted([e for e in events if e["channel"] == "vc" and e["status"] == "planned"],
                         key=lambda e: e["date"])
@@ -174,19 +196,22 @@ def render(posts, today=None):
     vk_url = (stats.get("vk") or {}).get("url", "https://vk.com/asfarm_ru")
     dz_url = (stats.get("dzen") or {}).get("url", "https://dzen.ru/asfarm_ru")
     vc_url = (stats.get("vc") or {}).get("url", "https://vc.ru/id6010646")
+    ok_url = (stats.get("ok") or {}).get("url", "https://ok.ru/group/70000052376502")
 
     return (HTML
             .replace("__DATA__", payload)
             .replace("__GEN__", gen_at)
             .replace("__VKLEFT__", str(vk_left))
             .replace("__DZENLEFT__", str(dzen_left))
+            .replace("__OKLEFT__", str(ok_left))
             .replace("__PUBTOTAL__", str(pub_total))
             .replace("__NEXTVC__", next_vc)
             .replace("__NEXTVCTITLE__", html.escape(next_vc_title))
             .replace("__NETWORKS__", _networks_html(stats))
             .replace("__VKURL__", vk_url)
             .replace("__DZURL__", dz_url)
-            .replace("__VCURL__", vc_url))
+            .replace("__VCURL__", vc_url)
+            .replace("__OKURL__", ok_url))
 
 
 HTML = """<!DOCTYPE html>
@@ -203,6 +228,7 @@ HTML = """<!DOCTYPE html>
     --bg:#070b16; --ink:#eaf0fb; --muted:#9aa6c2; --faint:#6b779a;
     --glass:rgba(255,255,255,.045); --glass2:rgba(255,255,255,.07); --line:rgba(255,255,255,.09);
     --vk1:#3b82f6; --vk2:#1d4ed8; --dz1:#fb923c; --dz2:#ea580c; --vc1:#a855f7; --vc2:#6d28d9;
+    --ok1:#fbbf24; --ok2:#d97706;
     --acc1:#38bdf8; --acc2:#22d3ee;
   }
   *{ box-sizing:border-box; }
@@ -236,7 +262,7 @@ HTML = """<!DOCTYPE html>
   .sub{ color:var(--muted); font-size:14.5px; margin-bottom:26px; }
   .sub b{ color:var(--ink); font-weight:600; }
 
-  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:26px; }
+  .stats{ display:grid; grid-template-columns:repeat(5,1fr); gap:14px; margin-bottom:26px; }
   @media (max-width:820px){ .stats{ grid-template-columns:repeat(2,1fr); } }
   .stat{ position:relative; overflow:hidden; padding:18px 18px 16px; border-radius:18px;
     background:var(--glass); border:1px solid var(--line); backdrop-filter:blur(14px);
@@ -250,10 +276,12 @@ HTML = """<!DOCTYPE html>
   .stat.vk::after{ background:linear-gradient(90deg,var(--vk1),var(--vk2)); }
   .stat.dz::after{ background:linear-gradient(90deg,var(--dz1),var(--dz2)); }
   .stat.vc::after{ background:linear-gradient(90deg,var(--vc1),var(--vc2)); }
+  .stat.ok::after{ background:linear-gradient(90deg,var(--ok1),var(--ok2)); }
 
   /* карточки соцсетей со счётчиками */
-  .nets{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:26px; }
-  @media (max-width:820px){ .nets{ grid-template-columns:1fr; } }
+  .nets{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:26px; }
+  @media (max-width:980px){ .nets{ grid-template-columns:repeat(2,1fr); } }
+  @media (max-width:560px){ .nets{ grid-template-columns:1fr; } }
   .net{ display:block; text-decoration:none; color:inherit; padding:16px 18px; border-radius:18px;
     background:var(--glass); border:1px solid var(--line); backdrop-filter:blur(14px);
     box-shadow:0 10px 30px rgba(0,0,0,.25); transition:transform .15s, border-color .15s, box-shadow .15s; }
@@ -278,6 +306,7 @@ HTML = """<!DOCTYPE html>
   .g-vk{ background:linear-gradient(135deg,var(--vk1),var(--vk2)); }
   .g-dz{ background:linear-gradient(135deg,var(--dz1),var(--dz2)); }
   .g-vc{ background:linear-gradient(135deg,var(--vc1),var(--vc2)); }
+  .g-ok{ background:linear-gradient(135deg,var(--ok1),var(--ok2)); }
 
   .months{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
   @media (max-width:880px){ .months{ grid-template-columns:1fr; } }
@@ -313,6 +342,7 @@ HTML = """<!DOCTYPE html>
   .ev.vk{ background:linear-gradient(135deg,var(--vk1),var(--vk2)); }
   .ev.dzen{ background:linear-gradient(135deg,var(--dz1),var(--dz2)); }
   .ev.vc{ background:linear-gradient(135deg,var(--vc1),var(--vc2)); }
+  .ev.ok{ background:linear-gradient(135deg,var(--ok1),var(--ok2)); }
   .ev.planned{ opacity:.94; }
   .ev .top{ display:flex; align-items:center; gap:5px; font-size:10px; font-weight:800;
     letter-spacing:.02em; opacity:.96; }
@@ -338,6 +368,7 @@ HTML = """<!DOCTYPE html>
     <div class="stat vk"><div class="n">__VKLEFT__</div><div class="l">ВКонтакте в очереди</div><div class="sm">по одному посту в день</div></div>
     <div class="stat dz"><div class="n">__DZENLEFT__</div><div class="l">Дзен в очереди</div><div class="sm">по статье раз в 2 дня</div></div>
     <div class="stat vc"><div class="n">__NEXTVC__</div><div class="l">Следующий VC-лонгрид</div><div class="sm">__NEXTVCTITLE__</div></div>
+    <div class="stat ok"><div class="n">__OKLEFT__</div><div class="l">Одноклассники готовы</div><div class="sm">пакет постов к выкладке</div></div>
   </div>
 
   <div class="nets">__NETWORKS__</div>
@@ -346,6 +377,7 @@ HTML = """<!DOCTYPE html>
     <span class="chip"><span class="gdot g-vk"></span><a href="__VKURL__" target="_blank" rel="noopener">ВКонтакте</a>&nbsp;· каждый день, 12:00</span>
     <span class="chip"><span class="gdot g-dz"></span><a href="__DZURL__" target="_blank" rel="noopener">Дзен</a>&nbsp;· раз в 2 дня</span>
     <span class="chip"><span class="gdot g-vc"></span><a href="__VCURL__" target="_blank" rel="noopener">VC.ru</a>&nbsp;· раз в 30 дней, 10:00</span>
+    <span class="chip"><span class="gdot g-ok"></span><a href="__OKURL__" target="_blank" rel="noopener">Одноклассники</a>&nbsp;· ручная выкладка</span>
     <span class="chip">✓ опубликовано&nbsp;&nbsp;·&nbsp;&nbsp;◷ запланировано</span>
   </div>
 
@@ -358,6 +390,8 @@ HTML = """<!DOCTYPE html>
     Дзен — 10 статей переданы в RSS-ленту и ждут модерации Дзена (опубликовано пока 0);
     в календаре они стоят как план — по статье раз в 2 дня. VC.ru — один лонгрид раз в 30 дней;
     интервал считается от даты последней публикации, поэтому не «съезжает» из-за разной длины месяцев.
+    <b>Одноклассники</b> — авто-API у OK закрыт, поэтому посты готовятся пакетом и выкладываются вручную;
+    в трекинге показаны только реально подготовленные посты (◷), а по факту выкладки ставится ✓.
   </div>
   <div class="foot">обновляется автоматически · АС Фарм</div>
 </div>
@@ -365,7 +399,7 @@ HTML = """<!DOCTYPE html>
 const EVENTS = __DATA__;
 const MONTHS_RU = ["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"];
 const DOW = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
-const CH = { vk:"ВК", vc:"VC.RU", dzen:"ДЗЕН" };
+const CH = { vk:"ВК", vc:"VC.RU", dzen:"ДЗЕН", ok:"ОК" };
 
 function pad(n){ return String(n).padStart(2,"0"); }
 function iso(y,m,d){ return `${y}-${pad(m+1)}-${pad(d)}`; }

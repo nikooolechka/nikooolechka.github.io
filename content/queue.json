@@ -120,6 +120,9 @@
       },
       "dzen": {
         "released_at": "2026-06-14T12:00:00+03:00"
+      },
+      "ok": {
+        "planned": true
       }
     },
     "_image_url": "/images/leto_morozhenoe.jpg"
@@ -271,6 +274,9 @@
       "dzen": {
         "released_at": "2026-06-26T12:00:00+03:00",
         "published_at": "2026-06-25T12:00:00+03:00"
+      },
+      "ok": {
+        "planned": true
       }
     },
     "_image_url": "/images/pervyy-stomatolog.jpg"
@@ -633,6 +639,9 @@
       },
       "dzen": {
         "released_at": null
+      },
+      "ok": {
+        "planned": true
       }
     }
   },
@@ -745,7 +754,10 @@
     "channels": {
       "vc": {},
       "vk": {},
-      "dzen": {}
+      "dzen": {},
+      "ok": {
+        "planned": true
+      }
     }
   },
   {
@@ -889,7 +901,10 @@
     "channels": {
       "vc": {},
       "vk": {},
-      "dzen": {}
+      "dzen": {},
+      "ok": {
+        "planned": true
+      }
     }
   },
   {
