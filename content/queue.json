@@ -322,13 +322,14 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-06-30T06:00:22.313872+00:00",
+        "url": "https://vk.com/wall-239602265_14"
       },
       "dzen": {
-        "released_at": null
+        "released_at": "2026-06-30T06:00:16.430616+00:00"
       }
-    }
+    },
+    "_image_url": "/images/sladkoe-i-zuby.jpg"
   },
   {
     "id": "vybor-shchetki",
