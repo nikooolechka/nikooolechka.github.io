@@ -25,6 +25,12 @@ OK_APP_KEY = os.environ.get("OK_APP_KEY", "")          # публичный Appl
 OK_APP_SECRET = os.environ.get("OK_APP_SECRET", "")    # секретный Application secret key
 OK_GROUP_ID = os.environ.get("OK_GROUP_ID", "70000052376502")
 
+# --- Telegram (Bot API) ---
+# Токен бота от @BotFather. Канал: @username или числовой chat_id (-100...).
+# Бот должен быть АДМИНОМ канала с правом публикации.
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_CHANNEL = os.environ.get("TELEGRAM_CHANNEL", "")
+
 # --- Дзен (через RSS-импорт) ---
 # Дзен не имеет API публикации: мы генерим статические страницы + RSS-фид,
 # хостим на GitHub Pages, а в Дзен Студио добавляем URL фида.
@@ -51,6 +57,7 @@ CADENCE_DAYS = {
     "vk": 1,     # ВК: безопасно 1/день (жёсткий лимит ~50/день)
     "dzen": 2,   # Дзен: ~1 раз в 2 дня = 3–4/нед
     "vc": 30,    # VC: ~1/мес на free-аккаунте
+    "tg": 1,     # Telegram: 1/день (Bot API, без жёстких лимитов для канала)
 }
 
 # --- Файл очереди постов ---

@@ -170,7 +170,7 @@ def do_channel_post(posts, channel, ClientCls, body_field, force=False):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="АС Фарм мульти-канальный постер")
-    parser.add_argument("--channel", default="all", choices=["all", "vc", "vk", "dzen"])
+    parser.add_argument("--channel", default="all", choices=["all", "vc", "vk", "dzen", "tg"])
     parser.add_argument("--dry-run", action="store_true", help="только валидация")
     parser.add_argument("--force", action="store_true", help="игнорировать интервалы частоты")
     args = parser.parse_args(argv)
@@ -195,6 +195,13 @@ def main(argv=None):
     if args.channel in ("all", "vc"):
         from .channels.vc import VCClient
         changed |= do_channel_post(posts, "vc", VCClient, "body_long", args.force)
+    if args.channel in ("all", "tg"):
+        # Telegram постим только если заданы токен и канал (иначе тихо пропускаем).
+        if config.TELEGRAM_BOT_TOKEN and config.TELEGRAM_CHANNEL:
+            from .channels.telegram import TelegramClient
+            changed |= do_channel_post(posts, "tg", TelegramClient, "body_vk", args.force)
+        else:
+            print("tg: TELEGRAM_BOT_TOKEN/TELEGRAM_CHANNEL не заданы — пропуск.")
 
     # Живые счётчики соцсетей (раз в сутки) + календарь — обновляем при каждом запуске.
     try:
