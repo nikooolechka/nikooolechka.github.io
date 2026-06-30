@@ -227,7 +227,8 @@
         "url": "https://vk.com/wall-239602265_10"
       },
       "dzen": {
-        "released_at": "2026-06-22T12:00:00+03:00"
+        "released_at": "2026-06-22T12:00:00+03:00",
+        "published_at": "2026-06-30T12:00:00+03:00"
       }
     },
     "_image_url": "/images/leto_more_zhenshchina.jpg"
@@ -252,7 +253,8 @@
         "url": "https://vk.com/wall-239602265_11"
       },
       "dzen": {
-        "released_at": "2026-06-24T12:00:00+03:00"
+        "released_at": "2026-06-24T12:00:00+03:00",
+        "published_at": "2026-06-30T12:00:00+03:00"
       }
     },
     "_image_url": "/images/leto_mama_park.jpg"
@@ -306,7 +308,8 @@
         "url": "https://vk.com/wall-239602265_13"
       },
       "dzen": {
-        "released_at": "2026-06-28T12:00:00+03:00"
+        "released_at": "2026-06-28T12:00:00+03:00",
+        "published_at": "2026-06-30T12:00:00+03:00"
       }
     },
     "_image_url": "/images/desny-grudnichka.jpg"
