@@ -21,7 +21,10 @@
       "dzen": {
         "released_at": "2026-06-06T12:00:00+03:00"
       },
-      "tg": {},
+      "tg": {
+        "posted_at": "2026-07-01T06:37:30.162024+00:00",
+        "url": "https://t.me/asfarm_ru/5"
+      },
       "ok": {}
     },
     "_image_url": "/images/zdorovaya-ulybka.jpg"
@@ -391,8 +394,8 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-01T06:37:29.081869+00:00",
+        "url": "https://vk.com/wall-239602265_15"
       },
       "dzen": {
         "released_at": null
