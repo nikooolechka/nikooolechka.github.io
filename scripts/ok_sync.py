@@ -19,8 +19,19 @@ import requests
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 QUEUE = os.path.join(REPO_ROOT, "content", "queue.json")
+STATE = os.path.join(REPO_ROOT, "data", "ok_watch.json")
 GROUP_URL = "https://ok.ru/group/70000052376502"
 MSK = timezone(timedelta(hours=3))
+THROTTLE_H = 72  # OK ручной и редкий — скрейпить дорогим Scrapfly не чаще раза в ~3 сут
+
+
+def _hours_since_last_check() -> float:
+    try:
+        st = json.load(open(STATE, encoding="utf-8"))
+        prev = datetime.fromisoformat(st["checked_at"])
+        return (datetime.now(MSK) - prev).total_seconds() / 3600
+    except Exception:
+        return 1e9
 
 
 def fetch_html(key: str) -> str:
@@ -37,6 +48,13 @@ def main():
     if not key:
         print("ok_sync: SCRAPFLY_KEY не задан — пропуск.")
         return 0
+
+    # Троттл: не чаще раза в THROTTLE_H (экономим кредиты Scrapfly).
+    hrs = _hours_since_last_check()
+    if hrs < THROTTLE_H:
+        print(f"ok_sync: последняя сверка {hrs:.0f} ч назад (< {THROTTLE_H} ч) — пропуск.")
+        return 0
+
     try:
         html = fetch_html(key)
     except Exception as e:
@@ -70,6 +88,10 @@ def main():
     else:
         print("ok_sync: новых публикаций OK нет.")
     print(f"ok_sync: всего опубликовано в OK по факту — {total}.")
+
+    os.makedirs(os.path.dirname(STATE), exist_ok=True)
+    json.dump({"checked_at": now, "ok_published_count": total},
+              open(STATE, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     return 0
 
 

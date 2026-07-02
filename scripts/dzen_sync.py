@@ -33,11 +33,39 @@ def fetch_channel_html(key: str) -> str:
     return ((r.json().get("result") or {}).get("content") or "")
 
 
+THROTTLE_H = 72  # не дёргать Scrapfly (дорогой render_js) чаще раза в ~3 сут
+
+
+def _hours_since_last_check() -> float:
+    try:
+        st = json.load(open(STATE, encoding="utf-8"))
+        prev = datetime.fromisoformat(st["checked_at"])
+        return (datetime.now(MSK) - prev).total_seconds() / 3600
+    except Exception:
+        return 1e9
+
+
 def main():
     key = os.environ.get("SCRAPFLY_KEY", "").strip()
     if not key:
         print("dzen_sync: SCRAPFLY_KEY не задан — пропуск.")
         return 0
+
+    # Гейт 1: скрейпить только если есть что подтверждать (released, но не published).
+    posts_pre = json.load(open(QUEUE, encoding="utf-8"))
+    pending = [p for p in posts_pre
+               if p.get("channels", {}).get("dzen", {}).get("released_at")
+               and not p.get("channels", {}).get("dzen", {}).get("published_at")]
+    if not pending:
+        print("dzen_sync: неподтверждённых публикаций нет — скрейп не нужен, пропуск.")
+        return 0
+
+    # Гейт 2: не чаще раза в THROTTLE_H (экономим кредиты Scrapfly).
+    hrs = _hours_since_last_check()
+    if hrs < THROTTLE_H:
+        print(f"dzen_sync: последняя сверка {hrs:.0f} ч назад (< {THROTTLE_H} ч) — пропуск.")
+        return 0
+
     try:
         html = fetch_channel_html(key)
     except Exception as e:
