@@ -81,7 +81,11 @@
       "dzen": {
         "released_at": "2026-06-10T12:00:00+03:00"
       },
-      "ok": {}
+      "ok": {},
+      "tg": {
+        "posted_at": "2026-07-02T06:36:50.018186+00:00",
+        "url": "https://t.me/asfarm_ru/6"
+      }
     },
     "_image_url": "/images/kalendar-zubki.jpg"
   },
@@ -369,14 +373,15 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-02T06:36:48.891910+00:00",
+        "url": "https://vk.com/wall-239602265_16"
       },
       "dzen": {
-        "released_at": null
+        "released_at": "2026-07-02T06:36:43.698178+00:00"
       },
       "ok": {}
-    }
+    },
+    "_image_url": "/images/vybor-shchetki.jpg"
   },
   {
     "id": "opolaskivatel-kak",
