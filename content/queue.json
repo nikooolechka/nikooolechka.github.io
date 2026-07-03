@@ -111,7 +111,11 @@
       "dzen": {
         "released_at": "2026-06-12T12:00:00+03:00"
       },
-      "ok": {}
+      "ok": {},
+      "tg": {
+        "posted_at": "2026-07-03T06:36:11.083237+00:00",
+        "url": "https://t.me/asfarm_ru/7"
+      }
     },
     "_image_url": "/images/detskaya-pasta.jpg"
   },
@@ -424,8 +428,8 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-03T06:36:10.105079+00:00",
+        "url": "https://vk.com/wall-239602265_17"
       },
       "dzen": {
         "released_at": null
