@@ -143,6 +143,10 @@
       },
       "ok": {
         "published_at": "2026-06-30T13:55:18+03:00"
+      },
+      "tg": {
+        "posted_at": "2026-07-04T06:36:12.379555+00:00",
+        "url": "https://t.me/asfarm_ru/8"
       }
     },
     "_image_url": "/images/leto_morozhenoe.jpg"
@@ -407,10 +411,11 @@
         "url": "https://vk.com/wall-239602265_15"
       },
       "dzen": {
-        "released_at": null
+        "released_at": "2026-07-04T06:36:05.951515+00:00"
       },
       "ok": {}
-    }
+    },
+    "_image_url": "/images/opolaskivatel-kak.jpg"
   },
   {
     "id": "krovotochivost-desen",
@@ -453,8 +458,8 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-04T06:36:11.382279+00:00",
+        "url": "https://vk.com/wall-239602265_18"
       },
       "dzen": {
         "released_at": null
