@@ -203,7 +203,11 @@
       "dzen": {
         "released_at": "2026-06-18T12:00:00+03:00"
       },
-      "ok": {}
+      "ok": {},
+      "tg": {
+        "posted_at": "2026-07-06T06:36:12.699833+00:00",
+        "url": "https://t.me/asfarm_ru/10"
+      }
     },
     "_image_url": "/images/lezhachie-zabota.jpg"
   },
@@ -441,10 +445,11 @@
         "url": "https://vk.com/wall-239602265_17"
       },
       "dzen": {
-        "released_at": null
+        "released_at": "2026-07-06T06:36:05.825224+00:00"
       },
       "ok": {}
-    }
+    },
+    "_image_url": "/images/krovotochivost-desen.jpg"
   },
   {
     "id": "uhod-za-ochkami",
@@ -512,8 +517,8 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-06T06:36:11.570054+00:00",
+        "url": "https://vk.com/wall-239602265_20"
       },
       "dzen": {
         "released_at": null
