@@ -9,6 +9,7 @@
     --nav1:#051929; --nav2:#1B6CA8; --ink:#0f2233; --muted:#6b7f90;
     --line:#e3ebf1; --bg:#f4f8fb; --card:#ffffff;
     --flight:#1B6CA8; --flight-soft:#e6f0f7; --today:#ff7a45;
+    --train:#1e9e6a; --train-soft:#e3f5ec;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -60,6 +61,9 @@
   .cell.flight{background:var(--flight);color:#fff;font-weight:700;cursor:pointer}
   .cell.flight::after{content:"✈";position:absolute;top:1px;right:3px;font-size:8px;opacity:.9}
   .cell.flight:hover{filter:brightness(1.08)}
+  .cell.train{background:var(--train);color:#fff;font-weight:700;cursor:pointer}
+  .cell.train::after{content:"🚆";position:absolute;top:0;right:2px;font-size:8px;opacity:.95}
+  .cell.train:hover{filter:brightness(1.08)}
 
   .list{margin-top:34px}
   .list h3{font-size:18px;font-weight:800;margin:0 4px 14px}
@@ -87,6 +91,7 @@
     </div>
     <div class="stats">
       <div class="stat"><b id="stTotal">0</b><span>перелётов</span></div>
+      <div class="stat"><b id="stTrains">0</b><span>поездов</span></div>
       <div class="stat"><b id="stMonths">0</b><span>месяцев в пути</span></div>
     </div>
   </div>
@@ -94,9 +99,10 @@
 
 <main>
   <div class="legend">
-    <span><span class="dot" style="background:var(--flight)"></span>день перелёта</span>
+    <span><span class="dot" style="background:var(--flight)"></span>✈ перелёт</span>
+    <span><span class="dot" style="background:var(--train)"></span>🚆 поезд</span>
     <span><span class="dot" style="background:var(--today);"></span>сегодня</span>
-    <span>наведи на дату — увидишь рейс</span>
+    <span>наведи на дату — увидишь маршрут</span>
   </div>
 
   <div class="year" id="year"></div>
@@ -121,6 +127,9 @@ const FLIGHTS = [
   { date:"2026-01-07", from:"Шарм-эль-Шейх", to:"Москва", time:"", flight:"", airline:"", note:"возвращение домой" },
   { date:"2026-01-15", from:"Москва", to:"Сочи", time:"", flight:"", airline:"", note:"из дома" },
   { date:"2026-04-11", from:"Москва", to:"Гуанчжоу", time:"", flight:"", airline:"", note:"" },
+  { date:"2026-04-18", from:"Гуанчжоу", to:"Гонконг", time:"", flight:"", airline:"", note:"наземный переезд", type:"train" },
+  { date:"2026-04-20", from:"Гонконг", to:"Гуанчжоу", time:"", flight:"", airline:"", note:"наземный переезд", type:"train" },
+  { date:"2026-04-23", from:"Гуанчжоу", to:"Шанхай", time:"", flight:"", airline:"", note:"" },
 ];
 
 const MONTHS = ["Январь","Февраль","Март","Апрель","Май","Июнь",
@@ -154,10 +163,12 @@ for(let m=0;m<12;m++){
     if(dow>=5) cls.push("we");
     let title="";
     if(byDate[iso]){
-      cls.push("flight");
-      cntThis+=byDate[iso].length;
+      const hasFlight = byDate[iso].some(t=>t.type!=="train");
+      cls.push(hasFlight ? "flight" : "train");
+      if(hasFlight){ cntThis+=byDate[iso].filter(t=>t.type!=="train").length; }
       monthsWithFlights.add(m);
-      title = byDate[iso].map(f=>`${f.from} → ${f.to}${f.time?" · "+f.time:""}${f.flight?" · "+f.flight:""}`).join(" | ");
+      const ic = t=> t.type==="train" ? "🚆" : "✈";
+      title = byDate[iso].map(t=>`${ic(t)} ${t.from} → ${t.to}${t.time?" · "+t.time:""}${t.flight?" · "+t.flight:""}`).join(" | ");
     }
     let style="";
     if(iso===TODAY) style=`style="box-shadow:0 0 0 2px var(--today) inset"`;
@@ -174,19 +185,25 @@ for(let m=0;m<12;m++){
 }
 
 // статистика
-document.getElementById("stTotal").textContent = FLIGHTS.length;
+const flightCount = FLIGHTS.filter(t=>t.type!=="train").length;
+const trainCount  = FLIGHTS.filter(t=>t.type==="train").length;
+document.getElementById("stTotal").textContent = flightCount;
+document.getElementById("stTrains").textContent = trainCount;
 document.getElementById("stMonths").textContent = monthsWithFlights.size;
 
 // таблица
 const tw=document.getElementById("tableWrap");
 if(FLIGHTS.length){
-  const rows=[...FLIGHTS].sort((a,b)=>a.date.localeCompare(b.date)).map((f,i)=>{
+  let n=0;
+  const rows=[...FLIGHTS].sort((a,b)=>a.date.localeCompare(b.date)).map((f)=>{
     const dt=new Date(f.date);
     const ds=`${pad(dt.getDate())}.${pad(dt.getMonth()+1)}`;
+    const isTrain=f.type==="train";
+    const num = isTrain ? "🚆" : (++n);
     return `<tr>
-      <td>${i+1}</td>
-      <td class="date">${ds}</td>
-      <td class="route">${f.from} → ${f.to}</td>
+      <td>${num}</td>
+      <td class="date"${isTrain?' style="color:var(--train)"':''}>${ds}</td>
+      <td class="route">${isTrain?"🚆":"✈"} ${f.from} → ${f.to}</td>
       <td>${f.time||"—"}</td>
       <td>${f.flight?`<span class="badge">${f.flight}</span>`:"—"}</td>
       <td>${f.airline||"—"}</td>
