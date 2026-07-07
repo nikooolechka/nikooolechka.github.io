@@ -176,7 +176,8 @@
   .month:hover .legmk{transform:scale(1.08)}
   /* будущая поездка — пунктир */
   .cell.soon.tstart,.cell.soon.tend{outline:1px dashed rgba(255,255,255,.4)}
-  .cell .evbadge{position:absolute;bottom:1px;left:1px;width:15px;height:15px;
+  .cell .evbadges{position:absolute;bottom:1px;left:1px;display:flex;gap:2px;z-index:4}
+  .cell .evbadge{width:15px;height:15px;
     background:#fdfaf3;border-radius:5px;display:flex;align-items:center;justify-content:center;
     box-shadow:0 0 0 1px rgba(0,0,0,.25),0 2px 6px rgba(0,0,0,.4)}
   .cell .evbadge svg{display:block}
@@ -210,16 +211,20 @@
   /* всплывающая картинка букета */
   .pop{position:fixed;z-index:200;pointer-events:none;opacity:0;transform:translateY(6px) scale(.96);
     transition:opacity .16s var(--ease),transform .16s var(--ease);
-    width:200px;padding:9px;border-radius:18px;
+    padding:9px;border-radius:18px;max-width:340px;
     background:linear-gradient(180deg,rgba(22,28,40,.97),rgba(12,16,24,.98));
     border:1px solid var(--border-str);box-shadow:0 26px 56px -18px rgba(0,0,0,.92);backdrop-filter:blur(14px)}
   .pop.show{opacity:1;transform:translateY(0) scale(1)}
-  .pop .ph{width:100%;height:160px;border-radius:12px;overflow:hidden;background:#0c1119;
+  .pop .ph{display:flex;gap:6px}
+  .pop .pcell{width:152px;height:170px;border-radius:12px;overflow:hidden;background:#0c1119;
     display:flex;align-items:center;justify-content:center;position:relative}
-  .pop .ph img{width:100%;height:100%;object-fit:cover;display:block}
-  .pop .ph .none{font-size:11px;color:var(--muted);text-align:center;padding:0 10px;line-height:1.4}
-  .pop .cap{font-size:12.5px;color:var(--text-2);font-weight:600;padding:9px 4px 3px;text-align:center}
-  .pop .cap b{color:#fff;display:block;font-size:13px;margin-bottom:2px}
+  .pop .pcell img{width:100%;height:100%;object-fit:cover;display:block}
+  .pop .pcell .none{font-size:11px;color:var(--muted);text-align:center;padding:0 10px;line-height:1.4;display:none}
+  .pop .pcell.miss img{display:none}
+  .pop .pcell.miss .none{display:block}
+  .pop .cap{font-size:12.5px;color:var(--text-2);font-weight:600;padding:9px 4px 2px;text-align:center}
+  .pop .cap b{color:#fff;display:block;font-size:13px}
+  .pop .cap .row+.row{margin-top:5px;padding-top:5px;border-top:1px solid var(--border)}
   footer{text-align:center;color:var(--muted);font-size:12px;padding:34px 0 46px;position:relative;z-index:1}
 
   @media (prefers-reduced-motion: reduce){
@@ -276,10 +281,7 @@
   <div id="tripList"></div>
 
 </div>
-<div class="pop" id="pop">
-  <div class="ph"><img id="popImg" alt=""><div class="none" id="popNone" style="display:none">📷 фото добавим</div></div>
-  <div class="cap" id="popCap"></div>
-</div>
+<div class="pop" id="pop"></div>
 <footer>Обновляется вручную · nikooolechka.github.io/flights.html</footer>
 
 <script>
@@ -344,7 +346,9 @@ const TRIPS = [
       { date:"2026-06-17", from:"Москва", to:"Тбилиси", type:"flight", note:"из дома" },
       { date:"2026-06-24", from:"Тбилиси", to:"Москва", type:"flight", note:"домой" },
     ],
-    events:[],
+    events:[
+      { date:"2026-06-21", place:"Лавандовые поля", icon:"lavender", note:"Грузия", pic:"img/bouquets/2026-06-21-lavender.jpg" },
+    ],
   },
   {
     name:"Шарм", flag:"🇪🇬", country:"Египет", color:"#F0A93C", legBg:"#8f5f11", soft:"rgba(240,169,60,.15)", edge:"rgba(240,169,60,.42)", photo:"img/trips/sharm.jpg", upcoming:true,
@@ -366,7 +370,9 @@ const ICONS = {
   lilac:`<svg viewBox='0 0 24 24' width='12' height='12'><g fill='#b57ee6'><circle cx='9' cy='6.5' r='2.1'/><circle cx='13' cy='5.6' r='2.1'/><circle cx='11' cy='9' r='2.1'/><circle cx='15' cy='8.4' r='1.9'/><circle cx='7.4' cy='9.4' r='1.9'/><circle cx='13.4' cy='11' r='1.8'/></g><g fill='#8e5bc0'><circle cx='10.6' cy='7' r='.6'/><circle cx='12.6' cy='6' r='.6'/><circle cx='9.2' cy='9.3' r='.6'/><circle cx='14' cy='8.7' r='.5'/></g><path d='M6.2 12.5 h11 l-1.1 6 a1 1 0 0 1 -1 .9 H8.3 a1 1 0 0 1 -1 -.9 Z' fill='#c79155'/><path d='M6 12.5 h11.4' stroke='#9c6a30' stroke-width='1.1'/><path d='M8.5 14.5 l1 3.5 M12 14.5 v3.7 M15.5 14.5 l-1 3.5' stroke='#9c6a30' stroke-width='.5'/></svg>`,
   music:`<svg viewBox='0 0 24 24' width='12' height='12'><path d='M9 17 V5.5 l10 -2 V15' fill='none' stroke='#8b7bff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/><circle cx='6.6' cy='17.2' r='2.5' fill='#8b7bff'/><circle cx='16.6' cy='15.2' r='2.5' fill='#8b7bff'/></svg>`,
   spa:`<svg viewBox='0 0 24 24' width='12' height='12'><path d='M8 7.5 q-1.6 -2 0 -4 M12 7.5 q-1.6 -2 0 -4 M16 7.5 q-1.6 -2 0 -4' stroke='#3ec8db' stroke-width='1.5' fill='none' stroke-linecap='round'/><path d='M3 11 h18 v1.2 a8 8 0 0 1 -8 8 h-2 a8 8 0 0 1 -8 -8 Z' fill='#3ec8db'/><path d='M3 11 h18' stroke='#2aa7b8' stroke-width='1'/></svg>`,
-  redroses:`<svg viewBox='0 0 24 24' width='12' height='12'><path d='M12 22 C12 17 9.5 15.5 7 15' stroke='#2f9e57' stroke-width='1.4' fill='none' stroke-linecap='round'/><path d='M12 22 C12 17.5 14.5 15.8 17 15.3' stroke='#2f9e57' stroke-width='1.4' fill='none' stroke-linecap='round'/><path d='M8 16 q-3 -0.5 -4 -3 q3 -0.5 4 1.5Z' fill='#2f9e57'/><path d='M16 16 q3 -0.5 4 -3 q-3 -0.5 -4 1.5Z' fill='#2f9e57'/><circle cx='7' cy='9' r='3.6' fill='#e23b3b'/><circle cx='17' cy='9' r='3.6' fill='#c62828'/><circle cx='12' cy='6.5' r='4' fill='#ef4444'/><path d='M12 4.5 a2 2 0 0 1 0 4 a2 2 0 0 1 0 -4' fill='none' stroke='#8f1d1d' stroke-width='.7'/><path d='M7 7.4 a1.6 1.6 0 0 1 0 3.2' fill='none' stroke='#8f1d1d' stroke-width='.6'/><path d='M17 7.4 a1.6 1.6 0 0 0 0 3.2' fill='none' stroke='#8f1d1d' stroke-width='.6'/></svg>`
+  redroses:`<svg viewBox='0 0 24 24' width='12' height='12'><path d='M12 22 C12 17 9.5 15.5 7 15' stroke='#2f9e57' stroke-width='1.4' fill='none' stroke-linecap='round'/><path d='M12 22 C12 17.5 14.5 15.8 17 15.3' stroke='#2f9e57' stroke-width='1.4' fill='none' stroke-linecap='round'/><path d='M8 16 q-3 -0.5 -4 -3 q3 -0.5 4 1.5Z' fill='#2f9e57'/><path d='M16 16 q3 -0.5 4 -3 q-3 -0.5 -4 1.5Z' fill='#2f9e57'/><circle cx='7' cy='9' r='3.6' fill='#e23b3b'/><circle cx='17' cy='9' r='3.6' fill='#c62828'/><circle cx='12' cy='6.5' r='4' fill='#ef4444'/><path d='M12 4.5 a2 2 0 0 1 0 4 a2 2 0 0 1 0 -4' fill='none' stroke='#8f1d1d' stroke-width='.7'/><path d='M7 7.4 a1.6 1.6 0 0 1 0 3.2' fill='none' stroke='#8f1d1d' stroke-width='.6'/><path d='M17 7.4 a1.6 1.6 0 0 0 0 3.2' fill='none' stroke='#8f1d1d' stroke-width='.6'/></svg>`,
+  laptop:`<svg viewBox='0 0 24 24' width='12' height='12'><rect x='4' y='4.5' width='16' height='10.5' rx='1.4' fill='#d4dbe4' stroke='#8a97a6' stroke-width='.6'/><rect x='5.4' y='5.9' width='13.2' height='7.7' fill='#111827'/><path d='M2.4 16.6 h19.2 l-1 1.7 a1 1 0 0 1 -.86 .5 H4.26 a1 1 0 0 1 -.86 -.5 Z' fill='#e6ebf1' stroke='#94a3b8' stroke-width='.5'/></svg>`,
+  lavender:`<svg viewBox='0 0 24 24' width='12' height='12'><g stroke='#7c5cc4' stroke-width='1.3' fill='none' stroke-linecap='round'><path d='M8 21 C8 15 7 11 7 8.5'/><path d='M12 21 C12 14 12 10 12 6'/><path d='M16 21 C16 15 17 11 17 9'/></g><g fill='#9b6fd6'><ellipse cx='7' cy='6.6' rx='1.6' ry='3'/><ellipse cx='12' cy='4.6' rx='1.7' ry='3.3'/><ellipse cx='17' cy='7.4' rx='1.6' ry='3'/></g><g fill='#6f4bb0'><circle cx='7' cy='5.6' r='.5'/><circle cx='12' cy='3.7' r='.5'/><circle cx='17' cy='6.6' r='.5'/></g></svg>`
 };
 
 /* Узнаваемые сцены места (рисуются на фоне месяца, цвет = цвет поездки) */
@@ -397,12 +403,13 @@ function fmtRange(from,to,openS,openE){
 
 /* Особые дни вне поездок (подарки, важные даты) */
 const MOMENTS = [
-  { date:"2026-05-15", place:"Ресторан «Красота»", icon:"star",  note:"особенный день" },
-  { date:"2026-05-22", place:"Подарили цветы",     icon:"peony", note:"ярко-розовые пионы", pic:"img/bouquets/2026-05-22.jpg" },
-  { date:"2026-05-29", place:"Подарили цветы",     icon:"lilac", note:"корзинка сирени", pic:"img/bouquets/2026-05-29.jpg" },
-  { date:"2026-06-21", place:"Концерт Тома Оделла", icon:"music", note:"" },
-  { date:"2026-06-27", place:"Подарили цветы",     icon:"peony", note:"розовые пионы", pic:"img/bouquets/2026-06-27.jpg" },
-  { date:"2026-06-30", place:"Гремм",              icon:"spa",   note:"термокомплекс с бассейном на крыше" },
+  { date:"2026-05-15", place:"Ресторан «Красота»", icon:"star",   note:"особенный день", pic:"img/bouquets/2026-05-15.jpg" },
+  { date:"2026-05-22", place:"Подарили цветы",     icon:"peony",  note:"ярко-розовые пионы", pic:"img/bouquets/2026-05-22-peony.jpg" },
+  { date:"2026-05-22", place:"Подарили MacBook",   icon:"laptop", note:"новый Mac", pic:"img/bouquets/2026-05-22-macbook.jpg" },
+  { date:"2026-05-29", place:"Подарили цветы",     icon:"lilac",  note:"корзинка сирени", pic:"img/bouquets/2026-05-29.jpg" },
+  { date:"2026-06-21", place:"Концерт Тома Оделла", icon:"music", note:"", pic:"img/bouquets/2026-06-21-concert.jpg" },
+  { date:"2026-06-27", place:"Подарили цветы",     icon:"peony",  note:"розовые пионы", pic:"img/bouquets/2026-06-27.jpg" },
+  { date:"2026-06-30", place:"Гремм",              icon:"spa",    note:"термокомплекс с бассейном на крыше", pic:"img/bouquets/2026-06-30.jpg" },
   { date:"2026-07-04", place:"Подарили цветы",     icon:"redroses", note:"красные розы", pic:"img/bouquets/2026-07-04.jpg" },
 ];
 const FLOWER_ICONS = ["roses","peony","lilac","redroses"];
@@ -418,9 +425,9 @@ TRIPS.forEach((t,ti)=>{
     : [{photo:t.photo,from:t.from,to:t.to,label:t.name}];
   segs.forEach(s=>{ let x=dt(s.from), xe=dt(s.to); for(; x<=xe; x.setDate(x.getDate()+1)) daySeg[isoOf(x)]=s; });
   t.legs.forEach(l=>legByDate[l.date]=l);
-  t.events.forEach(e=>evByDate[e.date]=e);
+  t.events.forEach(e=>{(evByDate[e.date]||(evByDate[e.date]=[])).push(e);});
 });
-MOMENTS.forEach(mo=>evByDate[mo.date]=mo);
+MOMENTS.forEach(mo=>{(evByDate[mo.date]||(evByDate[mo.date]=[])).push(mo);});
 
 /* лента года */
 const tm=document.getElementById("tmonths");
@@ -487,12 +494,14 @@ for(let m=0;m<12;m++){
         titles.push(`${isTrain?"🚆":"✈"} ${leg.from} → ${leg.to}${leg.note?" · "+leg.note:""}`);
       }
     }
-    const ev=evByDate[iso];
-    if(ev){
-      badge=`<span class="evbadge">${ICONS[ev.icon]||"⭐"}</span>`;
-      titles.push(`📍 ${ev.place}${ev.note?" — "+ev.note:""}`);
-      if(ev.dayPhoto) style+=`background-image:linear-gradient(rgba(8,11,17,.42),rgba(8,11,17,.42)),url('${ev.dayPhoto}');background-size:cover,cover;background-position:center,center;`;
-      if(ev.pic){ cls.push("haspic"); data=`data-pic="${ev.pic}" data-cap="${ev.place}" data-note="${(ev.note||'').replace(/"/g,'&quot;')}"`; }
+    const evs=evByDate[iso];
+    if(evs && evs.length){
+      badge=`<span class="evbadges">${evs.map(ev=>`<span class="evbadge">${ICONS[ev.icon]||"⭐"}</span>`).join("")}</span>`;
+      evs.forEach(ev=>titles.push(`📍 ${ev.place}${ev.note?" — "+ev.note:""}`));
+      const dp=evs.find(ev=>ev.dayPhoto);
+      if(dp) style+=`background-image:linear-gradient(rgba(8,11,17,.42),rgba(8,11,17,.42)),url('${dp.dayPhoto}');background-size:cover,cover;background-position:center,center;`;
+      const pics=evs.filter(ev=>ev.pic).map(ev=>({pic:ev.pic,cap:ev.place,note:ev.note||""}));
+      if(pics.length){ cls.push("haspic"); data=`data-ev="${encodeURIComponent(JSON.stringify(pics))}"`; }
     }
     if(iso===TODAY) style+="box-shadow:0 0 0 2px var(--accent), 0 0 14px -2px var(--accent);";
     cells+=`<div class="${cls.join(' ')}" ${data} style="${style}" title="${titles.join(' | ')}">${d}${mark}${badge}</div>`;
@@ -569,19 +578,17 @@ document.getElementById("stDays").textContent=totalDays;
 document.getElementById("stBouquets").textContent=flowerCount;
 
 /* всплывающая картинка букета при наведении — без перехода куда-либо */
-const pop=document.getElementById("pop"),popImg=document.getElementById("popImg"),
-      popNone=document.getElementById("popNone"),popCap=document.getElementById("popCap");
+const pop=document.getElementById("pop");
 function showPop(el){
-  const pic=el.dataset.pic,cap=el.dataset.cap||"",note=el.dataset.note||"";
-  popImg.style.display="none"; popNone.style.display="none";
-  popImg.onload=()=>{popImg.style.display="block";popNone.style.display="none";};
-  popImg.onerror=()=>{popImg.style.display="none";popNone.style.display="block";};
-  popImg.src=pic;
-  popCap.innerHTML=`<b>${cap}</b>${note}`;
+  let evs=[]; try{evs=JSON.parse(decodeURIComponent(el.dataset.ev||"[]"));}catch(e){}
+  if(!evs.length){ pop.classList.remove("show"); return; }
+  const ph=evs.map(e=>`<div class="pcell"><img src="${e.pic}" onerror="this.parentNode.classList.add('miss')"><div class="none">📷 нет фото</div></div>`).join("");
+  const cap=evs.map(e=>`<div class="row"><b>${e.cap}</b>${e.note||""}</div>`).join("");
+  pop.innerHTML=`<div class="ph">${ph}</div><div class="cap">${cap}</div>`;
   pop.classList.add("show");
 }
 function movePop(e){
-  const pad=16,w=200,h=210; let x=e.clientX+pad,y=e.clientY+pad;
+  const pad=16,w=pop.offsetWidth||200,h=pop.offsetHeight||210; let x=e.clientX+pad,y=e.clientY+pad;
   if(x+w>innerWidth) x=e.clientX-w-pad;
   if(y+h>innerHeight) y=e.clientY-h-pad;
   pop.style.left=Math.max(6,x)+"px"; pop.style.top=Math.max(6,y)+"px";
