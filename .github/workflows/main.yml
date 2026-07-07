@@ -48,6 +48,7 @@ jobs:
       - name: Sync Dzen publications (Scrapfly → календарь отражает реальность сам)
         env:
           SCRAPFLY_KEY: ${{ secrets.SCRAPFLY_KEY }}
+          SCRAPFLY_KEY_SOCIAL: ${{ secrets.SCRAPFLY_KEY_SOCIAL }}
         run: python scripts/dzen_sync.py || echo "dzen_sync пропущен (не критично)"
 
       - name: Publish

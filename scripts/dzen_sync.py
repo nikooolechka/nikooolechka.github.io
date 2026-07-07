@@ -46,9 +46,10 @@ def _hours_since_last_check() -> float:
 
 
 def main():
-    key = os.environ.get("SCRAPFLY_KEY", "").strip()
+    # Отдельный ключ Scrapfly под соцсети (второй аккаунт), фолбэк на основной.
+    key = (os.environ.get("SCRAPFLY_KEY_SOCIAL") or os.environ.get("SCRAPFLY_KEY") or "").strip()
     if not key:
-        print("dzen_sync: SCRAPFLY_KEY не задан — пропуск.")
+        print("dzen_sync: SCRAPFLY_KEY(_SOCIAL) не задан — пропуск.")
         return 0
 
     # Гейт 1: скрейпить только если есть что подтверждать (released, но не published).
