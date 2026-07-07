@@ -3,263 +3,326 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Мои перелёты · 2026</title>
+<title>Мои путешествия · 2026</title>
 <style>
   :root{
     --nav1:#051929; --nav2:#1B6CA8; --ink:#0f2233; --muted:#6b7f90;
-    --line:#e3ebf1; --bg:#f4f8fb; --card:#ffffff;
-    --flight:#1B6CA8; --flight-soft:#e6f0f7; --today:#ff7a45;
-    --train:#1e9e6a; --train-soft:#e3f5ec;
+    --line:#e3ebf1; --bg:#f4f8fb; --card:#ffffff; --today:#ff7a45;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
     background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
 
-  header{
-    background:linear-gradient(to top,#051929,#1B6CA8);
-    color:#fff;padding:42px 28px 58px;position:relative;overflow:hidden;
-    border-bottom-left-radius:0;border-bottom-right-radius:0;
-  }
-  header::after{
-    content:"";position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);
-    width:150%;height:60px;background:var(--bg);border-radius:50% 50% 0 0;
-  }
+  header{background:linear-gradient(to top,#051929,#1B6CA8);color:#fff;
+    padding:42px 28px 58px;position:relative;overflow:hidden}
+  header::after{content:"";position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);
+    width:150%;height:60px;background:var(--bg);border-radius:50% 50% 0 0}
   header .wrap{max-width:1180px;margin:0 auto;position:relative;z-index:2;
     display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
   header h1{font-size:30px;font-weight:800;letter-spacing:-.4px;display:flex;align-items:center;gap:12px}
-  header .plane{font-size:30px}
   header .sub{opacity:.82;font-size:14px;margin-top:6px;font-weight:500}
-  .stats{display:flex;gap:14px}
+  .stats{display:flex;gap:12px;flex-wrap:wrap}
   .stat{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);
-    border-radius:14px;padding:10px 16px;text-align:center;min-width:88px;backdrop-filter:blur(4px)}
-  .stat b{display:block;font-size:24px;font-weight:800;line-height:1}
-  .stat span{font-size:11px;opacity:.85;text-transform:uppercase;letter-spacing:.5px}
+    border-radius:14px;padding:10px 15px;text-align:center;min-width:78px;backdrop-filter:blur(4px)}
+  .stat b{display:block;font-size:23px;font-weight:800;line-height:1}
+  .stat span{font-size:10.5px;opacity:.85;text-transform:uppercase;letter-spacing:.4px}
 
   main{max-width:1180px;margin:0 auto;padding:8px 20px 60px}
+  h3.sec{font-size:19px;font-weight:800;margin:26px 4px 14px}
 
-  .legend{display:flex;align-items:center;gap:18px;flex-wrap:wrap;
-    margin:6px 4px 22px;font-size:13px;color:var(--muted)}
-  .legend .dot{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-1px}
+  /* ---- ЛЕНТА ГОДА (периоды поездок) ---- */
+  .timeline{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:16px 18px 20px;box-shadow:0 1px 3px rgba(15,34,51,.04);overflow:hidden}
+  .tmonths{position:relative;height:18px;margin-bottom:8px}
+  .tmonths span{position:absolute;top:0;font-size:10.5px;font-weight:600;color:var(--muted);
+    transform:translateX(-1px)}
+  .track{position:relative;
+    background:
+      linear-gradient(90deg,var(--line) 0 1px,transparent 1px) 0 0 / calc(100%/12) 100%;
+    border-radius:8px}
+  .trow{position:relative;height:34px}
+  .tbar{position:absolute;top:6px;height:22px;border-radius:11px;
+    box-shadow:0 1px 3px rgba(0,0,0,.12);min-width:6px;
+    display:flex;align-items:center;gap:3px;padding:0 6px;overflow:hidden}
+  .tbar .tick{font-size:9px;color:#fff;opacity:.9}
+  .tbar.open-r{border-top-right-radius:2px;border-bottom-right-radius:2px}
+  .tbar.open-l{border-top-left-radius:2px;border-bottom-left-radius:2px}
+  .tlabel{position:absolute;top:9px;font-size:12px;font-weight:700;white-space:nowrap;
+    padding-left:8px;color:var(--ink)}
+  .tlabel small{font-weight:500;color:var(--muted)}
+  .tnow{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--today);z-index:5}
+  .tnow::after{content:"сегодня";position:absolute;top:-15px;left:-16px;font-size:9px;
+    color:var(--today);font-weight:700}
 
-  .year{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  /* ---- МЕСЯЦЫ ---- */
+  .legend{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:14px 4px 18px;
+    font-size:12.5px;color:var(--muted)}
+  .legend .dot{display:inline-block;width:14px;height:14px;border-radius:5px;margin-right:6px;vertical-align:-2px}
+  .year{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
   @media(max-width:920px){.year{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:620px){.year{grid-template-columns:1fr}}
-
+  @media(max-width:600px){.year{grid-template-columns:1fr}}
   .month{background:var(--card);border:1px solid var(--line);border-radius:16px;
     padding:14px 14px 16px;box-shadow:0 1px 3px rgba(15,34,51,.04)}
-  .month h2{font-size:15px;font-weight:700;margin:2px 2px 12px;display:flex;
-    justify-content:space-between;align-items:center}
-  .month h2 .cnt{font-size:11px;font-weight:700;color:var(--flight);
-    background:var(--flight-soft);border-radius:20px;padding:2px 9px}
-  .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px}
+  .month h2{font-size:15px;font-weight:700;margin:2px 2px 12px}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px}
   .dow span{text-align:center;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase}
-  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
   .cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
-    font-size:12px;border-radius:8px;position:relative;color:var(--ink)}
+    font-size:12px;position:relative;color:var(--ink);border-radius:3px}
   .cell.empty{visibility:hidden}
   .cell.we{color:#c0392b}
-  .cell.flight{background:var(--flight);color:#fff;font-weight:700;cursor:pointer}
-  .cell.flight::after{content:"✈";position:absolute;top:1px;right:3px;font-size:8px;opacity:.9}
-  .cell.flight:hover{filter:brightness(1.08)}
-  .cell.train{background:var(--train);color:#fff;font-weight:700;cursor:pointer}
-  .cell.train::after{content:"🚆";position:absolute;top:0;right:2px;font-size:8px;opacity:.95}
-  .cell.train:hover{filter:brightness(1.08)}
-  .cell.eventonly{background:#fff6e0;color:var(--ink);font-weight:700;cursor:pointer}
+  /* день внутри поездки (мягкая заливка периода) */
+  .cell.trip{color:var(--ink);font-weight:600}
+  .cell.tstart{border-top-left-radius:11px;border-bottom-left-radius:11px}
+  .cell.tend{border-top-right-radius:11px;border-bottom-right-radius:11px}
+  /* день перелёта / поезда — насыщенная точка поверх периода */
+  .cell.leg{color:#fff;font-weight:800}
+  .cell.leg::after{position:absolute;top:0;right:2px;font-size:8px}
+  .cell.leg.flight::after{content:"✈"}
+  .cell.leg.train::after{content:"🚆"}
   .cell .evbadge{position:absolute;bottom:1px;left:1px;width:15px;height:15px;background:#fff;
-    border-radius:4px;display:flex;align-items:center;justify-content:center;
-    box-shadow:0 0 0 1px rgba(0,0,0,.1)}
+    border-radius:4px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
   .cell .evbadge svg{display:block}
 
-  .list{margin-top:34px}
-  .list h3{font-size:18px;font-weight:800;margin:0 4px 14px}
-  table{width:100%;border-collapse:collapse;background:var(--card);
-    border:1px solid var(--line);border-radius:14px;overflow:hidden}
-  th,td{padding:11px 14px;text-align:left;font-size:13px;border-bottom:1px solid var(--line)}
-  th{background:#f0f6fa;font-weight:700;color:var(--ink);font-size:11px;
-    text-transform:uppercase;letter-spacing:.5px}
-  tr:last-child td{border-bottom:none}
-  tr:hover td{background:#f8fbfd}
-  td.date{white-space:nowrap;font-weight:700;color:var(--flight)}
-  td.route{font-weight:600}
-  .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;
-    background:var(--flight-soft);color:var(--flight);font-weight:600}
-  .empty-note{color:var(--muted);font-size:13px;padding:18px;text-align:center}
-  footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 40px}
+  /* ---- СПИСОК ПОЕЗДОК ---- */
+  .trip-card{background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(15,34,51,.04);
+    border-left:5px solid #ccc}
+  .trip-card h4{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:2px}
+  .trip-card .period{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:10px}
+  .trip-card .period b{color:var(--ink)}
+  .leglist{display:flex;flex-direction:column;gap:5px}
+  .legrow{display:flex;align-items:center;gap:8px;font-size:13px}
+  .legrow .ld{font-weight:700;min-width:46px;color:var(--muted)}
+  .legrow .li{width:18px;text-align:center}
+  .legrow.ev .li{filter:none}
+  .legrow .lt{font-weight:600}
+  .legrow small{color:var(--muted);font-weight:500}
+  .open-note{font-size:12px;color:#c47a1a;background:#fff6e0;border-radius:8px;
+    padding:6px 10px;margin-top:8px;display:inline-block}
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:14px 0 40px}
 </style>
 </head>
 <body>
 <header>
   <div class="wrap">
     <div>
-      <h1><span class="plane">✈</span> Мои перелёты · 2026</h1>
-      <div class="sub" id="subtitle">Личный календарь перелётов на год</div>
+      <h1>✈ Мои путешествия · 2026</h1>
+      <div class="sub">Календарь поездок за год — где и когда я была в пути</div>
     </div>
     <div class="stats">
-      <div class="stat"><b id="stTotal">0</b><span>перелётов</span></div>
+      <div class="stat"><b id="stTrips">0</b><span>поездок</span></div>
+      <div class="stat"><b id="stFlights">0</b><span>перелётов</span></div>
       <div class="stat"><b id="stTrains">0</b><span>поездов</span></div>
-      <div class="stat"><b id="stPlaces">0</b><span>мест</span></div>
-      <div class="stat"><b id="stMonths">0</b><span>месяцев в пути</span></div>
+      <div class="stat"><b id="stDays">0</b><span>дней в пути</span></div>
     </div>
   </div>
 </header>
 
 <main>
-  <div class="legend">
-    <span><span class="dot" style="background:var(--flight)"></span>✈ перелёт</span>
-    <span><span class="dot" style="background:var(--train)"></span>🚆 поезд</span>
-    <span><span class="dot" style="background:#fff6e0;box-shadow:0 0 0 1px var(--line)"></span>📍 достопримечательность</span>
-    <span><span class="dot" style="background:var(--today);"></span>сегодня</span>
-    <span>наведи на дату — увидишь маршрут</span>
+  <h3 class="sec">Лента года — периоды поездок</h3>
+  <div class="timeline">
+    <div class="tmonths" id="tmonths"></div>
+    <div class="track" id="track"></div>
   </div>
 
+  <h3 class="sec">По месяцам</h3>
+  <div class="legend" id="legend"></div>
   <div class="year" id="year"></div>
 
-  <div class="list">
-    <h3>Список перелётов за 2026</h3>
-    <div id="tableWrap"></div>
-  </div>
+  <h3 class="sec">Подробно по поездкам</h3>
+  <div id="tripList"></div>
 </main>
 
-<footer>Обновлено вручную · ~/Desktop/files/Календарь перелетов 2026/flights.html</footer>
+<footer>Обновляется вручную · ~/Desktop/files/Календарь перелетов 2026/flights.html</footer>
 
 <script>
 /* ============================================================
-   ПЕРЕЛЁТЫ 2026 — заполняется вручную.
-   Формат: { date:"2026-MM-DD", from:"Город", to:"Город",
-             time:"чч:мм", flight:"рейс", airline:"а/к", note:"" }
-   Пример ниже — ЗАГЛУШКИ, заменю на твои 14 перелётов.
+   ПОЕЗДКИ 2026 — заполняется вручную.
+   Каждая поездка = период (from..to) + перелёты/поезда + места.
+   type у ноги: "flight" (✈, в счёт перелётов) | "train" (🚆).
+   openStart/openEnd = дата границы пока неизвестна (спросить).
    ============================================================ */
-const FLIGHTS = [
-  { date:"2026-01-06", from:"Шарм-эль-Шейх", to:"Каир", time:"", flight:"", airline:"", note:"одним днём, туда-обратно (Шарм → Каир → Шарм)" },
-  { date:"2026-01-07", from:"Шарм-эль-Шейх", to:"Москва", time:"", flight:"", airline:"", note:"возвращение домой" },
-  { date:"2026-01-15", from:"Москва", to:"Сочи", time:"", flight:"", airline:"", note:"из дома" },
-  { date:"2026-04-11", from:"Москва", to:"Гуанчжоу", time:"", flight:"", airline:"", note:"" },
-  { date:"2026-04-18", from:"Гуанчжоу", to:"Гонконг", time:"", flight:"", airline:"", note:"наземный переезд", type:"train" },
-  { date:"2026-04-20", from:"Гонконг", to:"Гуанчжоу", time:"", flight:"", airline:"", note:"наземный переезд", type:"train" },
-  { date:"2026-04-23", from:"Гуанчжоу", to:"Шанхай", time:"", flight:"", airline:"", note:"" },
-  { date:"2026-04-25", from:"Шанхай", to:"Пекин", time:"", flight:"", airline:"", note:"" },
-  { date:"2026-04-28", from:"Пекин", to:"Гуанчжоу", time:"", flight:"", airline:"", note:"" },
-
-  // Достопримечательности / впечатления (type:"event", icon — картинка места)
-  { date:"2026-01-06", type:"event", place:"Пирамиды Гизы", note:"чудо света", icon:"pyramids" },
-  { date:"2026-04-26", type:"event", place:"Великая Китайская стена", note:"", icon:"wall" },
+const TRIPS = [
+  {
+    name:"Египет", flag:"🇪🇬", color:"#e8912a", soft:"#fbe4c7",
+    from:"2026-01-06", to:"2026-01-07",
+    openStart:true,   // когда именно прилетела в Шарм — уточнить
+    legs:[
+      { date:"2026-01-06", from:"Шарм-эль-Шейх", to:"Каир", type:"flight", note:"одним днём, туда-обратно" },
+      { date:"2026-01-07", from:"Шарм-эль-Шейх", to:"Москва", type:"flight", note:"домой" },
+    ],
+    events:[
+      { date:"2026-01-06", place:"Пирамиды Гизы", icon:"pyramids", note:"чудо света" },
+    ],
+  },
+  {
+    name:"Сочи", flag:"🌴", color:"#16a3a3", soft:"#cceded",
+    from:"2026-01-15", to:"2026-01-15",
+    openEnd:true,     // дата возвращения из Сочи — уточнить
+    legs:[
+      { date:"2026-01-15", from:"Москва", to:"Сочи", type:"flight", note:"из дома" },
+    ],
+    events:[],
+  },
+  {
+    name:"Китай", flag:"🇨🇳", color:"#d1433f", soft:"#f6d6d4",
+    from:"2026-04-11", to:"2026-04-28",
+    openEnd:true,     // дата возвращения из Китая домой — уточнить
+    legs:[
+      { date:"2026-04-11", from:"Москва",   to:"Гуанчжоу", type:"flight" },
+      { date:"2026-04-18", from:"Гуанчжоу", to:"Гонконг",  type:"train" },
+      { date:"2026-04-20", from:"Гонконг",  to:"Гуанчжоу", type:"train" },
+      { date:"2026-04-23", from:"Гуанчжоу", to:"Шанхай",   type:"flight" },
+      { date:"2026-04-25", from:"Шанхай",   to:"Пекин",    type:"flight" },
+      { date:"2026-04-28", from:"Пекин",    to:"Гуанчжоу", type:"flight" },
+    ],
+    events:[
+      { date:"2026-04-26", place:"Великая Китайская стена", icon:"wall", note:"" },
+    ],
+  },
 ];
 
-/* Картинки мест (мини-SVG, рисуются на белом бейдже — видно на любой ячейке) */
 const ICONS = {
   pyramids:`<svg viewBox='0 0 24 24' width='12' height='12'><polygon points='9,4 17,20 1,20' fill='#e6b74d' stroke='#b8862a' stroke-width='.6'/><polygon points='17,8 23,20 11,20' fill='#d69a2f' stroke='#b8862a' stroke-width='.6'/></svg>`,
   wall:`<svg viewBox='0 0 24 24' width='12' height='12'><path d='M1 22 V13 H4 V10 H7 V13 H10 V10 H13 V13 H16 V10 H19 V13 H23 V22 Z' fill='#9a8f79' stroke='#5f5748' stroke-width='.6'/></svg>`
 };
 
-const MONTHS = ["Январь","Февраль","Март","Апрель","Май","Июнь",
-  "Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
-const DOW = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
-const YEAR = 2026;
+const MONTHS=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+const MON_A =["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"];
+const DOW=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+const YEAR=2026, TODAY="2026-07-07";
+const pad=n=>String(n).padStart(2,"0");
+const dt=iso=>new Date(iso+"T00:00:00");
+function doy(iso){const d=dt(iso);const s=new Date(YEAR,0,0);return Math.round((d-s)/86400000);} // 1..365
+function fmtRange(from,to,openS,openE){
+  const a=dt(from),b=dt(to);
+  const dA=a.getDate(),mA=a.getMonth(),dB=b.getDate(),mB=b.getMonth();
+  let s = mA===mB ? `${dA}–${dB} ${MON_A[mB]}` : `${dA} ${MON_A[mA]} – ${dB} ${MON_A[mB]}`;
+  if(from===to) s=`${dA} ${MON_A[mA]}`;
+  if(openS) s="? – "+ (from===to?`${dA} ${MON_A[mA]}`:`${dB} ${MON_A[mB]}`);
+  if(openE) s=`${dA} ${MON_A[mA]} – ?`;
+  return s;
+}
 
-const byDate = {};   // переезды (перелёты + поезда)
-const evByDate = {}; // события / места
-FLIGHTS.forEach(f=>{
-  if(f.type==="event"){ (evByDate[f.date] ||= []).push(f); }
-  else { (byDate[f.date] ||= []).push(f); }
+/* индекс дней -> поездка/ноги/события */
+const dayTrip={}, legByDate={}, evByDate={};
+TRIPS.forEach((t,ti)=>{
+  let d=dt(t.from), end=dt(t.to);
+  for(; d<=end; d.setDate(d.getDate()+1)){
+    const iso=`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    dayTrip[iso]=ti;
+  }
+  t.legs.forEach(l=>legByDate[l.date]=l);
+  t.events.forEach(e=>evByDate[e.date]=e);
 });
 
-// сегодня (фиксировано, чтобы совпадало со средой владельца)
-const TODAY = "2026-07-07";
+/* ---------- ЛЕНТА ГОДА ---------- */
+const tm=document.getElementById("tmonths");
+for(let m=0;m<12;m++){const left=(m/12*100);tm.insertAdjacentHTML("beforeend",`<span style="left:${left}%">${MON_A[m]}</span>`);}
+const track=document.getElementById("track");
+TRIPS.forEach(t=>{
+  const l=(doy(t.from)-1)/365*100;
+  const w=Math.max((doy(t.to)-doy(t.from)+1)/365*100, 1.4);
+  const cls="tbar"+(t.openEnd?" open-r":"")+(t.openStart?" open-l":"");
+  const ticks=t.legs.map(x=>x.type==="train"?"🚆":"✈").join("");
+  const row=document.createElement("div");row.className="trow";
+  row.innerHTML=`<div class="${cls}" style="left:${l}%;width:${w}%;background:${t.color}"></div>
+    <div class="tlabel" style="left:${l+w}%">${t.flag} ${t.name} <small>· ${fmtRange(t.from,t.to,t.openStart,t.openEnd)}</small></div>`;
+  track.appendChild(row);
+});
+track.style.height=(TRIPS.length*34+6)+"px";
+// линия «сегодня»
+const nowL=(doy(TODAY)-1)/365*100;
+track.insertAdjacentHTML("beforeend",`<div class="tnow" style="left:${nowL}%"></div>`);
 
-function pad(n){return String(n).padStart(2,"0");}
+/* ---------- ЛЕГЕНДА ---------- */
+document.getElementById("legend").innerHTML =
+  TRIPS.map(t=>`<span><span class="dot" style="background:${t.soft};box-shadow:0 0 0 1px ${t.color} inset"></span>${t.flag} ${t.name}</span>`).join("")
+  + `<span><span class="dot" style="background:#555;border-radius:5px"></span>✈/🚆 день переезда</span>`
+  + `<span>📍 достопримечательность</span>`;
 
-const yearEl = document.getElementById("year");
-let monthsWithFlights = new Set();
-
+/* ---------- МЕСЯЦЫ ---------- */
+const yearEl=document.getElementById("year");
 for(let m=0;m<12;m++){
-  const first = new Date(YEAR, m, 1);
-  const startDow = (first.getDay()+6)%7;           // Пн=0
-  const days = new Date(YEAR, m+1, 0).getDate();
-
-  let cntThis=0;
+  const first=new Date(YEAR,m,1);
+  const startDow=(first.getDay()+6)%7;
+  const days=new Date(YEAR,m+1,0).getDate();
   let cells="";
   for(let i=0;i<startDow;i++) cells+=`<div class="cell empty"></div>`;
   for(let d=1;d<=days;d++){
     const iso=`${YEAR}-${pad(m+1)}-${pad(d)}`;
     const dow=(startDow+d-1)%7;
-    const cls=["cell"];
-    if(dow>=5) cls.push("we");
-    const titles=[];
-    if(byDate[iso]){
-      const hasFlight = byDate[iso].some(t=>t.type!=="train");
-      cls.push(hasFlight ? "flight" : "train");
-      if(hasFlight){ cntThis+=byDate[iso].filter(t=>t.type!=="train").length; }
-      monthsWithFlights.add(m);
-      const ic = t=> t.type==="train" ? "🚆" : "✈";
-      byDate[iso].forEach(t=>titles.push(`${ic(t)} ${t.from} → ${t.to}${t.time?" · "+t.time:""}${t.flight?" · "+t.flight:""}`));
+    const cls=["cell"]; if(dow>=5) cls.push("we");
+    let style="", badge="", titles=[];
+    const ti=dayTrip[iso];
+    if(ti!==undefined){
+      const t=TRIPS[ti];
+      cls.push("trip");
+      style=`background:${t.soft};`;
+      if(iso===t.from) cls.push("tstart");
+      if(iso===t.to)   cls.push("tend");
+      titles.push(`${t.flag} ${t.name}`);
+      const leg=legByDate[iso];
+      if(leg){
+        cls.push("leg", leg.type==="train"?"train":"flight");
+        style=`background:${leg.type==="train"?"#3f7f6a":t.color};`;
+        titles.push(`${leg.type==="train"?"🚆":"✈"} ${leg.from} → ${leg.to}${leg.note?" · "+leg.note:""}`);
+      }
     }
-    let badge="";
-    if(evByDate[iso]){
-      if(!byDate[iso]) cls.push("eventonly");
-      monthsWithFlights.add(m);
-      const ev=evByDate[iso][0];
-      badge=`<span class="evbadge">${ICONS[ev.icon]||"⭐"}</span>`;
-      evByDate[iso].forEach(e=>titles.push(`📍 ${e.place}${e.note?" — "+e.note:""}`));
-    }
-    let style="";
-    if(iso===TODAY) style=`style="box-shadow:0 0 0 2px var(--today) inset"`;
-    cells+=`<div class="${cls.join(' ')}" ${style} title="${titles.join(' | ')}">${d}${badge}</div>`;
+    const ev=evByDate[iso];
+    if(ev){ badge=`<span class="evbadge">${ICONS[ev.icon]||"⭐"}</span>`; titles.push(`📍 ${ev.place}${ev.note?" — "+ev.note:""}`); }
+    if(iso===TODAY) style+="box-shadow:0 0 0 2px var(--today) inset;";
+    cells+=`<div class="${cls.join(' ')}" style="${style}" title="${titles.join(' | ')}">${d}${badge}</div>`;
   }
-
-  const cntBadge = cntThis? `<span class="cnt">${cntThis} ✈</span>` : "";
   yearEl.insertAdjacentHTML("beforeend",
-    `<div class="month">
-      <h2>${MONTHS[m]}${cntBadge}</h2>
+    `<div class="month"><h2>${MONTHS[m]}</h2>
       <div class="dow">${DOW.map(x=>`<span>${x}</span>`).join("")}</div>
-      <div class="grid">${cells}</div>
-    </div>`);
+      <div class="grid">${cells}</div></div>`);
 }
 
-// статистика
-const isFlight = t=> !t.type || t.type==="flight";
-const flightCount = FLIGHTS.filter(isFlight).length;
-const trainCount  = FLIGHTS.filter(t=>t.type==="train").length;
-const eventCount  = FLIGHTS.filter(t=>t.type==="event").length;
-document.getElementById("stTotal").textContent = flightCount;
-document.getElementById("stTrains").textContent = trainCount;
-document.getElementById("stPlaces").textContent = eventCount;
-document.getElementById("stMonths").textContent = monthsWithFlights.size;
+/* ---------- СПИСОК ПОЕЗДОК ---------- */
+const tl=document.getElementById("tripList");
+let totalFlights=0, totalTrains=0, totalDays=0;
+TRIPS.forEach(t=>{
+  const nf=t.legs.filter(l=>l.type!=="train").length;
+  const nt=t.legs.filter(l=>l.type==="train").length;
+  totalFlights+=nf; totalTrains+=nt;
+  totalDays += doy(t.to)-doy(t.from)+1;
 
-// таблица
-const tw=document.getElementById("tableWrap");
-if(FLIGHTS.length){
-  let n=0;
-  const rows=[...FLIGHTS].sort((a,b)=>a.date.localeCompare(b.date)).map((f)=>{
-    const dt=new Date(f.date);
-    const ds=`${pad(dt.getDate())}.${pad(dt.getMonth()+1)}`;
-    const isTrain=f.type==="train", isEvent=f.type==="event";
-    let num, dateStyle="", route;
-    if(isEvent){
-      num=`<span class="evbadge" style="position:static;display:inline-flex">${ICONS[f.icon]||"⭐"}</span>`;
-      dateStyle=' style="color:#b8862a"';
-      route=`📍 ${f.place}`;
-    } else if(isTrain){
-      num="🚆"; dateStyle=' style="color:var(--train)"';
-      route=`🚆 ${f.from} → ${f.to}`;
-    } else {
-      num=++n; route=`✈ ${f.from} → ${f.to}`;
+  // объединяем ноги и события в хронологию
+  const items=[...t.legs.map(l=>({...l,kind:"leg"})),...t.events.map(e=>({...e,kind:"ev"}))]
+    .sort((a,b)=>a.date.localeCompare(b.date));
+  const rows=items.map(it=>{
+    const d=dt(it.date), ds=`${pad(d.getDate())}.${pad(d.getMonth()+1)}`;
+    if(it.kind==="ev"){
+      return `<div class="legrow ev"><span class="ld">${ds}</span>
+        <span class="li"><span class="evbadge" style="position:static;display:inline-flex">${ICONS[it.icon]||"⭐"}</span></span>
+        <span class="lt">📍 ${it.place}</span> ${it.note?`<small>· ${it.note}</small>`:""}</div>`;
     }
-    return `<tr>
-      <td>${num}</td>
-      <td class="date"${dateStyle}>${ds}</td>
-      <td class="route">${route}</td>
-      <td>${f.time||"—"}</td>
-      <td>${f.flight?`<span class="badge">${f.flight}</span>`:"—"}</td>
-      <td>${f.airline||"—"}</td>
-      <td>${f.note||""}</td>
-    </tr>`;
+    const ic=it.type==="train"?"🚆":"✈";
+    return `<div class="legrow"><span class="ld">${ds}</span>
+      <span class="li">${ic}</span>
+      <span class="lt">${it.from} → ${it.to}</span> ${it.note?`<small>· ${it.note}</small>`:""}</div>`;
   }).join("");
-  tw.innerHTML=`<table>
-    <thead><tr><th>#</th><th>Дата</th><th>Маршрут</th><th>Время</th><th>Рейс</th><th>А/к</th><th>Примечание</th></tr></thead>
-    <tbody>${rows}</tbody></table>`;
-} else {
-  tw.innerHTML=`<div class="empty-note">Перелёты ещё не заведены. Пришли список — вобью сюда.</div>`;
-}
+
+  const openTxt = t.openStart ? "Дата прилёта в начале поездки пока не указана"
+                : t.openEnd   ? "Дата возвращения пока не указана"
+                : "";
+  tl.insertAdjacentHTML("beforeend",
+    `<div class="trip-card" style="border-left-color:${t.color}">
+       <h4>${t.flag} ${t.name}</h4>
+       <div class="period">${fmtRange(t.from,t.to,t.openStart,t.openEnd)}
+         · <b>${nf}</b> ✈${nt?` · <b>${nt}</b> 🚆`:""}${t.events.length?` · <b>${t.events.length}</b> 📍`:""}</div>
+       <div class="leglist">${rows}</div>
+       ${openTxt?`<div class="open-note">✎ ${openTxt}</div>`:""}
+     </div>`);
+});
+
+document.getElementById("stTrips").textContent=TRIPS.length;
+document.getElementById("stFlights").textContent=totalFlights;
+document.getElementById("stTrains").textContent=totalTrains;
+document.getElementById("stDays").textContent=totalDays;
 </script>
 </body>
 </html>
