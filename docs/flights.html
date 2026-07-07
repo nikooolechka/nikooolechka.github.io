@@ -173,6 +173,13 @@
     display:flex;align-items:center;justify-content:center}
   .legmk svg{width:12.5px;height:12.5px;color:#fff;fill:#fff;display:block}
   .legmk.fly svg{transform:rotate(90deg)}
+  /* красная линия-подчёркивание «была с котиком» */
+  .cell.together::after{content:"";position:absolute;left:-3px;right:-3px;bottom:-1px;height:3px;
+    background:#ff3b5c;box-shadow:0 0 8px -1px #ff3b5c;z-index:6}
+  /* дата, обведённая сердечком */
+  .cell .hd{position:absolute;inset:-3px;z-index:3;pointer-events:none;display:block}
+  .cell .hd svg{width:100%;height:100%;filter:drop-shadow(0 0 5px rgba(255,59,92,.85))}
+  .cell.heartday{font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.9)}
   .month:hover .legmk{transform:scale(1.08)}
   /* будущая поездка — пунктир */
   .cell.soon.tstart,.cell.soon.tend{outline:1px dashed rgba(255,255,255,.4)}
@@ -263,6 +270,10 @@
       <div class="stat" style="--c:#ff77b0">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="2.6"/><path d="M12 9c0-3-2-4.6-4.6-4.6M12 9c0 3 2 4.6 4.6 4.6M12 9c3 0 4.6-2 4.6-4.6M12 9c-3 0-4.6 2-4.6 4.6"/><path d="M12 12v9"/><path d="M12 17c-2.4 0-3.6-1.4-3.6-1.4M12 17c2.4 0 3.6-1.4 3.6-1.4"/></svg></span>
         <span class="meta"><b id="stBouquets">0</b><span>букетов</span></span>
+      </div>
+      <div class="stat" style="--c:#ff5a8a">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.4-9.5-8.9C1 9.2 2.4 5.6 6 5.6c2 0 3.2 1.2 4 2.4.8-1.2 2-2.4 4-2.4 3.6 0 5 3.6 3.5 6.5C19 16.6 12 21 12 21z"/></svg></span>
+        <span class="meta"><b id="stTogether">0</b><span>дней с котиком</span></span>
       </div>
     </div>
   </header>
@@ -384,6 +395,7 @@ const SCENES = {
 
 const PLANE_SVG=`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 15.5v-1.7l-7.5-4.6V4.3a1.5 1.5 0 0 0-3 0v4.9L3 13.8v1.7l7.5-2.2v4.3l-2 1.4v1.3l3.5-1 3.5 1v-1.3l-2-1.4v-4.3z"/></svg>`;
 const TRAIN_SVG=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="11" rx="2.5"/><path d="M5 10h14M9 19l-2 2M15 19l2 2"/></svg>`;
+const HEART_SVG=`<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-4.4-9.5-8.9C1 9.2 2.4 5.6 6 5.6c2 0 3.2 1.2 4 2.4.8-1.2 2-2.4 4-2.4 3.6 0 5 3.6 3.5 6.5C19 16.6 12 21 12 21z"/></svg>`;
 
 const MONTHS=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
 const MON_A =["янв","фев","мар","апр","май","июн","июл","авг","сен","окт","ноя","дек"];
@@ -405,7 +417,7 @@ function fmtRange(from,to,openS,openE){
 const MOMENTS = [
   { date:"2026-05-15", place:"Ресторан «Красота»", icon:"star",   note:"особенный день", pic:"img/bouquets/2026-05-15.jpg" },
   { date:"2026-05-22", place:"Подарили цветы",     icon:"peony",  note:"ярко-розовые пионы", pic:"img/bouquets/2026-05-22-peony.jpg" },
-  { date:"2026-05-22", place:"Подарили MacBook",   icon:"laptop", note:"новый Mac", pic:"img/bouquets/2026-05-22-macbook.jpg" },
+  { date:"2026-05-21", place:"Подарили MacBook",   icon:"laptop", note:"новый Mac", pic:"img/bouquets/2026-05-21-macbook.jpg" },
   { date:"2026-05-29", place:"Подарили цветы",     icon:"lilac",  note:"корзинка сирени", pic:"img/bouquets/2026-05-29.jpg" },
   { date:"2026-06-21", place:"Концерт Тома Оделла", icon:"music", note:"", pic:"img/bouquets/2026-06-21-concert.jpg" },
   { date:"2026-06-27", place:"Подарили цветы",     icon:"peony",  note:"розовые пионы", pic:"img/bouquets/2026-06-27.jpg" },
@@ -413,6 +425,14 @@ const MOMENTS = [
   { date:"2026-07-04", place:"Подарили цветы",     icon:"redroses", note:"красные розы", pic:"img/bouquets/2026-07-04.jpg" },
 ];
 const FLOWER_ICONS = ["roses","peony","lilac","redroses"];
+
+/* Трекер «Котик» — периоды, проведённые вместе (пришлёт даты) */
+const TOGETHER = [
+  // { from:"2026-01-01", to:"2026-01-05" },
+];
+/* даты, обведённые сердечком (особые с котиком) */
+const HEART_DAYS = ["2026-04-14"];
+const HEART_OUTLINE=`<svg viewBox="0 0 24 24" fill="none" stroke="#ff3b5c" stroke-width="2.2" stroke-linejoin="round"><path d="M12 21.5s-7.2-4.6-9.7-9.2C.8 9.1 2.3 5.2 6 5.2c2.1 0 3.3 1.3 4 2.5.7-1.2 1.9-2.5 4-2.5 3.7 0 5.2 3.9 3.7 7.1C19.2 16.9 12 21.5 12 21.5z"/></svg>`;
 
 const dayTrip={}, daySeg={}, legByDate={}, evByDate={};
 const isoOf=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
@@ -428,6 +448,8 @@ TRIPS.forEach((t,ti)=>{
   t.events.forEach(e=>{(evByDate[e.date]||(evByDate[e.date]=[])).push(e);});
 });
 MOMENTS.forEach(mo=>{(evByDate[mo.date]||(evByDate[mo.date]=[])).push(mo);});
+const togetherDays=new Set();
+TOGETHER.forEach(p=>{ let x=dt(p.from),xe=dt(p.to); for(;x<=xe;x.setDate(x.getDate()+1)) togetherDays.add(isoOf(x)); });
 
 /* лента года */
 const tm=document.getElementById("tmonths");
@@ -464,7 +486,7 @@ for(let m=0;m<12;m++){
     const iso=`${YEAR}-${pad(m+1)}-${pad(d)}`;
     const dow=(startDow+d-1)%7;
     const cls=["cell"]; if(dow>=5) cls.push("we");
-    let style="", badge="", mark="", data="", titles=[];
+    let style="", badge="", mark="", data="", heartmk="", titles=[];
     const ti=dayTrip[iso];
     if(ti!==undefined){
       const t=TRIPS[ti];
@@ -503,6 +525,8 @@ for(let m=0;m<12;m++){
       const pics=evs.filter(ev=>ev.pic).map(ev=>({pic:ev.pic,cap:ev.place,note:ev.note||""}));
       if(pics.length){ cls.push("haspic"); data=`data-ev="${encodeURIComponent(JSON.stringify(pics))}"`; }
     }
+    if(togetherDays.has(iso)){ cls.push("together"); titles.push("💗 с котиком"); }
+    if(HEART_DAYS.includes(iso)){ cls.push("heartday"); mark+=`<span class="hd">${HEART_OUTLINE}</span>`; titles.push("💗 особый день"); }
     if(iso===TODAY) style+="box-shadow:0 0 0 2px var(--accent), 0 0 14px -2px var(--accent);";
     cells+=`<div class="${cls.join(' ')}" ${data} style="${style}" title="${titles.join(' | ')}">${d}${mark}${badge}</div>`;
   }
@@ -576,6 +600,8 @@ document.getElementById("stFlights").textContent=totalFlights;
 document.getElementById("stTrains").textContent=totalTrains;
 document.getElementById("stDays").textContent=totalDays;
 document.getElementById("stBouquets").textContent=flowerCount;
+document.getElementById("stTogether").textContent=
+  TOGETHER.reduce((s,p)=>s+Math.round((dt(p.to)-dt(p.from))/86400000)+1,0);
 
 /* всплывающая картинка букета при наведении — без перехода куда-либо */
 const pop=document.getElementById("pop");
