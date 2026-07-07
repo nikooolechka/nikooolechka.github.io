@@ -4,171 +4,205 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Мои путешествия · 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --nav1:#051929; --nav2:#1B6CA8; --ink:#0f2233; --muted:#6b7f90;
-    --line:#e3ebf1; --bg:#f4f8fb; --card:#ffffff; --today:#ff7a45;
+    --bg:#080b11; --bg2:#0c1119;
+    --surface:rgba(255,255,255,.045);
+    --surface-2:rgba(255,255,255,.07);
+    --border:rgba(255,255,255,.09);
+    --border-str:rgba(255,255,255,.16);
+    --text:#eef3f9; --text-2:#c3ccd8; --muted:#8695a6;
+    --accent:#8b7bff; /* сегодня */
+    --radius:18px;
+    --ease:cubic-bezier(.2,.7,.2,1);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-    background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
-
-  header{background:linear-gradient(to top,#051929,#1B6CA8);color:#fff;
-    padding:42px 28px 58px;position:relative;overflow:hidden}
-  header::after{content:"";position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);
-    width:150%;height:60px;background:var(--bg);border-radius:50% 50% 0 0}
-  header .wrap{max-width:1180px;margin:0 auto;position:relative;z-index:2;
-    display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
-  header h1{font-size:30px;font-weight:800;letter-spacing:-.4px;display:flex;align-items:center;gap:12px}
-  header .sub{opacity:.82;font-size:14px;margin-top:6px;font-weight:500}
-  .stats{display:flex;gap:12px;flex-wrap:wrap}
-  .stat{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);
-    border-radius:14px;padding:10px 15px;text-align:center;min-width:78px;backdrop-filter:blur(4px)}
-  .stat b{display:block;font-size:23px;font-weight:800;line-height:1}
-  .stat span{font-size:10.5px;opacity:.85;text-transform:uppercase;letter-spacing:.4px}
-
-  main{max-width:1180px;margin:0 auto;padding:8px 20px 60px}
-  h3.sec{font-size:19px;font-weight:800;margin:26px 4px 14px}
-
-  /* ---- ЛЕНТА ГОДА (периоды поездок) ---- */
-  .timeline{background:var(--card);border:1px solid var(--line);border-radius:16px;
-    padding:16px 18px 20px;box-shadow:0 1px 3px rgba(15,34,51,.04);overflow:hidden}
-  .tmonths{position:relative;height:18px;margin-bottom:8px}
-  .tmonths span{position:absolute;top:0;font-size:10.5px;font-weight:600;color:var(--muted);
-    transform:translateX(-1px)}
-  .track{position:relative;
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+    color:var(--text);background:var(--bg);line-height:1.5;
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative;min-height:100vh;
+  }
+  /* аврора-подсветка на фоне */
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
-      linear-gradient(90deg,var(--line) 0 1px,transparent 1px) 0 0 / calc(100%/12) 100%;
-    border-radius:8px}
-  .trow{position:relative;height:34px}
-  .tbar{position:absolute;top:6px;height:22px;border-radius:11px;
-    box-shadow:0 1px 3px rgba(0,0,0,.12);min-width:6px;
-    display:flex;align-items:center;gap:3px;padding:0 6px;overflow:hidden}
-  .tbar .tick{font-size:9px;color:#fff;opacity:.9}
-  .tbar.open-r{border-top-right-radius:2px;border-bottom-right-radius:2px}
-  .tbar.open-l{border-top-left-radius:2px;border-bottom-left-radius:2px}
-  .tlabel{position:absolute;top:9px;font-size:12px;font-weight:700;white-space:nowrap;
-    padding-left:8px;color:var(--ink)}
-  .tlabel small{font-weight:500;color:var(--muted)}
-  .tnow{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--today);z-index:5}
-  .tnow::after{content:"сегодня";position:absolute;top:-15px;left:-16px;font-size:9px;
-    color:var(--today);font-weight:700}
+      radial-gradient(60% 45% at 12% 0%, rgba(231,169,60,.18), transparent 60%),
+      radial-gradient(55% 45% at 88% 8%, rgba(255,90,95,.16), transparent 60%),
+      radial-gradient(60% 50% at 50% 100%, rgba(46,210,196,.13), transparent 60%),
+      linear-gradient(180deg,var(--bg),var(--bg2));
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
 
-  /* ---- МЕСЯЦЫ ---- */
-  .legend{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:14px 4px 18px;
-    font-size:12.5px;color:var(--muted)}
-  .legend .dot{display:inline-block;width:14px;height:14px;border-radius:5px;margin-right:6px;vertical-align:-2px}
-  .year{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  /* ---------- HEADER ---------- */
+  header{padding:56px 0 30px}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);
+    background:var(--surface);border:1px solid var(--border);
+    padding:7px 14px;border-radius:999px;backdrop-filter:blur(12px)}
+  .eyebrow .pin{width:6px;height:6px;border-radius:50%;background:var(--accent);
+    box-shadow:0 0 10px var(--accent)}
+  h1{font-family:'Sora',sans-serif;font-weight:800;font-size:clamp(30px,5vw,50px);
+    line-height:1.05;letter-spacing:-.02em;margin:18px 0 8px;
+    background:linear-gradient(120deg,#fff 20%,#e7a93c 55%,#ff5a5f 80%,#2ed2c4);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+  .lead{color:var(--text-2);font-size:16px;max-width:560px}
+
+  .stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+  .stat{flex:1;min-width:120px;background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);padding:16px 18px;backdrop-filter:blur(14px);
+    transition:transform .25s var(--ease),border-color .25s}
+  .stat:hover{transform:translateY(-3px);border-color:var(--border-str)}
+  .stat b{font-family:'Sora',sans-serif;font-size:30px;font-weight:800;display:block;line-height:1}
+  .stat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:4px;display:block}
+  .stat.c-e b{color:#e7a93c}.stat.c-s b{color:#2ed2c4}.stat.c-c b{color:#ff5a5f}
+
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin:44px 0 16px}
+  .sec-head h2{font-family:'Sora',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.01em}
+  .sec-head .hint{font-size:13px;color:var(--muted)}
+
+  .glass{background:var(--surface);border:1px solid var(--border);border-radius:22px;
+    backdrop-filter:blur(16px);box-shadow:0 20px 50px -30px rgba(0,0,0,.8)}
+
+  /* ---------- ЛЕНТА ГОДА ---------- */
+  .timeline{padding:22px 22px 24px;overflow:hidden}
+  .tmonths{position:relative;height:20px;margin-bottom:10px}
+  .tmonths span{position:absolute;top:0;font-size:11px;font-weight:600;color:var(--muted);
+    letter-spacing:.03em;transform:translateX(-1px)}
+  .track{position:relative;border-radius:12px;
+    background:linear-gradient(90deg,var(--border) 0 1px,transparent 1px) 0 0 / calc(100%/12) 100%}
+  .trow{position:relative;height:40px}
+  .tbar{position:absolute;top:8px;height:24px;border-radius:999px;min-width:8px;
+    transition:transform .3s var(--ease),filter .3s;cursor:default}
+  .tbar:hover{transform:scaleY(1.12);filter:brightness(1.12)}
+  .tbar.open-r{border-top-right-radius:4px;border-bottom-right-radius:4px}
+  .tbar.open-l{border-top-left-radius:4px;border-bottom-left-radius:4px}
+  .tlabel{position:absolute;top:11px;font-size:12.5px;font-weight:700;white-space:nowrap;
+    padding-left:10px;color:var(--text)}
+  .tlabel small{font-weight:500;color:var(--muted)}
+  .tnow{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--accent);
+    box-shadow:0 0 12px var(--accent);z-index:5;border-radius:2px}
+  .tnow::after{content:"сегодня";position:absolute;top:-17px;left:-18px;font-size:9.5px;
+    color:var(--accent);font-weight:700;white-space:nowrap}
+
+  /* ---------- ЛЕГЕНДА ---------- */
+  .legend{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin:6px 2px 18px;
+    font-size:13px;color:var(--text-2)}
+  .legend .sw{display:inline-block;width:26px;height:12px;border-radius:6px;margin-right:8px;vertical-align:-1px}
+
+  /* ---------- МЕСЯЦЫ ---------- */
+  .year{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
   @media(max-width:920px){.year{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:600px){.year{grid-template-columns:1fr}}
-  .month{background:var(--card);border:1px solid var(--line);border-radius:16px;
-    padding:14px 14px 16px;box-shadow:0 1px 3px rgba(15,34,51,.04)}
-  .month h2{font-size:15px;font-weight:700;margin:2px 2px 12px}
-  .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px}
-  .dow span{text-align:center;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase}
-  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
-  .cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
-    font-size:12px;position:relative;color:var(--ink);border-radius:3px}
+  .month{padding:16px 16px 18px;transition:transform .25s var(--ease),border-color .25s}
+  .month:hover{transform:translateY(-3px);border-color:var(--border-str)}
+  .month h3{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;margin:2px 2px 12px;color:var(--text)}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:5px}
+  .dow span{text-align:center;font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.04em}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+  .cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;
+    font-size:12px;color:var(--text-2);border-radius:6px;transition:transform .18s var(--ease)}
   .cell.empty{visibility:hidden}
-  .cell.we{color:#c0392b}
-  /* день внутри поездки (мягкая заливка периода) */
-  .cell.trip{color:var(--ink);font-weight:600}
-  .cell.tstart{border-top-left-radius:11px;border-bottom-left-radius:11px}
-  .cell.tend{border-top-right-radius:11px;border-bottom-right-radius:11px}
-  /* день перелёта / поезда — насыщенная точка поверх периода */
-  .cell.leg{color:#fff;font-weight:800}
-  .cell.leg::after{position:absolute;top:0;right:2px;font-size:8px}
+  .cell.we{color:#8a97a6}
+  .cell.trip{color:var(--text);font-weight:600}
+  .cell.tstart{border-top-left-radius:999px;border-bottom-left-radius:999px}
+  .cell.tend{border-top-right-radius:999px;border-bottom-right-radius:999px}
+  .cell.leg{color:#fff;font-weight:800;box-shadow:0 4px 14px -4px rgba(0,0,0,.7)}
+  .cell.leg:hover{transform:scale(1.12);z-index:3}
+  .cell.leg::after{position:absolute;top:0;right:2px;font-size:8px;line-height:1}
   .cell.leg.flight::after{content:"✈"}
   .cell.leg.train::after{content:"🚆"}
-  .cell .evbadge{position:absolute;bottom:1px;left:1px;width:15px;height:15px;background:#fff;
-    border-radius:4px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 1px rgba(0,0,0,.12)}
+  .cell .evbadge{position:absolute;bottom:1px;left:1px;width:15px;height:15px;
+    background:#fdfaf3;border-radius:5px;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 1px rgba(0,0,0,.25),0 2px 6px rgba(0,0,0,.4)}
   .cell .evbadge svg{display:block}
 
-  /* ---- СПИСОК ПОЕЗДОК ---- */
-  .trip-card{background:var(--card);border:1px solid var(--line);border-radius:14px;
-    padding:14px 16px;margin-bottom:12px;box-shadow:0 1px 3px rgba(15,34,51,.04);
-    border-left:5px solid #ccc}
-  .trip-card h4{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:2px}
-  .trip-card .period{font-size:13px;color:var(--muted);font-weight:600;margin-bottom:10px}
-  .trip-card .period b{color:var(--ink)}
-  .leglist{display:flex;flex-direction:column;gap:5px}
-  .legrow{display:flex;align-items:center;gap:8px;font-size:13px}
-  .legrow .ld{font-weight:700;min-width:46px;color:var(--muted)}
-  .legrow .li{width:18px;text-align:center}
-  .legrow.ev .li{filter:none}
-  .legrow .lt{font-weight:600}
+  /* ---------- КАРТОЧКИ ПОЕЗДОК ---------- */
+  .trip-card{padding:20px 22px;margin-bottom:14px;position:relative;overflow:hidden;
+    transition:transform .25s var(--ease),border-color .25s}
+  .trip-card:hover{transform:translateY(-3px)}
+  .trip-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px}
+  .trip-card .glow{position:absolute;left:-40px;top:-40px;width:180px;height:180px;
+    border-radius:50%;filter:blur(48px);opacity:.28;pointer-events:none}
+  .th{display:flex;align-items:center;gap:12px;margin-bottom:3px;position:relative}
+  .th .flag{font-size:26px;line-height:1}
+  .th h4{font-family:'Sora',sans-serif;font-size:19px;font-weight:700}
+  .period{font-size:13.5px;color:var(--muted);font-weight:500;margin-bottom:14px;position:relative}
+  .period b{color:var(--text-2);font-weight:700}
+  .leglist{display:flex;flex-direction:column;gap:2px;position:relative}
+  .legrow{display:flex;align-items:center;gap:12px;font-size:13.5px;padding:7px 0;
+    border-top:1px solid var(--border)}
+  .legrow:first-child{border-top:none}
+  .legrow .ld{font-weight:700;min-width:44px;color:var(--muted);font-variant-numeric:tabular-nums}
+  .legrow .li{width:22px;height:22px;display:flex;align-items:center;justify-content:center;
+    border-radius:7px;background:var(--surface-2);font-size:12px;flex:none}
+  .legrow .lt{font-weight:600;color:var(--text)}
   .legrow small{color:var(--muted);font-weight:500}
-  .open-note{font-size:12px;color:#c47a1a;background:#fff6e0;border-radius:8px;
-    padding:6px 10px;margin-top:8px;display:inline-block}
-  footer{text-align:center;color:var(--muted);font-size:12px;padding:14px 0 40px}
+  .open-note{font-size:12.5px;color:#f0c674;background:rgba(240,198,116,.1);
+    border:1px solid rgba(240,198,116,.25);border-radius:10px;
+    padding:8px 12px;margin-top:12px;display:inline-flex;gap:6px;align-items:center;position:relative}
+
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:34px 0 46px;position:relative;z-index:1}
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+  }
 </style>
 </head>
 <body>
-<header>
-  <div class="wrap">
-    <div>
-      <h1>✈ Мои путешествия · 2026</h1>
-      <div class="sub">Календарь поездок за год — где и когда я была в пути</div>
-    </div>
+<div class="wrap">
+
+  <header>
+    <span class="eyebrow"><span class="pin"></span>Личный дневник путешествий</span>
+    <h1>Мои путешествия<br>2026</h1>
+    <p class="lead">Где и когда я была в пути — целыми периодами, а не отдельными днями. Перелёты, поезда и места, которые стоит помнить.</p>
+
     <div class="stats">
       <div class="stat"><b id="stTrips">0</b><span>поездок</span></div>
-      <div class="stat"><b id="stFlights">0</b><span>перелётов</span></div>
-      <div class="stat"><b id="stTrains">0</b><span>поездов</span></div>
-      <div class="stat"><b id="stDays">0</b><span>дней в пути</span></div>
+      <div class="stat c-e"><b id="stFlights">0</b><span>перелётов</span></div>
+      <div class="stat c-s"><b id="stTrains">0</b><span>поездов</span></div>
+      <div class="stat c-c"><b id="stDays">0</b><span>дней в пути</span></div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main>
-  <h3 class="sec">Лента года — периоды поездок</h3>
-  <div class="timeline">
+  <div class="sec-head"><h2>Лента года</h2><span class="hint">периоды поездок по месяцам</span></div>
+  <div class="glass timeline">
     <div class="tmonths" id="tmonths"></div>
     <div class="track" id="track"></div>
   </div>
 
-  <h3 class="sec">По месяцам</h3>
+  <div class="sec-head"><h2>По месяцам</h2><span class="hint">подсветка — дни в поездке</span></div>
   <div class="legend" id="legend"></div>
   <div class="year" id="year"></div>
 
-  <h3 class="sec">Подробно по поездкам</h3>
+  <div class="sec-head"><h2>Подробно</h2><span class="hint">маршрут каждой поездки</span></div>
   <div id="tripList"></div>
-</main>
 
-<footer>Обновляется вручную · ~/Desktop/files/Календарь перелетов 2026/flights.html</footer>
+</div>
+<footer>Обновляется вручную · nikooolechka.github.io/flights.html</footer>
 
 <script>
-/* ============================================================
-   ПОЕЗДКИ 2026 — заполняется вручную.
-   Каждая поездка = период (from..to) + перелёты/поезда + места.
-   type у ноги: "flight" (✈, в счёт перелётов) | "train" (🚆).
-   openStart/openEnd = дата границы пока неизвестна (спросить).
-   ============================================================ */
 const TRIPS = [
   {
-    name:"Египет", flag:"🇪🇬", color:"#e8912a", soft:"#fbe4c7",
-    from:"2026-01-06", to:"2026-01-07",
-    openStart:true,   // когда именно прилетела в Шарм — уточнить
+    name:"Египет", flag:"🇪🇬", color:"#E7A93C", legBg:"#8f5f11", soft:"rgba(231,169,60,.16)", edge:"rgba(231,169,60,.45)",
+    from:"2026-01-06", to:"2026-01-07", openStart:true,
     legs:[
       { date:"2026-01-06", from:"Шарм-эль-Шейх", to:"Каир", type:"flight", note:"одним днём, туда-обратно" },
       { date:"2026-01-07", from:"Шарм-эль-Шейх", to:"Москва", type:"flight", note:"домой" },
     ],
-    events:[
-      { date:"2026-01-06", place:"Пирамиды Гизы", icon:"pyramids", note:"чудо света" },
-    ],
+    events:[{ date:"2026-01-06", place:"Пирамиды Гизы", icon:"pyramids", note:"чудо света" }],
   },
   {
-    name:"Сочи", flag:"🌴", color:"#16a3a3", soft:"#cceded",
-    from:"2026-01-15", to:"2026-01-15",
-    openEnd:true,     // дата возвращения из Сочи — уточнить
-    legs:[
-      { date:"2026-01-15", from:"Москва", to:"Сочи", type:"flight", note:"из дома" },
-    ],
+    name:"Сочи", flag:"🌴", color:"#2ED2C4", legBg:"#0d7168", soft:"rgba(46,210,196,.15)", edge:"rgba(46,210,196,.4)",
+    from:"2026-01-15", to:"2026-01-15", openEnd:true,
+    legs:[{ date:"2026-01-15", from:"Москва", to:"Сочи", type:"flight", note:"из дома" }],
     events:[],
   },
   {
-    name:"Китай", flag:"🇨🇳", color:"#d1433f", soft:"#f6d6d4",
-    from:"2026-04-11", to:"2026-04-28",
-    openEnd:true,     // дата возвращения из Китая домой — уточнить
+    name:"Китай", flag:"🇨🇳", color:"#FF5A5F", legBg:"#a82a30", soft:"rgba(255,90,95,.15)", edge:"rgba(255,90,95,.4)",
+    from:"2026-04-11", to:"2026-04-28", openEnd:true,
     legs:[
       { date:"2026-04-11", from:"Москва",   to:"Гуанчжоу", type:"flight" },
       { date:"2026-04-18", from:"Гуанчжоу", to:"Гонконг",  type:"train" },
@@ -177,9 +211,7 @@ const TRIPS = [
       { date:"2026-04-25", from:"Шанхай",   to:"Пекин",    type:"flight" },
       { date:"2026-04-28", from:"Пекин",    to:"Гуанчжоу", type:"flight" },
     ],
-    events:[
-      { date:"2026-04-26", place:"Великая Китайская стена", icon:"wall", note:"" },
-    ],
+    events:[{ date:"2026-04-26", place:"Великая Китайская стена", icon:"wall", note:"" }],
   },
 ];
 
@@ -194,18 +226,16 @@ const DOW=["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
 const YEAR=2026, TODAY="2026-07-07";
 const pad=n=>String(n).padStart(2,"0");
 const dt=iso=>new Date(iso+"T00:00:00");
-function doy(iso){const d=dt(iso);const s=new Date(YEAR,0,0);return Math.round((d-s)/86400000);} // 1..365
+function doy(iso){const d=dt(iso);const s=new Date(YEAR,0,0);return Math.round((d-s)/86400000);}
 function fmtRange(from,to,openS,openE){
-  const a=dt(from),b=dt(to);
-  const dA=a.getDate(),mA=a.getMonth(),dB=b.getDate(),mB=b.getMonth();
+  const a=dt(from),b=dt(to),dA=a.getDate(),mA=a.getMonth(),dB=b.getDate(),mB=b.getMonth();
   let s = mA===mB ? `${dA}–${dB} ${MON_A[mB]}` : `${dA} ${MON_A[mA]} – ${dB} ${MON_A[mB]}`;
   if(from===to) s=`${dA} ${MON_A[mA]}`;
-  if(openS) s="? – "+ (from===to?`${dA} ${MON_A[mA]}`:`${dB} ${MON_A[mB]}`);
+  if(openS) s="? – "+(from===to?`${dA} ${MON_A[mA]}`:`${dB} ${MON_A[mB]}`);
   if(openE) s=`${dA} ${MON_A[mA]} – ?`;
   return s;
 }
 
-/* индекс дней -> поездка/ноги/события */
 const dayTrip={}, legByDate={}, evByDate={};
 TRIPS.forEach((t,ti)=>{
   let d=dt(t.from), end=dt(t.to);
@@ -217,32 +247,30 @@ TRIPS.forEach((t,ti)=>{
   t.events.forEach(e=>evByDate[e.date]=e);
 });
 
-/* ---------- ЛЕНТА ГОДА ---------- */
+/* лента года */
 const tm=document.getElementById("tmonths");
-for(let m=0;m<12;m++){const left=(m/12*100);tm.insertAdjacentHTML("beforeend",`<span style="left:${left}%">${MON_A[m]}</span>`);}
+for(let m=0;m<12;m++) tm.insertAdjacentHTML("beforeend",`<span style="left:${m/12*100}%">${MON_A[m]}</span>`);
 const track=document.getElementById("track");
 TRIPS.forEach(t=>{
-  const l=(doy(t.from)-1)/365*100;
-  const w=Math.max((doy(t.to)-doy(t.from)+1)/365*100, 1.4);
+  const l=(doy(t.from)-1)/365*100, w=Math.max((doy(t.to)-doy(t.from)+1)/365*100,1.5);
   const cls="tbar"+(t.openEnd?" open-r":"")+(t.openStart?" open-l":"");
-  const ticks=t.legs.map(x=>x.type==="train"?"🚆":"✈").join("");
   const row=document.createElement("div");row.className="trow";
-  row.innerHTML=`<div class="${cls}" style="left:${l}%;width:${w}%;background:${t.color}"></div>
+  row.innerHTML=`<div class="${cls}" style="left:${l}%;width:${w}%;
+      background:linear-gradient(90deg,${t.color},${t.legBg});
+      box-shadow:0 0 20px -2px ${t.color}88, inset 0 1px 0 rgba(255,255,255,.25)"></div>
     <div class="tlabel" style="left:${l+w}%">${t.flag} ${t.name} <small>· ${fmtRange(t.from,t.to,t.openStart,t.openEnd)}</small></div>`;
   track.appendChild(row);
 });
-track.style.height=(TRIPS.length*34+6)+"px";
-// линия «сегодня»
-const nowL=(doy(TODAY)-1)/365*100;
-track.insertAdjacentHTML("beforeend",`<div class="tnow" style="left:${nowL}%"></div>`);
+track.style.height=(TRIPS.length*40+8)+"px";
+track.insertAdjacentHTML("beforeend",`<div class="tnow" style="left:${(doy(TODAY)-1)/365*100}%"></div>`);
 
-/* ---------- ЛЕГЕНДА ---------- */
+/* легенда */
 document.getElementById("legend").innerHTML =
-  TRIPS.map(t=>`<span><span class="dot" style="background:${t.soft};box-shadow:0 0 0 1px ${t.color} inset"></span>${t.flag} ${t.name}</span>`).join("")
-  + `<span><span class="dot" style="background:#555;border-radius:5px"></span>✈/🚆 день переезда</span>`
+  TRIPS.map(t=>`<span><span class="sw" style="background:linear-gradient(90deg,${t.color},${t.legBg})"></span>${t.flag} ${t.name}</span>`).join("")
+  + `<span><span class="sw" style="background:#3a4657"></span>✈ / 🚆 день переезда</span>`
   + `<span>📍 достопримечательность</span>`;
 
-/* ---------- МЕСЯЦЫ ---------- */
+/* месяцы */
 const yearEl=document.getElementById("year");
 for(let m=0;m<12;m++){
   const first=new Date(YEAR,m,1);
@@ -260,60 +288,56 @@ for(let m=0;m<12;m++){
       const t=TRIPS[ti];
       cls.push("trip");
       style=`background:${t.soft};`;
-      if(iso===t.from) cls.push("tstart");
-      if(iso===t.to)   cls.push("tend");
+      if(iso===t.from){cls.push("tstart");style+=`box-shadow:inset 3px 0 0 ${t.edge};`;}
+      if(iso===t.to){cls.push("tend");style+=`box-shadow:inset -3px 0 0 ${t.edge};`;}
       titles.push(`${t.flag} ${t.name}`);
       const leg=legByDate[iso];
       if(leg){
         cls.push("leg", leg.type==="train"?"train":"flight");
-        style=`background:${leg.type==="train"?"#3f7f6a":t.color};`;
+        style=`background:linear-gradient(135deg,${leg.type==="train"?"#12988c":t.color},${leg.type==="train"?"#0d7168":t.legBg});`;
         titles.push(`${leg.type==="train"?"🚆":"✈"} ${leg.from} → ${leg.to}${leg.note?" · "+leg.note:""}`);
       }
     }
     const ev=evByDate[iso];
     if(ev){ badge=`<span class="evbadge">${ICONS[ev.icon]||"⭐"}</span>`; titles.push(`📍 ${ev.place}${ev.note?" — "+ev.note:""}`); }
-    if(iso===TODAY) style+="box-shadow:0 0 0 2px var(--today) inset;";
+    if(iso===TODAY) style+="box-shadow:0 0 0 2px var(--accent), 0 0 14px -2px var(--accent);";
     cells+=`<div class="${cls.join(' ')}" style="${style}" title="${titles.join(' | ')}">${d}${badge}</div>`;
   }
   yearEl.insertAdjacentHTML("beforeend",
-    `<div class="month"><h2>${MONTHS[m]}</h2>
+    `<div class="glass month"><h3>${MONTHS[m]}</h3>
       <div class="dow">${DOW.map(x=>`<span>${x}</span>`).join("")}</div>
       <div class="grid">${cells}</div></div>`);
 }
 
-/* ---------- СПИСОК ПОЕЗДОК ---------- */
+/* карточки поездок */
 const tl=document.getElementById("tripList");
-let totalFlights=0, totalTrains=0, totalDays=0;
+let totalFlights=0,totalTrains=0,totalDays=0;
 TRIPS.forEach(t=>{
   const nf=t.legs.filter(l=>l.type!=="train").length;
   const nt=t.legs.filter(l=>l.type==="train").length;
-  totalFlights+=nf; totalTrains+=nt;
-  totalDays += doy(t.to)-doy(t.from)+1;
-
-  // объединяем ноги и события в хронологию
+  totalFlights+=nf; totalTrains+=nt; totalDays+=doy(t.to)-doy(t.from)+1;
   const items=[...t.legs.map(l=>({...l,kind:"leg"})),...t.events.map(e=>({...e,kind:"ev"}))]
     .sort((a,b)=>a.date.localeCompare(b.date));
   const rows=items.map(it=>{
     const d=dt(it.date), ds=`${pad(d.getDate())}.${pad(d.getMonth()+1)}`;
-    if(it.kind==="ev"){
-      return `<div class="legrow ev"><span class="ld">${ds}</span>
-        <span class="li"><span class="evbadge" style="position:static;display:inline-flex">${ICONS[it.icon]||"⭐"}</span></span>
+    if(it.kind==="ev")
+      return `<div class="legrow"><span class="ld">${ds}</span>
+        <span class="li"><span class="evbadge" style="position:static;box-shadow:none;width:16px;height:16px">${ICONS[it.icon]||"⭐"}</span></span>
         <span class="lt">📍 ${it.place}</span> ${it.note?`<small>· ${it.note}</small>`:""}</div>`;
-    }
     const ic=it.type==="train"?"🚆":"✈";
     return `<div class="legrow"><span class="ld">${ds}</span>
       <span class="li">${ic}</span>
       <span class="lt">${it.from} → ${it.to}</span> ${it.note?`<small>· ${it.note}</small>`:""}</div>`;
   }).join("");
-
-  const openTxt = t.openStart ? "Дата прилёта в начале поездки пока не указана"
-                : t.openEnd   ? "Дата возвращения пока не указана"
-                : "";
+  const openTxt=t.openStart?"Дата прилёта в начале поездки пока не указана"
+    :t.openEnd?"Дата возвращения пока не указана":"";
   tl.insertAdjacentHTML("beforeend",
-    `<div class="trip-card" style="border-left-color:${t.color}">
-       <h4>${t.flag} ${t.name}</h4>
+    `<div class="glass trip-card" style="border-color:var(--border)">
+       <span style="position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(${t.color},${t.legBg})"></span>
+       <span class="glow" style="background:${t.color}"></span>
+       <div class="th"><span class="flag">${t.flag}</span><h4>${t.name}</h4></div>
        <div class="period">${fmtRange(t.from,t.to,t.openStart,t.openEnd)}
-         · <b>${nf}</b> ✈${nt?` · <b>${nt}</b> 🚆`:""}${t.events.length?` · <b>${t.events.length}</b> 📍`:""}</div>
+         · <b>${nf}</b> перелёт${nt?` · <b>${nt}</b> поезд`:""}${t.events.length?` · <b>${t.events.length}</b> место`:""}</div>
        <div class="leglist">${rows}</div>
        ${openTxt?`<div class="open-note">✎ ${openTxt}</div>`:""}
      </div>`);
