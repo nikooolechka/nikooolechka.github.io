@@ -233,7 +233,11 @@
       "dzen": {
         "released_at": "2026-06-20T12:00:00+03:00"
       },
-      "ok": {}
+      "ok": {},
+      "tg": {
+        "posted_at": "2026-07-07T06:36:13.710920+00:00",
+        "url": "https://t.me/asfarm_ru/11"
+      }
     },
     "_image_url": "/images/irrigator.jpg"
   },
@@ -542,8 +546,8 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-07T06:36:12.271425+00:00",
+        "url": "https://vk.com/wall-239602265_21"
       },
       "dzen": {
         "released_at": null
