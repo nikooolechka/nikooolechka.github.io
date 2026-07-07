@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Мои перелёты · 2026</title>
+<style>
+  :root{
+    --nav1:#051929; --nav2:#1B6CA8; --ink:#0f2233; --muted:#6b7f90;
+    --line:#e3ebf1; --bg:#f4f8fb; --card:#ffffff;
+    --flight:#1B6CA8; --flight-soft:#e6f0f7; --today:#ff7a45;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased}
+
+  header{
+    background:linear-gradient(to top,#051929,#1B6CA8);
+    color:#fff;padding:42px 28px 58px;position:relative;overflow:hidden;
+    border-bottom-left-radius:0;border-bottom-right-radius:0;
+  }
+  header::after{
+    content:"";position:absolute;left:50%;bottom:-1px;transform:translateX(-50%);
+    width:150%;height:60px;background:var(--bg);border-radius:50% 50% 0 0;
+  }
+  header .wrap{max-width:1180px;margin:0 auto;position:relative;z-index:2;
+    display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  header h1{font-size:30px;font-weight:800;letter-spacing:-.4px;display:flex;align-items:center;gap:12px}
+  header .plane{font-size:30px}
+  header .sub{opacity:.82;font-size:14px;margin-top:6px;font-weight:500}
+  .stats{display:flex;gap:14px}
+  .stat{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);
+    border-radius:14px;padding:10px 16px;text-align:center;min-width:88px;backdrop-filter:blur(4px)}
+  .stat b{display:block;font-size:24px;font-weight:800;line-height:1}
+  .stat span{font-size:11px;opacity:.85;text-transform:uppercase;letter-spacing:.5px}
+
+  main{max-width:1180px;margin:0 auto;padding:8px 20px 60px}
+
+  .legend{display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    margin:6px 4px 22px;font-size:13px;color:var(--muted)}
+  .legend .dot{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:6px;vertical-align:-1px}
+
+  .year{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media(max-width:920px){.year{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:620px){.year{grid-template-columns:1fr}}
+
+  .month{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    padding:14px 14px 16px;box-shadow:0 1px 3px rgba(15,34,51,.04)}
+  .month h2{font-size:15px;font-weight:700;margin:2px 2px 12px;display:flex;
+    justify-content:space-between;align-items:center}
+  .month h2 .cnt{font-size:11px;font-weight:700;color:var(--flight);
+    background:var(--flight-soft);border-radius:20px;padding:2px 9px}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:4px}
+  .dow span{text-align:center;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+  .cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;
+    font-size:12px;border-radius:8px;position:relative;color:var(--ink)}
+  .cell.empty{visibility:hidden}
+  .cell.we{color:#c0392b}
+  .cell.flight{background:var(--flight);color:#fff;font-weight:700;cursor:pointer}
+  .cell.flight::after{content:"✈";position:absolute;top:1px;right:3px;font-size:8px;opacity:.9}
+  .cell.flight:hover{filter:brightness(1.08)}
+
+  .list{margin-top:34px}
+  .list h3{font-size:18px;font-weight:800;margin:0 4px 14px}
+  table{width:100%;border-collapse:collapse;background:var(--card);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  th,td{padding:11px 14px;text-align:left;font-size:13px;border-bottom:1px solid var(--line)}
+  th{background:#f0f6fa;font-weight:700;color:var(--ink);font-size:11px;
+    text-transform:uppercase;letter-spacing:.5px}
+  tr:last-child td{border-bottom:none}
+  tr:hover td{background:#f8fbfd}
+  td.date{white-space:nowrap;font-weight:700;color:var(--flight)}
+  td.route{font-weight:600}
+  .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;
+    background:var(--flight-soft);color:var(--flight);font-weight:600}
+  .empty-note{color:var(--muted);font-size:13px;padding:18px;text-align:center}
+  footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 0 40px}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div>
+      <h1><span class="plane">✈</span> Мои перелёты · 2026</h1>
+      <div class="sub" id="subtitle">Личный календарь перелётов на год</div>
+    </div>
+    <div class="stats">
+      <div class="stat"><b id="stTotal">0</b><span>перелётов</span></div>
+      <div class="stat"><b id="stMonths">0</b><span>месяцев в пути</span></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="legend">
+    <span><span class="dot" style="background:var(--flight)"></span>день перелёта</span>
+    <span><span class="dot" style="background:var(--today);"></span>сегодня</span>
+    <span>наведи на дату — увидишь рейс</span>
+  </div>
+
+  <div class="year" id="year"></div>
+
+  <div class="list">
+    <h3>Список перелётов за 2026</h3>
+    <div id="tableWrap"></div>
+  </div>
+</main>
+
+<footer>Обновлено вручную · ~/Desktop/files/Календарь перелетов 2026/flights.html</footer>
+
+<script>
+/* ============================================================
+   ПЕРЕЛЁТЫ 2026 — заполняется вручную.
+   Формат: { date:"2026-MM-DD", from:"Город", to:"Город",
+             time:"чч:мм", flight:"рейс", airline:"а/к", note:"" }
+   Пример ниже — ЗАГЛУШКИ, заменю на твои 14 перелётов.
+   ============================================================ */
+const FLIGHTS = [
+  { date:"2026-01-06", from:"Шарм-эль-Шейх", to:"Каир", time:"", flight:"", airline:"", note:"одним днём, туда-обратно (Шарм → Каир → Шарм)" },
+  { date:"2026-01-07", from:"Шарм-эль-Шейх", to:"Москва", time:"", flight:"", airline:"", note:"возвращение домой" },
+  { date:"2026-01-15", from:"Москва", to:"Сочи", time:"", flight:"", airline:"", note:"из дома" },
+];
+
+const MONTHS = ["Январь","Февраль","Март","Апрель","Май","Июнь",
+  "Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
+const DOW = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
+const YEAR = 2026;
+
+const byDate = {};
+FLIGHTS.forEach(f=>{ (byDate[f.date] ||= []).push(f); });
+
+// сегодня (фиксировано, чтобы совпадало со средой владельца)
+const TODAY = "2026-07-07";
+
+function pad(n){return String(n).padStart(2,"0");}
+
+const yearEl = document.getElementById("year");
+let monthsWithFlights = new Set();
+
+for(let m=0;m<12;m++){
+  const first = new Date(YEAR, m, 1);
+  const startDow = (first.getDay()+6)%7;           // Пн=0
+  const days = new Date(YEAR, m+1, 0).getDate();
+
+  let cntThis=0;
+  let cells="";
+  for(let i=0;i<startDow;i++) cells+=`<div class="cell empty"></div>`;
+  for(let d=1;d<=days;d++){
+    const iso=`${YEAR}-${pad(m+1)}-${pad(d)}`;
+    const dow=(startDow+d-1)%7;
+    const cls=["cell"];
+    if(dow>=5) cls.push("we");
+    let title="";
+    if(byDate[iso]){
+      cls.push("flight");
+      cntThis+=byDate[iso].length;
+      monthsWithFlights.add(m);
+      title = byDate[iso].map(f=>`${f.from} → ${f.to}${f.time?" · "+f.time:""}${f.flight?" · "+f.flight:""}`).join(" | ");
+    }
+    let style="";
+    if(iso===TODAY) style=`style="box-shadow:0 0 0 2px var(--today) inset"`;
+    cells+=`<div class="${cls.join(' ')}" ${style} title="${title}">${d}</div>`;
+  }
+
+  const cntBadge = cntThis? `<span class="cnt">${cntThis} ✈</span>` : "";
+  yearEl.insertAdjacentHTML("beforeend",
+    `<div class="month">
+      <h2>${MONTHS[m]}${cntBadge}</h2>
+      <div class="dow">${DOW.map(x=>`<span>${x}</span>`).join("")}</div>
+      <div class="grid">${cells}</div>
+    </div>`);
+}
+
+// статистика
+document.getElementById("stTotal").textContent = FLIGHTS.length;
+document.getElementById("stMonths").textContent = monthsWithFlights.size;
+
+// таблица
+const tw=document.getElementById("tableWrap");
+if(FLIGHTS.length){
+  const rows=[...FLIGHTS].sort((a,b)=>a.date.localeCompare(b.date)).map((f,i)=>{
+    const dt=new Date(f.date);
+    const ds=`${pad(dt.getDate())}.${pad(dt.getMonth()+1)}`;
+    return `<tr>
+      <td>${i+1}</td>
+      <td class="date">${ds}</td>
+      <td class="route">${f.from} → ${f.to}</td>
+      <td>${f.time||"—"}</td>
+      <td>${f.flight?`<span class="badge">${f.flight}</span>`:"—"}</td>
+      <td>${f.airline||"—"}</td>
+      <td>${f.note||""}</td>
+    </tr>`;
+  }).join("");
+  tw.innerHTML=`<table>
+    <thead><tr><th>#</th><th>Дата</th><th>Маршрут</th><th>Время</th><th>Рейс</th><th>А/к</th><th>Примечание</th></tr></thead>
+    <tbody>${rows}</tbody></table>`;
+} else {
+  tw.innerHTML=`<div class="empty-note">Перелёты ещё не заведены. Пришли список — вобью сюда.</div>`;
+}
+</script>
+</body>
+</html>
