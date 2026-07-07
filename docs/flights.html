@@ -26,13 +26,19 @@
     color:var(--text);background:var(--bg);line-height:1.5;
     -webkit-font-smoothing:antialiased;overflow-x:hidden;position:relative;min-height:100vh;
   }
-  /* аврора-подсветка на фоне */
+  /* аврора-подсветка на фоне + виньетка (глубина) */
   body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
     background:
-      radial-gradient(60% 45% at 12% 0%, rgba(231,169,60,.18), transparent 60%),
-      radial-gradient(55% 45% at 88% 8%, rgba(255,90,95,.16), transparent 60%),
-      radial-gradient(60% 50% at 50% 100%, rgba(46,210,196,.13), transparent 60%),
-      linear-gradient(180deg,var(--bg),var(--bg2));
+      radial-gradient(50% 38% at 10% -4%, rgba(231,169,60,.30), transparent 62%),
+      radial-gradient(48% 40% at 92% 4%, rgba(255,90,95,.26), transparent 62%),
+      radial-gradient(60% 46% at 50% 108%, rgba(46,210,196,.20), transparent 62%),
+      radial-gradient(120% 130% at 50% 24%, transparent 52%, rgba(0,0,0,.60) 100%),
+      linear-gradient(180deg,#0a0e15,#070a10 60%,#05070c);
+  }
+  /* зерно поверх фона — убирает «пластиковую» плоскость */
+  body::after{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.05;
+    mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
   .wrap{max-width:1180px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
 
@@ -51,20 +57,47 @@
   .lead{color:var(--text-2);font-size:16px;max-width:560px}
 
   .stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
-  .stat{flex:1;min-width:120px;background:var(--surface);border:1px solid var(--border);
-    border-radius:var(--radius);padding:16px 18px;backdrop-filter:blur(14px);
-    transition:transform .25s var(--ease),border-color .25s}
-  .stat:hover{transform:translateY(-3px);border-color:var(--border-str)}
-  .stat b{font-family:'Sora',sans-serif;font-size:30px;font-weight:800;display:block;line-height:1}
-  .stat span{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:4px;display:block}
-  .stat.c-e b{color:#e7a93c}.stat.c-s b{color:#2ed2c4}.stat.c-c b{color:#ff5a5f}
+  .stat{flex:1;min-width:150px;position:relative;overflow:hidden;
+    display:flex;align-items:center;gap:14px;
+    border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;
+    backdrop-filter:blur(16px) saturate(150%);
+    background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.015));
+    box-shadow:0 1px 0 rgba(255,255,255,.10) inset,0 18px 34px -26px rgba(0,0,0,.85);
+    transition:transform .25s var(--ease),border-color .25s,box-shadow .25s}
+  /* мягкое цветное свечение из-за иконки */
+  .stat::before{content:"";position:absolute;left:-10px;top:-14px;width:110px;height:110px;
+    border-radius:50%;background:var(--c);opacity:.14;filter:blur(30px);pointer-events:none}
+  .stat:hover{transform:translateY(-4px);border-color:color-mix(in srgb,var(--c) 45%,var(--border-str));
+    box-shadow:0 1px 0 rgba(255,255,255,.16) inset,0 26px 46px -24px rgba(0,0,0,.9),
+      0 0 0 1px color-mix(in srgb,var(--c) 22%,transparent)}
+  .stat .ico{flex:none;width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+    color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent);
+    border:1px solid color-mix(in srgb,var(--c) 32%,transparent);
+    box-shadow:0 1px 0 rgba(255,255,255,.14) inset,0 6px 16px -8px var(--c);position:relative;z-index:1}
+  .stat .ico svg{width:22px;height:22px}
+  .stat .meta{display:flex;flex-direction:column;line-height:1;position:relative;z-index:1}
+  .stat .meta b{font-family:'Sora',sans-serif;font-size:30px;font-weight:800;
+    color:var(--c);font-variant-numeric:tabular-nums;
+    text-shadow:0 0 22px color-mix(in srgb,var(--c) 45%,transparent)}
+  .stat .meta span{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:6px}
 
   .sec-head{display:flex;align-items:baseline;gap:12px;margin:44px 0 16px}
   .sec-head h2{font-family:'Sora',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.01em}
   .sec-head .hint{font-size:13px;color:var(--muted)}
 
-  .glass{background:var(--surface);border:1px solid var(--border);border-radius:22px;
-    backdrop-filter:blur(16px);box-shadow:0 20px 50px -30px rgba(0,0,0,.8)}
+  .glass{position:relative;border:1px solid var(--border);border-radius:22px;
+    background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.02) 42%,rgba(255,255,255,.012));
+    backdrop-filter:blur(22px) saturate(150%);-webkit-backdrop-filter:blur(22px) saturate(150%);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,.12) inset,
+      0 -26px 50px -34px rgba(0,0,0,.7) inset,
+      0 26px 44px -26px rgba(0,0,0,.85),
+      0 6px 16px -12px rgba(0,0,0,.9);}
+  /* светящаяся кромка сверху — «стекло ловит свет» */
+  .glass::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;
+    background:linear-gradient(180deg,rgba(255,255,255,.32),rgba(255,255,255,.04) 34%,transparent 60%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;}
 
   /* ---------- ЛЕНТА ГОДА ---------- */
   .timeline{padding:22px 22px 24px;overflow:hidden}
@@ -74,9 +107,11 @@
   .track{position:relative;border-radius:12px;
     background:linear-gradient(90deg,var(--border) 0 1px,transparent 1px) 0 0 / calc(100%/12) 100%}
   .trow{position:relative;height:40px}
-  .tbar{position:absolute;top:8px;height:24px;border-radius:999px;min-width:8px;
+  .tbar{position:absolute;top:8px;height:24px;border-radius:999px;min-width:8px;overflow:hidden;
     transition:transform .3s var(--ease),filter .3s;cursor:default}
-  .tbar:hover{transform:scaleY(1.12);filter:brightness(1.12)}
+  .tbar::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.12) 42%,rgba(0,0,0,.18) 100%)}
+  .tbar:hover{transform:scaleY(1.14);filter:brightness(1.12)}
   .tbar.open-r{border-top-right-radius:4px;border-bottom-right-radius:4px}
   .tbar.open-l{border-top-left-radius:4px;border-bottom-left-radius:4px}
   .tlabel{position:absolute;top:11px;font-size:12.5px;font-weight:700;white-space:nowrap;
@@ -109,9 +144,12 @@
   .cell.trip{color:var(--text);font-weight:600}
   .cell.tstart{border-top-left-radius:999px;border-bottom-left-radius:999px}
   .cell.tend{border-top-right-radius:999px;border-bottom-right-radius:999px}
-  .cell.leg{color:#fff;font-weight:800;box-shadow:0 4px 14px -4px rgba(0,0,0,.7)}
-  .cell.leg:hover{transform:scale(1.12);z-index:3}
-  .cell.leg::after{position:absolute;top:0;right:2px;font-size:8px;line-height:1}
+  .cell.leg{color:#fff;font-weight:800;
+    box-shadow:0 5px 14px -4px rgba(0,0,0,.75),0 1px 0 rgba(255,255,255,.28) inset}
+  .cell.leg::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(160deg,rgba(255,255,255,.42),rgba(255,255,255,0) 52%)}
+  .cell.leg:hover{transform:scale(1.14);z-index:3}
+  .cell.leg::after{position:absolute;top:0;right:2px;font-size:8px;line-height:1;z-index:2}
   .cell.leg.flight::after{content:"✈"}
   .cell.leg.train::after{content:"🚆"}
   .cell .evbadge{position:absolute;bottom:1px;left:1px;width:15px;height:15px;
@@ -160,10 +198,22 @@
     <p class="lead">Где и когда я была в пути — целыми периодами, а не отдельными днями. Перелёты, поезда и места, которые стоит помнить.</p>
 
     <div class="stats">
-      <div class="stat"><b id="stTrips">0</b><span>поездок</span></div>
-      <div class="stat c-e"><b id="stFlights">0</b><span>перелётов</span></div>
-      <div class="stat c-s"><b id="stTrains">0</b><span>поездов</span></div>
-      <div class="stat c-c"><b id="stDays">0</b><span>дней в пути</span></div>
+      <div class="stat" style="--c:#8b7bff">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg></span>
+        <span class="meta"><b id="stTrips">0</b><span>поездок</span></span>
+      </div>
+      <div class="stat" style="--c:#e7a93c">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.8 6.2a.5.5 0 0 0-.5.8l3.9 4.3-2.8 2.8H3.5a.5.5 0 0 0-.4.8l2 2.6 2.6 2a.5.5 0 0 0 .8-.4v-1.9l2.8-2.8 4.3 3.9a.5.5 0 0 0 .8-.5Z"/></svg></span>
+        <span class="meta"><b id="stFlights">0</b><span>перелётов</span></span>
+      </div>
+      <div class="stat" style="--c:#2ed2c4">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="14" rx="2"/><path d="M4 11h16M8 3v8M16 3v8"/><path d="M8 21l-2-3M16 21l2-3M9 17h6"/><circle cx="8.5" cy="14" r=".6" fill="currentColor"/><circle cx="15.5" cy="14" r=".6" fill="currentColor"/></svg></span>
+        <span class="meta"><b id="stTrains">0</b><span>поездов</span></span>
+      </div>
+      <div class="stat" style="--c:#ff5a5f">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2.5"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></span>
+        <span class="meta"><b id="stDays">0</b><span>дней в пути</span></span>
+      </div>
     </div>
   </header>
 
@@ -187,17 +237,21 @@
 const TRIPS = [
   {
     name:"Египет", flag:"🇪🇬", color:"#E7A93C", legBg:"#8f5f11", soft:"rgba(231,169,60,.16)", edge:"rgba(231,169,60,.45)",
-    from:"2026-01-06", to:"2026-01-07", openStart:true,
+    from:"2026-01-01", to:"2026-01-08",
     legs:[
+      { date:"2026-01-01", from:"Москва", to:"Шарм-эль-Шейх", type:"flight", note:"из дома" },
       { date:"2026-01-06", from:"Шарм-эль-Шейх", to:"Каир", type:"flight", note:"одним днём, туда-обратно" },
-      { date:"2026-01-07", from:"Шарм-эль-Шейх", to:"Москва", type:"flight", note:"домой" },
+      { date:"2026-01-08", from:"Шарм-эль-Шейх", to:"Москва", type:"flight", note:"домой" },
     ],
     events:[{ date:"2026-01-06", place:"Пирамиды Гизы", icon:"pyramids", note:"чудо света" }],
   },
   {
     name:"Сочи", flag:"🌴", color:"#2ED2C4", legBg:"#0d7168", soft:"rgba(46,210,196,.15)", edge:"rgba(46,210,196,.4)",
-    from:"2026-01-15", to:"2026-01-15", openEnd:true,
-    legs:[{ date:"2026-01-15", from:"Москва", to:"Сочи", type:"flight", note:"из дома" }],
+    from:"2026-01-15", to:"2026-01-18",
+    legs:[
+      { date:"2026-01-15", from:"Москва", to:"Сочи", type:"flight", note:"из дома" },
+      { date:"2026-01-18", from:"Сочи", to:"Москва", type:"flight", note:"домой" },
+    ],
     events:[],
   },
   {
