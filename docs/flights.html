@@ -667,8 +667,10 @@ function applyFilter(key,stat){
   (first||yearBox).scrollIntoView({behavior:"smooth", block:"center"});
 }
 document.querySelectorAll(".stat[data-filter]").forEach(s=>{
-  s.addEventListener("click",()=>{ if(activeFilter){ clearFilter(); } else { applyFilter(s.dataset.filter,s); } });
+  s.addEventListener("click",e=>{ if(activeFilter){ clearFilter(); } else { applyFilter(s.dataset.filter,s); e.stopPropagation(); } });
 });
+// клик по любой области снимает активный фильтр
+document.addEventListener("click",()=>{ if(activeFilter) clearFilter(); });
 document.addEventListener("keydown",e=>{ if(e.key==="Escape" && activeFilter) clearFilter(); });
 </script>
 </body>
