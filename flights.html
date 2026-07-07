@@ -64,6 +64,11 @@
   .cell.train{background:var(--train);color:#fff;font-weight:700;cursor:pointer}
   .cell.train::after{content:"🚆";position:absolute;top:0;right:2px;font-size:8px;opacity:.95}
   .cell.train:hover{filter:brightness(1.08)}
+  .cell.eventonly{background:#fff6e0;color:var(--ink);font-weight:700;cursor:pointer}
+  .cell .evbadge{position:absolute;bottom:1px;left:1px;width:15px;height:15px;background:#fff;
+    border-radius:4px;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 1px rgba(0,0,0,.1)}
+  .cell .evbadge svg{display:block}
 
   .list{margin-top:34px}
   .list h3{font-size:18px;font-weight:800;margin:0 4px 14px}
@@ -92,6 +97,7 @@
     <div class="stats">
       <div class="stat"><b id="stTotal">0</b><span>перелётов</span></div>
       <div class="stat"><b id="stTrains">0</b><span>поездов</span></div>
+      <div class="stat"><b id="stPlaces">0</b><span>мест</span></div>
       <div class="stat"><b id="stMonths">0</b><span>месяцев в пути</span></div>
     </div>
   </div>
@@ -101,6 +107,7 @@
   <div class="legend">
     <span><span class="dot" style="background:var(--flight)"></span>✈ перелёт</span>
     <span><span class="dot" style="background:var(--train)"></span>🚆 поезд</span>
+    <span><span class="dot" style="background:#fff6e0;box-shadow:0 0 0 1px var(--line)"></span>📍 достопримечательность</span>
     <span><span class="dot" style="background:var(--today);"></span>сегодня</span>
     <span>наведи на дату — увидишь маршрут</span>
   </div>
@@ -132,15 +139,29 @@ const FLIGHTS = [
   { date:"2026-04-23", from:"Гуанчжоу", to:"Шанхай", time:"", flight:"", airline:"", note:"" },
   { date:"2026-04-25", from:"Шанхай", to:"Пекин", time:"", flight:"", airline:"", note:"" },
   { date:"2026-04-28", from:"Пекин", to:"Гуанчжоу", time:"", flight:"", airline:"", note:"" },
+
+  // Достопримечательности / впечатления (type:"event", icon — картинка места)
+  { date:"2026-01-06", type:"event", place:"Пирамиды Гизы", note:"чудо света", icon:"pyramids" },
+  { date:"2026-04-26", type:"event", place:"Великая Китайская стена", note:"", icon:"wall" },
 ];
+
+/* Картинки мест (мини-SVG, рисуются на белом бейдже — видно на любой ячейке) */
+const ICONS = {
+  pyramids:`<svg viewBox='0 0 24 24' width='12' height='12'><polygon points='9,4 17,20 1,20' fill='#e6b74d' stroke='#b8862a' stroke-width='.6'/><polygon points='17,8 23,20 11,20' fill='#d69a2f' stroke='#b8862a' stroke-width='.6'/></svg>`,
+  wall:`<svg viewBox='0 0 24 24' width='12' height='12'><path d='M1 22 V13 H4 V10 H7 V13 H10 V10 H13 V13 H16 V10 H19 V13 H23 V22 Z' fill='#9a8f79' stroke='#5f5748' stroke-width='.6'/></svg>`
+};
 
 const MONTHS = ["Январь","Февраль","Март","Апрель","Май","Июнь",
   "Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
 const DOW = ["Пн","Вт","Ср","Чт","Пт","Сб","Вс"];
 const YEAR = 2026;
 
-const byDate = {};
-FLIGHTS.forEach(f=>{ (byDate[f.date] ||= []).push(f); });
+const byDate = {};   // переезды (перелёты + поезда)
+const evByDate = {}; // события / места
+FLIGHTS.forEach(f=>{
+  if(f.type==="event"){ (evByDate[f.date] ||= []).push(f); }
+  else { (byDate[f.date] ||= []).push(f); }
+});
 
 // сегодня (фиксировано, чтобы совпадало со средой владельца)
 const TODAY = "2026-07-07";
@@ -163,18 +184,26 @@ for(let m=0;m<12;m++){
     const dow=(startDow+d-1)%7;
     const cls=["cell"];
     if(dow>=5) cls.push("we");
-    let title="";
+    const titles=[];
     if(byDate[iso]){
       const hasFlight = byDate[iso].some(t=>t.type!=="train");
       cls.push(hasFlight ? "flight" : "train");
       if(hasFlight){ cntThis+=byDate[iso].filter(t=>t.type!=="train").length; }
       monthsWithFlights.add(m);
       const ic = t=> t.type==="train" ? "🚆" : "✈";
-      title = byDate[iso].map(t=>`${ic(t)} ${t.from} → ${t.to}${t.time?" · "+t.time:""}${t.flight?" · "+t.flight:""}`).join(" | ");
+      byDate[iso].forEach(t=>titles.push(`${ic(t)} ${t.from} → ${t.to}${t.time?" · "+t.time:""}${t.flight?" · "+t.flight:""}`));
+    }
+    let badge="";
+    if(evByDate[iso]){
+      if(!byDate[iso]) cls.push("eventonly");
+      monthsWithFlights.add(m);
+      const ev=evByDate[iso][0];
+      badge=`<span class="evbadge">${ICONS[ev.icon]||"⭐"}</span>`;
+      evByDate[iso].forEach(e=>titles.push(`📍 ${e.place}${e.note?" — "+e.note:""}`));
     }
     let style="";
     if(iso===TODAY) style=`style="box-shadow:0 0 0 2px var(--today) inset"`;
-    cells+=`<div class="${cls.join(' ')}" ${style} title="${title}">${d}</div>`;
+    cells+=`<div class="${cls.join(' ')}" ${style} title="${titles.join(' | ')}">${d}${badge}</div>`;
   }
 
   const cntBadge = cntThis? `<span class="cnt">${cntThis} ✈</span>` : "";
@@ -187,10 +216,13 @@ for(let m=0;m<12;m++){
 }
 
 // статистика
-const flightCount = FLIGHTS.filter(t=>t.type!=="train").length;
+const isFlight = t=> !t.type || t.type==="flight";
+const flightCount = FLIGHTS.filter(isFlight).length;
 const trainCount  = FLIGHTS.filter(t=>t.type==="train").length;
+const eventCount  = FLIGHTS.filter(t=>t.type==="event").length;
 document.getElementById("stTotal").textContent = flightCount;
 document.getElementById("stTrains").textContent = trainCount;
+document.getElementById("stPlaces").textContent = eventCount;
 document.getElementById("stMonths").textContent = monthsWithFlights.size;
 
 // таблица
@@ -200,12 +232,22 @@ if(FLIGHTS.length){
   const rows=[...FLIGHTS].sort((a,b)=>a.date.localeCompare(b.date)).map((f)=>{
     const dt=new Date(f.date);
     const ds=`${pad(dt.getDate())}.${pad(dt.getMonth()+1)}`;
-    const isTrain=f.type==="train";
-    const num = isTrain ? "🚆" : (++n);
+    const isTrain=f.type==="train", isEvent=f.type==="event";
+    let num, dateStyle="", route;
+    if(isEvent){
+      num=`<span class="evbadge" style="position:static;display:inline-flex">${ICONS[f.icon]||"⭐"}</span>`;
+      dateStyle=' style="color:#b8862a"';
+      route=`📍 ${f.place}`;
+    } else if(isTrain){
+      num="🚆"; dateStyle=' style="color:var(--train)"';
+      route=`🚆 ${f.from} → ${f.to}`;
+    } else {
+      num=++n; route=`✈ ${f.from} → ${f.to}`;
+    }
     return `<tr>
       <td>${num}</td>
-      <td class="date"${isTrain?' style="color:var(--train)"':''}>${ds}</td>
-      <td class="route">${isTrain?"🚆":"✈"} ${f.from} → ${f.to}</td>
+      <td class="date"${dateStyle}>${ds}</td>
+      <td class="route">${route}</td>
       <td>${f.time||"—"}</td>
       <td>${f.flight?`<span class="badge">${f.flight}</span>`:"—"}</td>
       <td>${f.airline||"—"}</td>
