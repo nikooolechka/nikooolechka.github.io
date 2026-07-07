@@ -43,7 +43,7 @@
   .wrap{max-width:1180px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
 
   /* ---------- HEADER ---------- */
-  header{padding:56px 0 30px}
+  header{padding:44px 0 16px}
   .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:600;
     letter-spacing:.14em;text-transform:uppercase;color:var(--text-2);
     background:var(--surface);border:1px solid var(--border);
@@ -81,7 +81,7 @@
     text-shadow:0 0 22px color-mix(in srgb,var(--c) 45%,transparent)}
   .stat .meta span{font-size:11.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:6px}
 
-  .sec-head{display:flex;align-items:baseline;gap:12px;margin:44px 0 16px}
+  .sec-head{display:flex;align-items:baseline;gap:12px;margin:22px 0 12px}
   .sec-head h2{font-family:'Sora',sans-serif;font-size:21px;font-weight:700;letter-spacing:-.01em}
   .sec-head .hint{font-size:13px;color:var(--muted)}
 
@@ -100,21 +100,21 @@
     -webkit-mask-composite:xor;mask-composite:exclude;}
 
   /* ---------- ЛЕНТА ГОДА ---------- */
-  .timeline{padding:22px 22px 24px;overflow:hidden}
-  .tmonths{position:relative;height:20px;margin-bottom:10px}
+  .timeline{padding:16px 18px 16px;overflow:hidden}
+  .tmonths{position:relative;height:16px;margin-bottom:6px}
   .tmonths span{position:absolute;top:0;font-size:11px;font-weight:600;color:var(--muted);
     letter-spacing:.03em;transform:translateX(-1px)}
   .track{position:relative;border-radius:12px;
     background:linear-gradient(90deg,var(--border) 0 1px,transparent 1px) 0 0 / calc(100%/12) 100%}
-  .trow{position:relative;height:40px}
-  .tbar{position:absolute;top:8px;height:24px;border-radius:999px;min-width:8px;overflow:hidden;
+  .trow{position:relative;height:30px}
+  .tbar{position:absolute;top:5px;height:20px;border-radius:999px;min-width:8px;overflow:hidden;
     transition:transform .3s var(--ease),filter .3s;cursor:default}
   .tbar::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
     background:linear-gradient(180deg,rgba(255,255,255,.5),rgba(255,255,255,.12) 42%,rgba(0,0,0,.18) 100%)}
   .tbar:hover{transform:scaleY(1.14);filter:brightness(1.12)}
   .tbar.open-r{border-top-right-radius:4px;border-bottom-right-radius:4px}
   .tbar.open-l{border-top-left-radius:4px;border-bottom-left-radius:4px}
-  .tlabel{position:absolute;top:11px;font-size:12.5px;font-weight:700;white-space:nowrap;
+  .tlabel{position:absolute;top:7px;font-size:12px;font-weight:700;white-space:nowrap;
     padding-left:10px;color:var(--text)}
   .tlabel small{font-weight:500;color:var(--muted)}
   .tnow{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--accent);
@@ -131,17 +131,33 @@
   .year{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
   @media(max-width:920px){.year{grid-template-columns:repeat(2,1fr)}}
   @media(max-width:600px){.year{grid-template-columns:1fr}}
-  .month{padding:16px 16px 18px;transition:transform .25s var(--ease),border-color .25s}
+  .month{padding:16px 16px 18px;position:relative;overflow:hidden;isolation:isolate;
+    transition:transform .25s var(--ease),border-color .25s}
   .month:hover{transform:translateY(-3px);border-color:var(--border-str)}
-  .month h3{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;margin:2px 2px 12px;color:var(--text)}
-  .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:5px}
+  /* фото-баннер периода поездки (только недели, когда была там) */
+  .bandlayer{position:absolute;inset:0;display:grid;grid-template-columns:repeat(7,1fr);
+    gap:3px;z-index:0;pointer-events:none}
+  .pband{grid-column:1 / -1;position:relative;border-radius:10px;overflow:hidden;
+    background-size:cover;background-position:center;
+    box-shadow:0 8px 22px -10px rgba(0,0,0,.75),inset 0 0 0 1px rgba(255,255,255,.08)}
+  .pband::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(180deg,rgba(8,11,17,.28),rgba(8,11,17,.60)),
+      linear-gradient(90deg,color-mix(in srgb,var(--sc) 22%,transparent),transparent 60%)}
+  .month:hover .pband{filter:brightness(1.12)}
+  .month h3{font-family:'Sora',sans-serif;font-size:15px;font-weight:700;margin:2px 2px 12px;color:var(--text);
+    position:relative;z-index:2;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .mchip{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:.01em;
+    padding:3px 9px 3px 7px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;
+    color:var(--mc);background:color-mix(in srgb,var(--mc) 16%,transparent);
+    border:1px solid color-mix(in srgb,var(--mc) 34%,transparent)}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:5px;position:relative;z-index:2}
   .dow span{text-align:center;font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.04em}
-  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-  .cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;position:relative;z-index:1}
+  .cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;
     font-size:12px;color:var(--text-2);border-radius:6px;transition:transform .18s var(--ease)}
   .cell.empty{visibility:hidden}
   .cell.we{color:#8a97a6}
-  .cell.trip{color:var(--text);font-weight:600}
+  .cell.trip{color:#fff;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.75)}
   .cell.tstart{border-top-left-radius:999px;border-bottom-left-radius:999px}
   .cell.tend{border-top-right-radius:999px;border-bottom-right-radius:999px}
   .cell.leg{color:#fff;font-weight:800;
@@ -194,13 +210,16 @@
 
   <header>
     <span class="eyebrow"><span class="pin"></span>Личный дневник путешествий</span>
-    <h1>Мои путешествия<br>2026</h1>
-    <p class="lead">Где и когда я была в пути — целыми периодами, а не отдельными днями. Перелёты, поезда и места, которые стоит помнить.</p>
+    <h1>Мои путешествия 2026</h1>
 
     <div class="stats">
       <div class="stat" style="--c:#8b7bff">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3c-2.5 2.6-2.5 15.4 0 18"/></svg></span>
         <span class="meta"><b id="stTrips">0</b><span>поездок</span></span>
+      </div>
+      <div class="stat" style="--c:#b794f6">
+        <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22V4a1 1 0 0 1 1-1h13l-2.5 4L18 11H5"/><path d="M4 22h0"/></svg></span>
+        <span class="meta"><b id="stCountries">0</b><span>стран</span></span>
       </div>
       <div class="stat" style="--c:#e7a93c">
         <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.2 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.8 6.2a.5.5 0 0 0-.5.8l3.9 4.3-2.8 2.8H3.5a.5.5 0 0 0-.4.8l2 2.6 2.6 2a.5.5 0 0 0 .8-.4v-1.9l2.8-2.8 4.3 3.9a.5.5 0 0 0 .8-.5Z"/></svg></span>
@@ -236,7 +255,7 @@
 <script>
 const TRIPS = [
   {
-    name:"Египет", flag:"🇪🇬", color:"#E7A93C", legBg:"#8f5f11", soft:"rgba(231,169,60,.16)", edge:"rgba(231,169,60,.45)",
+    name:"Египет", flag:"🇪🇬", country:"Египет", color:"#E7A93C", photo:"img/trips/pyramids.jpg", legBg:"#8f5f11", soft:"rgba(231,169,60,.16)", edge:"rgba(231,169,60,.45)",
     from:"2026-01-01", to:"2026-01-08",
     legs:[
       { date:"2026-01-01", from:"Москва", to:"Шарм-эль-Шейх", type:"flight", note:"из дома" },
@@ -246,7 +265,7 @@ const TRIPS = [
     events:[{ date:"2026-01-06", place:"Пирамиды Гизы", icon:"pyramids", note:"чудо света" }],
   },
   {
-    name:"Сочи", flag:"🌴", color:"#2ED2C4", legBg:"#0d7168", soft:"rgba(46,210,196,.15)", edge:"rgba(46,210,196,.4)",
+    name:"Сочи", flag:"🌴", country:"Россия", color:"#2ED2C4", photo:"img/trips/sochi.jpg", legBg:"#0d7168", soft:"rgba(46,210,196,.15)", edge:"rgba(46,210,196,.4)",
     from:"2026-01-15", to:"2026-01-18",
     legs:[
       { date:"2026-01-15", from:"Москва", to:"Сочи", type:"flight", note:"из дома" },
@@ -255,7 +274,7 @@ const TRIPS = [
     events:[],
   },
   {
-    name:"Китай", flag:"🇨🇳", color:"#FF5A5F", legBg:"#a82a30", soft:"rgba(255,90,95,.15)", edge:"rgba(255,90,95,.4)",
+    name:"Китай", flag:"🇨🇳", country:"Китай", color:"#FF5A5F", photo:"img/trips/china.jpg", legBg:"#a82a30", soft:"rgba(255,90,95,.15)", edge:"rgba(255,90,95,.4)",
     from:"2026-04-11", to:"2026-04-28", openEnd:true,
     legs:[
       { date:"2026-04-11", from:"Москва",   to:"Гуанчжоу", type:"flight" },
@@ -272,6 +291,13 @@ const TRIPS = [
 const ICONS = {
   pyramids:`<svg viewBox='0 0 24 24' width='12' height='12'><polygon points='9,4 17,20 1,20' fill='#e6b74d' stroke='#b8862a' stroke-width='.6'/><polygon points='17,8 23,20 11,20' fill='#d69a2f' stroke='#b8862a' stroke-width='.6'/></svg>`,
   wall:`<svg viewBox='0 0 24 24' width='12' height='12'><path d='M1 22 V13 H4 V10 H7 V13 H10 V10 H13 V13 H16 V10 H19 V13 H23 V22 Z' fill='#9a8f79' stroke='#5f5748' stroke-width='.6'/></svg>`
+};
+
+/* Узнаваемые сцены места (рисуются на фоне месяца, цвет = цвет поездки) */
+const SCENES = {
+  "Египет":`<svg viewBox="0 0 200 120" fill="none"><circle cx="152" cy="30" r="15" fill="currentColor"/><path d="M15 112 L68 40 L121 112 Z" fill="currentColor"/><path d="M68 40 L121 112 L86 112 L68 66 Z" fill="#000" opacity=".22"/><path d="M96 112 L141 54 L186 112 Z" fill="currentColor" opacity=".82"/><path d="M141 54 L186 112 L160 112 L141 74 Z" fill="#000" opacity=".18"/><rect x="0" y="110" width="200" height="10" fill="currentColor" opacity=".5"/></svg>`,
+  "Сочи":`<svg viewBox="0 0 200 120" fill="none"><circle cx="150" cy="28" r="14" fill="currentColor"/><path d="M66 114 C70 84 72 62 74 46" stroke="currentColor" stroke-width="6" stroke-linecap="round"/><path d="M74 46 C56 36 40 36 30 44 M74 46 C94 36 108 38 118 46 M74 46 C62 28 60 18 64 8 M74 46 C88 30 100 26 112 28 M74 46 C58 42 46 48 40 58" stroke="currentColor" stroke-width="5" stroke-linecap="round"/><path d="M0 104 q15 -7 30 0 t30 0 t30 0 t30 0 t30 0 t30 0" stroke="currentColor" stroke-width="3" opacity=".7"/><path d="M0 114 q15 -7 30 0 t30 0 t30 0 t30 0 t30 0 t30 0" stroke="currentColor" stroke-width="3" opacity=".5"/></svg>`,
+  "Китай":`<svg viewBox="0 0 200 120" fill="none"><circle cx="34" cy="26" r="13" fill="currentColor" opacity=".85"/><path d="M0 120 L58 58 L104 98 L150 52 L200 104 L200 120 Z" fill="currentColor" opacity=".4"/><path d="M12 104 L64 64 L116 96 L182 50" stroke="currentColor" stroke-width="7" stroke-linecap="round"/><rect x="58" y="55" width="12" height="15" rx="1.5" fill="currentColor"/><rect x="176" y="41" width="12" height="15" rx="1.5" fill="currentColor"/><rect x="110" y="87" width="11" height="14" rx="1.5" fill="currentColor"/></svg>`,
 };
 
 const MONTHS=["Январь","Февраль","Март","Апрель","Май","Июнь","Июль","Август","Сентябрь","Октябрь","Ноябрь","Декабрь"];
@@ -315,13 +341,13 @@ TRIPS.forEach(t=>{
     <div class="tlabel" style="left:${l+w}%">${t.flag} ${t.name} <small>· ${fmtRange(t.from,t.to,t.openStart,t.openEnd)}</small></div>`;
   track.appendChild(row);
 });
-track.style.height=(TRIPS.length*40+8)+"px";
+track.style.height=(TRIPS.length*30+6)+"px";
 track.insertAdjacentHTML("beforeend",`<div class="tnow" style="left:${(doy(TODAY)-1)/365*100}%"></div>`);
 
 /* легенда */
 document.getElementById("legend").innerHTML =
   TRIPS.map(t=>`<span><span class="sw" style="background:linear-gradient(90deg,${t.color},${t.legBg})"></span>${t.flag} ${t.name}</span>`).join("")
-  + `<span><span class="sw" style="background:#3a4657"></span>✈ / 🚆 день переезда</span>`
+  + `<span><span class="sw" style="background:#3a4657"></span>✈ самолёт · 🚆 поезд</span>`
   + `<span>📍 достопримечательность</span>`;
 
 /* месяцы */
@@ -341,7 +367,6 @@ for(let m=0;m<12;m++){
     if(ti!==undefined){
       const t=TRIPS[ti];
       cls.push("trip");
-      style=`background:${t.soft};`;
       if(iso===t.from){cls.push("tstart");style+=`box-shadow:inset 3px 0 0 ${t.edge};`;}
       if(iso===t.to){cls.push("tend");style+=`box-shadow:inset -3px 0 0 ${t.edge};`;}
       titles.push(`${t.flag} ${t.name}`);
@@ -357,10 +382,25 @@ for(let m=0;m<12;m++){
     if(iso===TODAY) style+="box-shadow:0 0 0 2px var(--accent), 0 0 14px -2px var(--accent);";
     cells+=`<div class="${cls.join(' ')}" style="${style}" title="${titles.join(' | ')}">${d}${badge}</div>`;
   }
+  // какие поездки в этом месяце → фото-баннеры по строкам периода + чипы в шапке
+  const mTrips=[]; TRIPS.forEach((t,ti)=>{ if(m>=dt(t.from).getMonth() && m<=dt(t.to).getMonth()) mTrips.push(ti); });
+  const nRows=Math.ceil((startDow+days)/7);
+  let bands="", chips="";
+  if(mTrips.length){
+    bands=mTrips.map(ti=>{
+      const t=TRIPS[ti];
+      const fd=dt(t.from).getMonth()<m?1:dt(t.from).getDate();
+      const ld=dt(t.to).getMonth()>m?days:dt(t.to).getDate();
+      const r1=Math.floor((startDow+fd-1)/7)+1, r2=Math.floor((startDow+ld-1)/7)+1;
+      return t.photo?`<div class="pband" style="--sc:${t.color};grid-row:${r1} / ${r2+1};background-image:url('${t.photo}')"></div>`:"";
+    }).join("");
+    chips=mTrips.map(ti=>`<span class="mchip" style="--mc:${TRIPS[ti].color}">${TRIPS[ti].flag} ${TRIPS[ti].name}</span>`).join("");
+  }
+  const bandlayer=bands?`<div class="bandlayer" style="grid-template-rows:repeat(${nRows},1fr)">${bands}</div>`:"";
   yearEl.insertAdjacentHTML("beforeend",
-    `<div class="glass month"><h3>${MONTHS[m]}</h3>
+    `<div class="glass month"><h3><span>${MONTHS[m]}</span>${chips}</h3>
       <div class="dow">${DOW.map(x=>`<span>${x}</span>`).join("")}</div>
-      <div class="grid">${cells}</div></div>`);
+      <div class="grid">${bandlayer}${cells}</div></div>`);
 }
 
 /* карточки поездок */
@@ -397,6 +437,7 @@ TRIPS.forEach(t=>{
      </div>`);
 });
 
+document.getElementById("stCountries").textContent=new Set(TRIPS.map(t=>t.country).filter(Boolean)).size;
 document.getElementById("stTrips").textContent=TRIPS.length;
 document.getElementById("stFlights").textContent=totalFlights;
 document.getElementById("stTrains").textContent=totalTrains;
