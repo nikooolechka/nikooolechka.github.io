@@ -222,10 +222,11 @@
     background:linear-gradient(180deg,rgba(22,28,40,.97),rgba(12,16,24,.98));
     border:1px solid var(--border-str);box-shadow:0 26px 56px -18px rgba(0,0,0,.92);backdrop-filter:blur(14px)}
   .pop.show{opacity:1;transform:translateY(0) scale(1)}
-  .pop .ph{display:flex;gap:6px}
-  .pop .pcell{width:152px;height:170px;border-radius:12px;overflow:hidden;background:#0c1119;
+  .pop .ph{display:flex;gap:6px;align-items:flex-start}
+  .pop .pcell{border-radius:12px;overflow:hidden;background:#0c1119;
     display:flex;align-items:center;justify-content:center;position:relative}
-  .pop .pcell img{width:100%;height:100%;object-fit:cover;display:block}
+  .pop .pcell img{max-width:210px;max-height:260px;width:auto;height:auto;display:block}
+  .pop .pcell.miss{width:150px;height:120px}
   .pop .pcell .none{font-size:11px;color:var(--muted);text-align:center;padding:0 10px;line-height:1.4;display:none}
   .pop .pcell.miss img{display:none}
   .pop .pcell.miss .none{display:block}
@@ -551,7 +552,10 @@ let totalFlights=0,totalTrains=0,totalDays=0;
 TRIPS.forEach(t=>{
   const nf=t.legs.filter(l=>l.type!=="train").length;
   const nt=t.legs.filter(l=>l.type==="train").length;
-  totalFlights+=nf; totalTrains+=nt; totalDays+=doy(t.to)-doy(t.from)+1;
+  // в трекеры — только то, что уже случилось (<= сегодня)
+  totalFlights+=t.legs.filter(l=>l.type!=="train"&&l.date<=TODAY).length;
+  totalTrains +=t.legs.filter(l=>l.type==="train"&&l.date<=TODAY).length;
+  if(t.from<=TODAY){ const e=t.to<=TODAY?t.to:TODAY; totalDays+=Math.round((dt(e)-dt(t.from))/86400000)+1; }
   const items=[...t.legs.map(l=>({...l,kind:"leg"})),...t.events.map(e=>({...e,kind:"ev"}))]
     .sort((a,b)=>a.date.localeCompare(b.date));
   const rows=items.map(it=>{
@@ -597,15 +601,17 @@ if(MOMENTS.length){
      </div>`);
 }
 
-const flowerCount=[...TRIPS.flatMap(t=>t.events), ...MOMENTS].filter(e=>FLOWER_ICONS.includes(e.icon)).length;
-document.getElementById("stCountries").textContent=new Set(TRIPS.map(t=>t.country).filter(Boolean)).size;
-document.getElementById("stTrips").textContent=TRIPS.length;
+// ⚑ ТРЕКЕРЫ: только уже случившееся (дата <= сегодня), запланированное не считаем
+const past=TRIPS.filter(t=>t.from<=TODAY);
+const flowerCount=[...TRIPS.flatMap(t=>t.events), ...MOMENTS].filter(e=>FLOWER_ICONS.includes(e.icon)&&e.date<=TODAY).length;
+document.getElementById("stCountries").textContent=new Set(past.map(t=>t.country).filter(Boolean)).size;
+document.getElementById("stTrips").textContent=past.length;
 document.getElementById("stFlights").textContent=totalFlights;
 document.getElementById("stTrains").textContent=totalTrains;
 document.getElementById("stDays").textContent=totalDays;
 document.getElementById("stBouquets").textContent=flowerCount;
 document.getElementById("stTogether").textContent=
-  TOGETHER.reduce((s,p)=>s+Math.round((dt(p.to)-dt(p.from))/86400000)+1,0);
+  TOGETHER.reduce((s,p)=>{ if(p.from>TODAY) return s; const e=p.to<=TODAY?p.to:TODAY; return s+Math.round((dt(e)-dt(p.from))/86400000)+1; },0);
 
 /* всплывающая картинка букета при наведении — без перехода куда-либо */
 const pop=document.getElementById("pop");
