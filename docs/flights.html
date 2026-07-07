@@ -154,7 +154,8 @@
   .dow span{text-align:center;font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.04em}
   .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;position:relative;z-index:1}
   .cell{aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;
-    font-size:12px;color:var(--text-2);border-radius:6px;transition:transform .18s var(--ease)}
+    font-size:12px;color:var(--text-2);border-radius:6px;background-repeat:no-repeat;
+    transition:transform .18s var(--ease)}
   .cell.empty{visibility:hidden}
   .cell.we{color:#8a97a6}
   .cell.trip{color:#fff;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.75)}
@@ -163,7 +164,7 @@
   .cell.leg{color:#fff;font-weight:800;
     box-shadow:0 5px 14px -4px rgba(0,0,0,.75),0 1px 0 rgba(255,255,255,.28) inset}
   .cell.leg::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    background:linear-gradient(160deg,rgba(255,255,255,.42),rgba(255,255,255,0) 52%)}
+    background:linear-gradient(160deg,rgba(255,255,255,.20),rgba(255,255,255,0) 55%)}
   .cell.leg:hover{transform:scale(1.14);z-index:3}
   .cell.leg::after{position:absolute;top:0;right:2px;font-size:8px;line-height:1;z-index:2}
   .cell.leg.flight::after{content:"✈"}
@@ -275,7 +276,7 @@ const TRIPS = [
   },
   {
     name:"Китай", flag:"🇨🇳", country:"Китай", color:"#FF5A5F", photo:"img/trips/china.jpg", legBg:"#a82a30", soft:"rgba(255,90,95,.15)", edge:"rgba(255,90,95,.4)",
-    from:"2026-04-11", to:"2026-04-28", openEnd:true,
+    from:"2026-04-11", to:"2026-05-09",
     legs:[
       { date:"2026-04-11", from:"Москва",   to:"Гуанчжоу", type:"flight" },
       { date:"2026-04-18", from:"Гуанчжоу", to:"Гонконг",  type:"train" },
@@ -283,6 +284,7 @@ const TRIPS = [
       { date:"2026-04-23", from:"Гуанчжоу", to:"Шанхай",   type:"flight" },
       { date:"2026-04-25", from:"Шанхай",   to:"Пекин",    type:"flight" },
       { date:"2026-04-28", from:"Пекин",    to:"Гуанчжоу", type:"flight" },
+      { date:"2026-05-09", from:"Гуанчжоу", to:"Москва",   type:"flight", note:"домой" },
     ],
     events:[{ date:"2026-04-26", place:"Великая Китайская стена", icon:"wall", note:"" }],
   },
@@ -367,13 +369,26 @@ for(let m=0;m<12;m++){
     if(ti!==undefined){
       const t=TRIPS[ti];
       cls.push("trip");
-      if(iso===t.from){cls.push("tstart");style+=`box-shadow:inset 3px 0 0 ${t.edge};`;}
-      if(iso===t.to){cls.push("tend");style+=`box-shadow:inset -3px 0 0 ${t.edge};`;}
+      // фото-спрайт: точные дни поездки складываются в цельную картинку
+      if(t.photo){
+        const fd=dt(t.from).getMonth()<m?1:dt(t.from).getDate();
+        const ld=dt(t.to).getMonth()>m?days:dt(t.to).getDate();
+        const r1=Math.floor((startDow+fd-1)/7), r2=Math.floor((startDow+ld-1)/7), nb=r2-r1+1;
+        const cc=(startDow+d-1)%7, rr=Math.floor((startDow+d-1)/7);
+        let sx,sy,px,py;
+        if(nb===1){
+          const cS=(startDow+fd-1)%7, cE=(startDow+ld-1)%7, span=cE-cS+1;
+          sx=span*100; sy=100; px=span>1?((cc-cS)/(span-1)*100):50; py=50;
+        }else{
+          sx=700; sy=nb*100; px=cc/6*100; py=(rr-r1)/(nb-1)*100;
+        }
+        style+=`background-image:url('${t.photo}');background-size:${sx}% ${sy}%;background-position:${px}% ${py}%;`;
+      }
       titles.push(`${t.flag} ${t.name}`);
       const leg=legByDate[iso];
       if(leg){
         cls.push("leg", leg.type==="train"?"train":"flight");
-        style=`background:linear-gradient(135deg,${leg.type==="train"?"#12988c":t.color},${leg.type==="train"?"#0d7168":t.legBg});`;
+        style+=`box-shadow:inset 0 0 0 2px ${leg.type==="train"?"#26c2b2":t.color},0 4px 12px -4px rgba(0,0,0,.75);`;
         titles.push(`${leg.type==="train"?"🚆":"✈"} ${leg.from} → ${leg.to}${leg.note?" · "+leg.note:""}`);
       }
     }
@@ -384,23 +399,13 @@ for(let m=0;m<12;m++){
   }
   // какие поездки в этом месяце → фото-баннеры по строкам периода + чипы в шапке
   const mTrips=[]; TRIPS.forEach((t,ti)=>{ if(m>=dt(t.from).getMonth() && m<=dt(t.to).getMonth()) mTrips.push(ti); });
-  const nRows=Math.ceil((startDow+days)/7);
-  let bands="", chips="";
-  if(mTrips.length){
-    bands=mTrips.map(ti=>{
-      const t=TRIPS[ti];
-      const fd=dt(t.from).getMonth()<m?1:dt(t.from).getDate();
-      const ld=dt(t.to).getMonth()>m?days:dt(t.to).getDate();
-      const r1=Math.floor((startDow+fd-1)/7)+1, r2=Math.floor((startDow+ld-1)/7)+1;
-      return t.photo?`<div class="pband" style="--sc:${t.color};grid-row:${r1} / ${r2+1};background-image:url('${t.photo}')"></div>`:"";
-    }).join("");
+  let chips="";
+  if(mTrips.length)
     chips=mTrips.map(ti=>`<span class="mchip" style="--mc:${TRIPS[ti].color}">${TRIPS[ti].flag} ${TRIPS[ti].name}</span>`).join("");
-  }
-  const bandlayer=bands?`<div class="bandlayer" style="grid-template-rows:repeat(${nRows},1fr)">${bands}</div>`:"";
   yearEl.insertAdjacentHTML("beforeend",
     `<div class="glass month"><h3><span>${MONTHS[m]}</span>${chips}</h3>
       <div class="dow">${DOW.map(x=>`<span>${x}</span>`).join("")}</div>
-      <div class="grid">${bandlayer}${cells}</div></div>`);
+      <div class="grid">${cells}</div></div>`);
 }
 
 /* карточки поездок */
