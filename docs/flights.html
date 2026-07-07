@@ -662,6 +662,9 @@ function applyFilter(key,stat){
   yearBox.classList.add("filtered");
   yearBox.querySelectorAll(".cell[data-d]").forEach(c=>{ if(set.has(c.dataset.d)) c.classList.add("hl"); });
   stat.classList.add("active"); activeFilter=key;
+  // сама прокрутка вниз к первой подсвеченной дате
+  const first=yearBox.querySelector(".cell.hl");
+  (first||yearBox).scrollIntoView({behavior:"smooth", block:"center"});
 }
 document.querySelectorAll(".stat[data-filter]").forEach(s=>{
   s.addEventListener("click",()=>{ if(activeFilter){ clearFilter(); } else { applyFilter(s.dataset.filter,s); } });
