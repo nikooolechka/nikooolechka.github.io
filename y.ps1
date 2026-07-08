@@ -1,4 +1,4 @@
-# ЯМ: тянет карточку прямым запросом и печатает контекст вокруг цен (для точной привязки)
+# ЯМ: печатает все ценовые ключи вида "...Price":{"amount":{"intPart":N}}
 $ErrorActionPreference='SilentlyContinue'
 [Net.ServicePointManager]::SecurityProtocol=[Net.SecurityProtocolType]::Tls12
 $u='https://market.yandex.ru/card/detskiye-vlazhnyye-salfetki-s-ksilitom-as-farm-20-sht-dlya-zubov-i-polosti-rta/102196144368'
@@ -8,17 +8,23 @@ $H=@{ 'User-Agent'=$ua; 'Accept'='text/html,application/xhtml+xml,application/xm
 $r=Invoke-WebRequest -Uri $u -Headers $H -UseBasicParsing -TimeoutSec 40
 $c=[string]$r.Content
 Write-Host ("len={0}" -f $c.Length)
-Write-Host "--- kontekst vokrug cen ---"
-foreach($n in '602','621','1800'){
-  $i=0; $cnt=0
-  while((($i=$c.IndexOf($n,$i)) -ge 0) -and ($cnt -lt 4)){
-    $s=[math]::Max(0,$i-60); $len=[math]::Min(78,$c.Length-$s)
-    $frag=($c.Substring($s,$len) -replace '\s+',' ')
-    Write-Host ("["+$n+"] "+$frag)
-    $i+=$n.Length; $cnt++
-  }
+
+Write-Host "--- kluchi ...Price -> intPart ---"
+$seen=@{}
+$mm=[regex]::Matches($c,'"([A-Za-z]+)":\{"amount":\{"intPart":(\d+)')
+foreach($x in $mm){
+  $k="{0}={1}" -f $x.Groups[1].Value,$x.Groups[2].Value
+  if(-not $seen.ContainsKey($k)){ $seen[$k]=1; Write-Host $k }
 }
-Write-Host "--- ld+json ---"
-$m=[regex]::Match($c,'application/ld\+json">(.*?)</script>',[Text.RegularExpressions.RegexOptions]::Singleline)
-if($m.Success){ $j=$m.Groups[1].Value; if($j.Length -gt 450){$j=$j.Substring(0,450)}; Write-Host $j }
+Write-Host ("vsego unikalnyh: {0}" -f $seen.Count)
+
+Write-Host "--- lyubye intPart (60 znakov do) ---"
+$s2=@{}
+$m2=[regex]::Matches($c,'.{55}"intPart":(\d{2,7})')
+$n=0
+foreach($x in $m2){
+  if($n -ge 14){break}
+  $frag=($x.Value -replace '\s+',' ')
+  if(-not $s2.ContainsKey($frag)){ $s2[$frag]=1; Write-Host $frag; $n++ }
+}
 Write-Host "--- GOTOVO ---"
