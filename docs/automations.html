@@ -25,75 +25,73 @@
   .aura::after{width:620px;height:620px;right:-200px;top:40px;background:radial-gradient(circle,#5b46b8,transparent 62%)}
   .grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.03;
          background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 18px}
 
-  /* ШАПКА: слева заголовок, справа сервисы/лимиты */
-  header{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;flex-wrap:wrap;padding:30px 0 22px}
-  .htitle h1{font-family:"Manrope",sans-serif;font-weight:700;font-size:clamp(22px,3.4vw,34px);line-height:1.05;margin:0;
-     background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;white-space:nowrap}
-  .htitle .kick{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
-  .htitle .sub{color:var(--mut);font-size:13px;margin-top:11px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .pill{display:inline-flex;align-items:center;gap:6px;background:var(--glass);border:1px solid var(--stroke);border-radius:100px;padding:4px 11px;font-size:12px}
-  .pd{width:8px;height:8px;border-radius:50%}
-  .pd.ok{background:var(--ok)} .pd.broken{background:var(--broken)} .pd.wip{background:var(--wip)} .pd.planned{background:var(--plan)}
-
-  /* блок сервисов/лимитов справа */
-  .svc{min-width:250px;background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:13px 15px;backdrop-filter:blur(14px)}
-  .svc h3{margin:0 0 10px;font-family:"Manrope";font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);font-weight:600}
-  .svc .r{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:5px 0;font-size:12.5px;border-top:1px solid rgba(255,255,255,.05)}
-  .svc .r:first-of-type{border-top:0}
-  .svc .nm{color:#c6d3e2;display:flex;align-items:center;gap:7px}
-  .svc .val{font-family:"Manrope";font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
-  .svc .val small{color:var(--faint);font-weight:400;font-family:"Inter"}
-  .svc .val.warn{color:var(--wip)} .svc .val.bad{color:var(--broken)}
-
-  /* КАТЕГОРИИ — сворачиваемые */
-  .cat{margin-top:12px;border:1px solid var(--stroke);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.015)}
-  .cathead{display:flex;align-items:center;gap:11px;padding:12px 15px;cursor:pointer;user-select:none;transition:background .15s}
-  .cathead:hover{background:rgba(255,255,255,.03)}
-  .cathead .ic{font-size:16px}
-  .cathead .ct{font-family:"Manrope";font-weight:600;font-size:14px;letter-spacing:.4px;flex:1}
-  .cathead .badges{display:flex;gap:5px;font-size:11px;color:var(--mut)}
-  .cathead .chev{transition:transform .2s;color:var(--faint)}
-  .cat.collapsed .chev{transform:rotate(-90deg)}
-  .cat.collapsed .catbody{display:none}
-  .catbody{padding:2px 0 6px}
-
-  /* СТРОКА автоматизации — компактная */
-  .item{border-top:1px solid rgba(255,255,255,.045)}
-  .head{display:flex;align-items:center;gap:11px;padding:9px 15px;cursor:pointer;transition:background .12s}
-  .head:hover{background:rgba(255,255,255,.03)}
+  @keyframes pulse{0%{transform:scale(.6);opacity:.85}70%{transform:scale(1.9);opacity:0}100%{opacity:0}}
+  /* точка со «пульсом» */
   .dot{position:relative;width:9px;height:9px;border-radius:50%;flex:0 0 auto}
   .dot.ok{background:var(--ok)} .dot.broken{background:var(--broken)} .dot.wip{background:var(--wip)} .dot.planned{background:var(--plan)}
   .dot.ok::after,.dot.broken::after{content:"";position:absolute;inset:-3px;border-radius:50%;animation:pulse 2s infinite}
-  .dot.ok::after{border:2px solid var(--ok)} .dot.broken::after{border:2px solid var(--broken);animation-duration:1s}
-  @keyframes pulse{0%{transform:scale(.6);opacity:.85}70%{transform:scale(1.9);opacity:0}100%{opacity:0}}
-  .nm{font-weight:500;font-size:14px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .sc{font-size:11.5px;color:var(--faint);white-space:nowrap}
-  .st{font-size:11px;font-weight:600;white-space:nowrap}
-  .st.ok{color:var(--ok)} .st.broken{color:var(--broken)} .st.wip{color:var(--wip)} .st.planned{color:var(--plan)}
+  .dot.ok::after{border:2px solid var(--ok)} .dot.broken::after{border:2px solid var(--broken);animation-duration:1.1s}
+
+  header{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;flex-wrap:wrap;padding:34px 0 22px}
+  .htitle .kick{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--faint);margin-bottom:9px}
+  .htitle h1{font-family:"Manrope",sans-serif;font-weight:800;font-size:clamp(26px,4vw,40px);line-height:1.02;margin:0;
+     background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .htitle .sub{color:var(--mut);font-size:13px;margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .pill{display:inline-flex;align-items:center;gap:7px;background:var(--glass);border:1px solid var(--stroke);border-radius:100px;padding:5px 13px;font-size:12.5px}
+
+  .svc{min-width:252px;background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:13px 15px;backdrop-filter:blur(14px)}
+  .svc h3{margin:0 0 10px;font-family:"Manrope";font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);font-weight:700}
+  .svc .r{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0;font-size:12.5px;border-top:1px solid rgba(255,255,255,.05)}
+  .svc .r:first-of-type{border-top:0}
+  .svc .snm{color:#c6d3e2;display:flex;align-items:center;gap:7px}
+  .svc .val{font-family:"Manrope";font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .svc .val small{color:var(--faint);font-weight:400;font-family:"Inter"}
+  .svc .val.warn{color:var(--wip)} .svc .val.bad{color:var(--broken)}
+
+  /* КАТЕГОРИЯ — сворачиваемая секция */
+  .cat{margin-top:26px}
+  .cathead{display:flex;align-items:center;gap:11px;cursor:pointer;user-select:none;margin-bottom:13px}
+  .cathead .ic{font-size:17px}
+  .cathead .ct{font-family:"Manrope";font-weight:700;font-size:16px;letter-spacing:.2px}
+  .cathead .ln{flex:1;height:1px;background:linear-gradient(90deg,var(--stroke),transparent)}
+  .cathead .badges{font-size:12px;color:var(--faint)}
+  .cathead .chev{color:var(--faint);transition:transform .2s;font-size:13px}
+  .cat.collapsed .chev{transform:rotate(-90deg)}
+  .cat.collapsed .grid{display:none}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:12px;align-items:start}
+  /* КАРТОЧКА */
+  .item{background:var(--glass);border:1px solid var(--stroke);border-radius:16px;backdrop-filter:blur(14px);
+        cursor:pointer;transition:transform .18s cubic-bezier(.2,.7,.3,1),border-color .18s,box-shadow .18s;position:relative;overflow:hidden}
+  .item:hover{transform:translateY(-3px);border-color:#39506380;box-shadow:0 16px 38px rgba(0,0,0,.45)}
+  .item.broken{border-color:rgba(255,90,106,.32)}
+  .head{padding:14px 16px 13px}
+  .row1{display:flex;align-items:center;gap:9px}
+  .nm{font-weight:600;font-size:14.5px;flex:1;letter-spacing:.1px}
   .chev2{color:var(--faint);transition:transform .2s;font-size:12px}
   .item.open .chev2{transform:rotate(90deg)}
-  /* раскрывающееся описание ВНУТРИ строки */
-  .body{max-height:0;overflow:hidden;transition:max-height .28s ease}
-  .item.open .body{max-height:420px}
-  .body .in{padding:2px 15px 14px 35px;font-size:13px;line-height:1.65;color:#d5e0ec}
+  .meta{margin-top:9px;color:var(--mut);font-size:12px;display:flex;align-items:center;gap:7px}
+  .sched{color:#c6d3e2}
+  .st{margin-top:8px;font-size:12px;font-weight:600;line-height:1.4}
+  .st.ok{color:var(--ok)} .st.broken{color:var(--broken)} .st.wip{color:var(--wip)} .st.planned{color:var(--plan)}
+  /* описание раскрывается ВНУТРИ карточки */
+  .body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+  .item.open .body{max-height:460px}
+  .body .in{padding:0 16px 15px;font-size:12.8px;line-height:1.62;color:#d5e0ec;border-top:1px solid rgba(255,255,255,.06);margin-top:2px;padding-top:12px}
   .body .in b{color:#fff;font-weight:600}
-  .body .meta{margin-top:9px;display:flex;gap:8px;flex-wrap:wrap;font-size:11.5px;color:var(--mut)}
-  .body .meta span{background:rgba(255,255,255,.04);border:1px solid var(--stroke);border-radius:8px;padding:3px 9px}
-  .body .reason{margin-top:9px;color:var(--broken);font-size:12px;font-weight:500}
-  .lnk{color:#6aa8ff;text-decoration:none;font-size:15px;line-height:1;padding:0 2px}
-  .lnk:hover{color:#43c6ff}
+  .body .datechip{display:inline-block;margin-top:10px;background:rgba(255,255,255,.04);border:1px solid var(--stroke);border-radius:8px;padding:3px 9px;font-size:11.5px;color:var(--mut)}
   .lnkbtn{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:rgba(67,198,255,.12);
           border:1px solid rgba(67,198,255,.38);color:#9ad4ff;text-decoration:none;font-size:12.5px;font-weight:600;
-          border-radius:10px;padding:8px 14px;transition:.15s}
-  .lnkbtn:hover{background:rgba(67,198,255,.22);transform:translateY(-1px)}
+          border-radius:10px;padding:8px 13px;transition:.15s}
+  .lnkbtn:hover{background:rgba(67,198,255,.22)}
 
-  footer{text-align:center;color:var(--faint);font-size:12px;margin-top:30px;line-height:1.8}
+  footer{text-align:center;color:var(--faint);font-size:12px;margin-top:40px;line-height:1.8}
   .liveT{display:inline-flex;align-items:center;gap:7px;color:var(--ok)}
   .liveT .d{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:blink 1.6s infinite}
   @keyframes blink{50%{opacity:.25}}
-  @media(max-width:640px){header{flex-direction:column}.svc{width:100%}.htitle h1{white-space:normal}}
+  @media(max-width:640px){header{flex-direction:column}.svc{width:100%}.grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -103,7 +101,7 @@
 <header>
   <div class="htitle">
     <div class="kick">панель управления</div>
-    <h1>🤖 Автоматизации АС Фарм</h1>
+    <h1>Автоматизации АС Фарм</h1>
     <div class="sub" id="sub">загрузка…</div>
   </div>
   <div class="svc">
@@ -116,58 +114,56 @@
 
 <footer>
   <div class="liveT"><span class="d"></span> статусы обновляются сами — 07:00 и 19:00 МСК</div>
-  <div style="margin-top:6px">последняя проверка: <span id="upd">—</span> · <span id="note"></span></div>
+  <div style="margin-top:6px">последняя проверка: <span id="upd">—</span></div>
 </footer>
 </div>
 
 <script>
 const CAT_ICON={"Цены":"💸","Отзывы":"⭐","Мониторы изменений":"🛰","Отчёты и данные":"📊","Контент и постинг":"📣","В работе и планах":"🧪"};
 function esc(s){return (s||"").replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
-function stTxt(i){return i.status==='broken'?'сломалось':i.status==='ok'?'работает':i.status==='wip'?'в работе':'план'}
+function stLine(i){
+  if(i.status==='broken') return `🔴 сломалось${i.reason?': '+esc(i.reason):''}`;
+  if(i.status==='ok') return '🟢 работает штатно';
+  if(i.status==='wip') return '🟡 в разработке';
+  return '🔵 в планах';
+}
 fetch('automations.json?v='+Date.now()).then(r=>r.json()).then(d=>{
   document.getElementById('upd').textContent=d.generated_at||'—';
   const items=d.items||[];
   const c={ok:0,broken:0,wip:0,planned:0}; items.forEach(i=>c[i.status]=(c[i.status]||0)+1);
-  const sub=document.getElementById('sub');
-  sub.innerHTML=`<span class="pill"><span class="pd ok"></span>${c.ok} работает</span>`+
-    (c.broken?`<span class="pill"><span class="pd broken"></span>${c.broken} сломано</span>`:'')+
-    (c.wip?`<span class="pill"><span class="pd wip"></span>${c.wip} в работе</span>`:'')+
-    (c.planned?`<span class="pill"><span class="pd planned"></span>${c.planned} план</span>`:'');
-  // сервисы/лимиты
+  document.getElementById('sub').innerHTML=
+    `<span class="pill"><span class="dot ok"></span>${c.ok} работает</span>`+
+    (c.broken?`<span class="pill"><span class="dot broken"></span>${c.broken} сломано</span>`:'')+
+    (c.wip?`<span class="pill"><span class="dot wip"></span>${c.wip} в работе</span>`:'')+
+    (c.planned?`<span class="pill"><span class="dot planned"></span>${c.planned} план</span>`:'');
   const svc=document.getElementById('svc');
-  svc.innerHTML=(d.services||[]).map(s=>`<div class="r"><span class="nm">${s.dot?`<span class="pd ${s.dot}"></span>`:''}${esc(s.name)}</span>
-     <span class="val ${s.level||''}">${esc(s.value)}${s.note?` <small>${esc(s.note)}</small>`:''}</span></div>`).join('')
-     || '<div class="r" style="color:var(--faint)">—</div>';
-  // категории
+  svc.innerHTML=(d.services||[]).map(s=>`<div class="r"><span class="snm">${s.dot?`<span class="dot ${s.dot}"></span>`:''}${esc(s.name)}</span>
+     <span class="val ${s.level||''}">${esc(s.value)}${s.note?` <small>${esc(s.note)}</small>`:''}</span></div>`).join('') || '<div class="r">—</div>';
   const cats=[...new Set(items.map(i=>i.category))];
   const app=document.getElementById('app');
   for(const cat of cats){
     const list=items.filter(x=>x.category===cat);
     const nbroken=list.filter(x=>x.status==='broken').length;
-    const cat_el=document.createElement('div');cat_el.className='cat';
-    const rows=list.map(i=>{
-      const dt=i.launched?`<span>🚀 запущено ${esc(i.launched)}</span>`:'';
-      const reason=(i.status==='broken'&&i.reason)?`<div class="reason">⚠ ${esc(i.reason)}</div>`:'';
-      const linkIcon=i.link?`<a class="lnk" href="${esc(i.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${esc(i.link_label||'Открыть')}">↗</a>`:'';
-      const linkBtn=i.link?`<a class="lnkbtn" href="${esc(i.link)}" target="_blank" rel="noopener">🔗 ${esc(i.link_label||'Открыть')} ↗</a>`:'';
-      return `<div class="item">
-        <div class="head" onclick="this.parentNode.classList.toggle('open')">
-          <span class="dot ${i.status}"></span>
-          <span class="nm">${esc(i.name)}</span>
-          <span class="sc">${esc(i.schedule)}</span>
-          <span class="st ${i.status}">${stTxt(i)}</span>
-          ${linkIcon}<span class="chev2">▸</span>
+    const sec=document.createElement('div');sec.className='cat';
+    const cards=list.map(i=>{
+      const linkBtn=i.link?`<a class="lnkbtn" href="${esc(i.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🔗 ${esc(i.link_label||'Открыть')} ↗</a>`:'';
+      const dchip=i.launched?`<div class="datechip">🚀 запущено ${esc(i.launched)}</div>`:'';
+      return `<div class="item ${i.status==='broken'?'broken':''}" onclick="this.classList.toggle('open')">
+        <div class="head">
+          <div class="row1"><span class="dot ${i.status}"></span><span class="nm">${esc(i.name)}</span><span class="chev2">▸</span></div>
+          <div class="meta"><span class="sched">⏱ ${esc(i.schedule)}</span></div>
+          <div class="st ${i.status}">${stLine(i)}</div>
         </div>
-        <div class="body"><div class="in">${i.details||''}
-          <div class="meta">${dt}</div>${reason}${linkBtn}</div></div>
+        <div class="body"><div class="in">${i.details||''}<br>${dchip}${linkBtn}</div></div>
       </div>`;
     }).join('');
-    cat_el.innerHTML=`<div class="cathead" onclick="this.parentNode.classList.toggle('collapsed')">
+    sec.innerHTML=`<div class="cathead" onclick="this.parentNode.classList.toggle('collapsed')">
         <span class="ic">${CAT_ICON[cat]||'•'}</span><span class="ct">${esc(cat)}</span>
+        <span class="ln"></span>
         <span class="badges">${nbroken?`<span style="color:var(--broken)">🔴 ${nbroken}</span> · `:''}${list.length}</span>
         <span class="chev">▾</span></div>
-      <div class="catbody">${rows}</div>`;
-    app.appendChild(cat_el);
+      <div class="grid">${cards}</div>`;
+    app.appendChild(sec);
   }
 }).catch(()=>{document.getElementById('sub').textContent='не удалось загрузить данные';});
 </script>
