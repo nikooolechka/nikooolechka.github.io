@@ -179,7 +179,7 @@ fetch('automations.json?v='+Date.now()).then(r=>r.json()).then(d=>{
   svc.innerHTML=(d.services||[]).map(s=>`<div class="r"><span class="snm">${s.dot?`<span class="dot ${s.dot}"></span>`:''}${esc(s.name)}</span>
      <span class="val ${s.level||''}">${esc(s.value)}${s.note?` <small>${esc(s.note)}</small>`:''}</span></div>`).join('') || '<div class="r">—</div>';
   // окошко «В работе и планах» — под шапкой, со скроллом
-  const plans=items.filter(i=>i.category==='В работе и планах');
+  const plans=items.filter(i=>i.category==='В работе и планах').sort((a,b)=>(b.status==='wip')-(a.status==='wip'));
   if(plans.length){
     document.getElementById('plansbox').style.display='';
     document.getElementById('plancnt').textContent='· '+plans.length;
