@@ -224,70 +224,149 @@ fetch('automations.json?v='+Date.now()).then(r=>r.json()).then(d=>{
 }).catch(()=>{document.getElementById('sub').textContent='не удалось загрузить данные';});
 function fitPlans(){
   const pb=document.getElementById('plansbox');
-  if(!pb || pb.style.display==='none') return;
   const svc=document.querySelector('.svc'), ht=document.querySelector('.htitle');
-  if(window.innerWidth<=640 || !svc || !ht){pb.style.height='';return;}
-  pb.style.height=Math.max(svc.offsetHeight - ht.offsetHeight - 16 + 38, 120)+'px';
+  if(!svc||!ht) return;
+  if(window.innerWidth<=640){ if(pb)pb.style.height=''; svc.style.height=''; return; }
+  svc.style.height='';                       // натуральная высота сервисов
+  const svcN=svc.offsetHeight, htN=ht.offsetHeight;
+  if(pb && pb.style.display!=='none'){
+    const ph=Math.max(svcN - htN - 16 + 38, 120);
+    pb.style.height=ph+'px';                  // окошко планов — фикс. высота
+    svc.style.height=(htN + 16 + ph)+'px';    // сервисы вниз до нижней границы планов
+  }
 }
 window.addEventListener('resize',fitPlans);
 </script>
 
 <!-- 🦆 уточка -->
-<div id="duck" title="кря!">
-  <svg viewBox="0 0 72 64" width="46" height="41" aria-hidden="true">
-    <ellipse cx="36" cy="44" rx="20" ry="14" fill="#ffffff" stroke="#dfe6ee" stroke-width="1.2"/>
-    <path d="M20 46 q-9 -2 -13 3 q6 4 13 1 Z" fill="#ffffff" stroke="#dfe6ee" stroke-width="1.2" class="tail"/>
-    <path d="M46 40 q10 -3 15 4 q-8 5 -16 1 Z" fill="#f2f6fa" class="wing"/>
-    <circle cx="50" cy="24" r="12" fill="#ffffff" stroke="#dfe6ee" stroke-width="1.2"/>
-    <circle cx="54" cy="21" r="2.1" fill="#1b1f27"/>
-    <circle cx="54.7" cy="20.3" r=".7" fill="#fff"/>
-    <path d="M60 24 q12 -1 12 4 q0 4 -12 3 Z" fill="#ffb61e" stroke="#f0a400" stroke-width="1"/>
-    <g class="legs" stroke="#ff9d0a" stroke-width="3" stroke-linecap="round">
-      <line class="leg l1" x1="31" y1="56" x2="31" y2="63"/>
-      <line class="leg l2" x1="41" y1="56" x2="41" y2="63"/>
+<div id="duck" aria-hidden="true">
+  <svg viewBox="0 0 90 78" width="56" height="49">
+    <defs>
+      <radialGradient id="dBody" cx="38%" cy="26%" r="88%">
+        <stop offset="0%" stop-color="#ffffff"/><stop offset="68%" stop-color="#f3f7fc"/><stop offset="100%" stop-color="#dde6f1"/>
+      </radialGradient>
+      <linearGradient id="dBeak" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffd451"/><stop offset="100%" stop-color="#ff9e18"/>
+      </linearGradient>
+      <linearGradient id="dLeg" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffb42e"/><stop offset="100%" stop-color="#ff8a04"/>
+      </linearGradient>
+    </defs>
+    <g class="legs" stroke="url(#dLeg)" stroke-width="4.2" stroke-linecap="round">
+      <line class="leg l1" x1="37" y1="63" x2="37" y2="72"/>
+      <line class="leg l2" x1="48" y1="63" x2="48" y2="72"/>
     </g>
+    <path class="tail" d="M21 50 q-12 -3 -16 4 q8 5 16 2 Z" fill="url(#dBody)"/>
+    <ellipse cx="43" cy="50" rx="25" ry="18" fill="url(#dBody)"/>
+    <path class="wing" d="M40 44 q17 -7 25 3 q-3 11 -15 10 q-9 -1 -10 -13 Z" fill="#eef3f9" stroke="#e0e8f1" stroke-width="1"/>
+    <path d="M56 13 q3 -7 8 -3 q-2 3 -1 6 Z" fill="url(#dBody)"/>
+    <circle cx="61" cy="28" r="16.5" fill="url(#dBody)"/>
+    <ellipse cx="66" cy="34" rx="4.4" ry="2.5" fill="#ffb3c1" opacity=".55"/>
+    <circle cx="66" cy="24" r="3.5" fill="#20242c"/>
+    <circle cx="67.3" cy="22.7" r="1.15" fill="#fff"/>
+    <circle cx="64.8" cy="25.4" r=".65" fill="#fff" opacity=".85"/>
+    <path d="M73 24.5 q15 -1.5 15 4.6 q0 2 -4 2.6 l-11 .4 Z" fill="url(#dBeak)"/>
+    <path d="M73 30 q13 1 15 -.4 q-1 4.2 -5 4.6 l-10 -.3 Z" fill="#ef8c00"/>
   </svg>
 </div>
 <style>
-  #duck{position:fixed;left:30vw;top:50vh;z-index:9999;width:46px;height:41px;cursor:pointer;
-        transform:translate(-50%,-50%);will-change:left,top,transform;filter:drop-shadow(0 6px 8px rgba(0,0,0,.45));
-        transition:opacity .5s;pointer-events:auto;user-select:none}
-  #duck.hidden{opacity:0;pointer-events:none}
-  #duck .leg{transform-origin:top;animation:legw .28s linear infinite}
-  #duck.walk .l2{animation-delay:.14s}
+  #duck{position:fixed;left:30vw;top:50vh;z-index:9999;width:56px;height:49px;
+        transform:translate(-50%,-50%);will-change:left,top,transform;filter:drop-shadow(0 7px 9px rgba(0,0,0,.4));
+        transition:opacity .5s;pointer-events:none;user-select:none}
+  #duck.hidden{opacity:0}
+  #duck .leg{transform-origin:top;animation:legw .27s linear infinite}
+  #duck.walk .l2{animation-delay:.135s}
   #duck:not(.walk) .legs{animation:none}
-  @keyframes legw{0%,100%{transform:rotate(14deg)}50%{transform:rotate(-14deg)}}
-  #duck .wing{transform-origin:48px 42px;animation:flap 2.4s ease-in-out infinite}
-  @keyframes flap{0%,92%,100%{transform:rotate(0)}96%{transform:rotate(-14deg)}}
+  @keyframes legw{0%,100%{transform:rotate(15deg)}50%{transform:rotate(-15deg)}}
+  #duck .wing{transform-origin:44px 47px;animation:flap 2.6s ease-in-out infinite}
+  @keyframes flap{0%,90%,100%{transform:rotate(0)}95%{transform:rotate(-15deg)}}
 </style>
 <script>
 (function(){
   const d=document.getElementById('duck'); if(!d) return;
-  let x=innerWidth*0.28, y=innerHeight*0.5, tx=x, ty=y, mode='wander', face=1, wob=0, chaseUntil=0, mx=x, my=y, retarget=0;
-  function rnd(a,b){return a+(b-a)*(Math.sin(Date.now()*0.000997+a*3.1)*0.5+0.5)*Math.random();}
-  function pick(){tx=40+Math.random()*(innerWidth-80);ty=110+Math.random()*(innerHeight-190);retarget=Date.now()+2200+Math.random()*2600;}
-  pick();
-  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;if(mode==='chase')chaseUntil=Date.now()+3500;});
-  d.addEventListener('mouseenter',()=>{mode='chase';chaseUntil=Date.now()+4000;});
+  const W=()=>innerWidth, H=()=>innerHeight;
+  let x=-120, y=innerHeight*0.5, mode='gone', face=1, wob=0, mx=-999,my=-999, sc=1;
+  let tx=x,ty=y, retarget=0, nextAntic=0, nextBig=Date.now()+180000;
+  let jx0,jy0,jx1,jy1,jt,jdur, perchUntil, groundY, spin=0, spinV=0, fallV=0, arcH=0;
+  let eatSpan=null, eatEl=null, eatRestore=0, bigEl=null, phaseEnd=0, visTimer=0;
+
+  function pick(){tx=50+Math.random()*(W()-100);ty=130+Math.random()*(H()-210);retarget=Date.now()+2000+Math.random()*2400;}
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  function restoreAll(){ if(eatSpan){eatSpan.style.visibility='';try{eatEl.textContent=eatEl.textContent;}catch(e){}eatSpan=eatEl=null;} if(bigEl){bigEl.style.transition='';bigEl.style.transform='';bigEl.style.opacity='';bigEl.style.pointerEvents='';bigEl.style.transformOrigin='';bigEl=null;} }
+
+  function textEls(){return [...document.querySelectorAll('.nm,.cathead .ct,.pill .n,.htitle h1,.prow .pnm')].filter(e=>e.firstChild&&e.firstChild.nodeType===3&&e.textContent.trim().length>1);}
+  function startEat(){ try{
+    const els=textEls(); if(!els.length){mode='wander';pick();return;}
+    const el=els[(Math.random()*els.length)|0], txt=el.firstChild.nodeValue;
+    const cand=[...txt].map((c,i)=>/[A-Za-zА-Яа-я0-9]/.test(c)?i:-1).filter(i=>i>=0);
+    if(!cand.length){mode='wander';pick();return;}
+    const idx=cand[(Math.random()*cand.length)|0], sp=document.createElement('span'); sp.textContent=txt[idx];
+    el.textContent=''; el.append(txt.slice(0,idx),sp,txt.slice(idx+1));
+    const r=sp.getBoundingClientRect(); tx=r.left+r.width/2; ty=r.top+r.height/2+9; eatSpan=sp; eatEl=el; mode='goEat';
+  }catch(e){mode='wander';pick();} }
+  function startJump(){
+    const bs=[...document.querySelectorAll('.item,.svc,.plans,.cathead,.htitle h1')].filter(e=>{const r=e.getBoundingClientRect();return r.top>70&&r.top<H()-60&&r.width>90;});
+    if(!bs.length){mode='wander';pick();return;}
+    const r=bs[(Math.random()*bs.length)|0].getBoundingClientRect();
+    jx0=x;jy0=y;jx1=r.left+30+Math.random()*(r.width-60);jy1=r.top-3;jt=0;jdur=26+Math.hypot(jx1-jx0,jy1-jy0)*0.05;arcH=55+Math.random()*40;face=jx1<jx0?-1:1;mode='jumpTo';
+  }
+  function startVacuum(){
+    const bs=[...document.querySelectorAll('.item')].filter(e=>{const r=e.getBoundingClientRect();return r.top>70&&r.top<H()-60&&r.width>90;});
+    if(!bs.length){mode='wander';pick();return;}
+    bigEl=bs[(Math.random()*bs.length)|0]; const r=bigEl.getBoundingClientRect(); tx=r.left+r.width/2; ty=r.bottom+30; face=1; mode='vacTo';
+  }
+
   function loop(){
-    if(mode==='chase'){ tx=mx; ty=my; if(Date.now()>chaseUntil){mode='wander';pick();} }
-    else if(Date.now()>retarget){ pick(); }
-    const dx=tx-x, dy=ty-y, dist=Math.hypot(dx,dy);
-    const moving=dist>3;
-    if(moving){ const sp=mode==='chase'?5.2:1.7; const s=Math.min(sp,dist); x+=dx/dist*s; y+=dy/dist*s; if(Math.abs(dx)>0.6) face=dx<0?-1:1; }
+    const near=Math.hypot(mx-x,my-y);
+    if(near<100 && (mode==='wander'||mode==='chase')) mode='chase';
+    let moving=false, tilt=null, bob=0, rot=null; sc=1;
+
+    if(mode==='gone'){ /* за экраном ждёт */ }
+    else if(mode==='exit'){
+      const dx=tx-x,dy=ty-y,dist=Math.hypot(dx,dy); moving=true; const s=Math.min(4.6,dist||1);
+      if(dist>1){x+=dx/dist*s;y+=dy/dist*s;}
+      if(x<-100||x>W()+100){ mode='gone'; setTimeout(enter,30000); }
+    }
+    else if(mode==='chase'){ tx=mx;ty=my; const dx=tx-x,dy=ty-y,dist=Math.hypot(dx,dy);
+      moving=dist>62; if(moving){const s=Math.min(5.6,dist-62);x+=dx/dist*s;y+=dy/dist*s;if(Math.abs(dx)>.6)face=dx<0?-1:1;} if(near>150){mode='wander';pick();} }
+    else if(mode==='wander'){ const dx=tx-x,dy=ty-y,dist=Math.hypot(dx,dy); moving=dist>3;
+      if(moving){const s=Math.min(1.7,dist);x+=dx/dist*s;y+=dy/dist*s;if(Math.abs(dx)>.6)face=dx<0?-1:1;}
+      if(Date.now()>nextBig){nextBig=Date.now()+180000;startVacuum();}
+      else if(Date.now()>nextAntic){nextAntic=Date.now()+5000+Math.random()*4000;(Math.random()<0.5?startEat:startJump)();}
+      else if(Date.now()>retarget)pick(); }
+    else if(mode==='goEat'){ const dx=tx-x,dy=ty-y,dist=Math.hypot(dx,dy); moving=dist>4;
+      if(moving){const s=Math.min(2.4,dist);x+=dx/dist*s;y+=dy/dist*s;if(Math.abs(dx)>.6)face=dx<0?-1:1;}
+      else { if(eatSpan){eatSpan.style.visibility='hidden';eatRestore=Date.now()+2000;mode='eating';} else {mode='wander';pick();} } }
+    else if(mode==='eating'){ tilt=Math.sin(Date.now()*0.032)*17;
+      if(Date.now()>eatRestore){ if(eatSpan){eatSpan.style.visibility='';try{eatEl.textContent=eatEl.textContent;}catch(e){}} eatSpan=eatEl=null;mode='wander';pick();nextAntic=Date.now()+4500; } }
+    else if(mode==='jumpTo'){ jt++; const p=Math.min(jt/jdur,1); x=jx0+(jx1-jx0)*p; y=jy0+(jy1-jy0)*p-Math.sin(p*Math.PI)*arcH; rot=Math.sin(p*Math.PI)*face*12; moving=true; if(p>=1){mode='perch';perchUntil=Date.now()+900+Math.random()*800;} }
+    else if(mode==='perch'){ tilt=Math.sin(Date.now()*0.011)*4; if(Date.now()>perchUntil){mode='fall';spin=0;spinV=(Math.random()<.5?-1:1)*(9+Math.random()*7);fallV=-2.5;groundY=H()-28;} }
+    else if(mode==='fall'){ fallV+=0.9;y+=fallV;x+=face*1.3;spin+=spinV;rot=spin; if(y>=groundY){y=groundY;mode='wander';pick();nextAntic=Date.now()+3500;} }
+    else if(mode==='vacTo'){ const dx=tx-x,dy=ty-y,dist=Math.hypot(dx,dy); moving=dist>4;
+      if(moving){const s=Math.min(2.2,dist);x+=dx/dist*s;y+=dy/dist*s;if(Math.abs(dx)>.6)face=dx<0?-1:1;}
+      else if(bigEl){ const r=bigEl.getBoundingClientRect(), m={x:x+face*22,y:y-4};
+        bigEl.style.transformOrigin='center';bigEl.style.transition='transform .6s cubic-bezier(.6,.1,.9,.2),opacity .6s';
+        bigEl.style.transform=`translate(${m.x-(r.left+r.width/2)}px,${m.y-(r.top+r.height/2)}px) scale(.05) rotate(160deg)`;
+        bigEl.style.opacity='0';bigEl.style.pointerEvents='none';phaseEnd=Date.now()+700;mode='suck';
+      } else {mode='wander';pick();} }
+    else if(mode==='suck'){ sc=1.12;tilt=-8; if(Date.now()>phaseEnd){phaseEnd=Date.now()+700;mode='hold';} }
+    else if(mode==='hold'){ sc=1.28;tilt=Math.sin(Date.now()*0.02)*4;
+      if(Date.now()>phaseEnd){ if(bigEl){bigEl.style.transition='transform .55s cubic-bezier(.2,1.5,.4,1),opacity .4s';bigEl.style.transform='';bigEl.style.opacity='1';} phaseEnd=Date.now()+600;mode='cough'; } }
+    else if(mode==='cough'){ sc=1+Math.max(0,(phaseEnd-Date.now())/600)*0.15;tilt=Math.sin(Date.now()*0.05)*10;
+      if(Date.now()>phaseEnd){ if(bigEl){bigEl.style.transition='';bigEl.style.transform='';bigEl.style.opacity='';bigEl.style.pointerEvents='';bigEl.style.transformOrigin='';} bigEl=null;mode='wander';pick();nextAntic=Date.now()+4000; } }
+
     wob+=moving?0.28:0.06;
-    const tilt=(moving?9:3)*Math.sin(wob);
-    const bob=moving?Math.abs(Math.sin(wob))*3:0;
+    if(tilt===null) tilt=(moving?9:3)*Math.sin(wob);
+    if(moving && (mode==='wander'||mode==='chase'||mode==='goEat'||mode==='vacTo'||mode==='exit')) bob=Math.abs(Math.sin(wob))*3;
     d.style.left=x+'px'; d.style.top=(y-bob)+'px';
-    d.style.transform=`translate(-50%,-50%) scaleX(${face}) rotate(${tilt}deg)`;
-    d.classList.toggle('walk',moving);
+    d.style.transform=`translate(-50%,-50%) scale(${sc}) scaleX(${face}) rotate(${rot===null?tilt:rot}deg)`;
+    d.classList.toggle('walk', moving && mode!=='jumpTo' && mode!=='fall');
     requestAnimationFrame(loop);
   }
+  function enter(){ restoreAll(); const dir=Math.random()<0.5?-1:1; x=dir<0?-110:W()+110; y=130+Math.random()*(H()-260); mode='wander'; pick(); nextAntic=Date.now()+3000; clearTimeout(visTimer); visTimer=setTimeout(exit,15000); }
+  function exit(){ restoreAll(); const dir=Math.random()<0.5?-1:1; tx=dir<0?-140:W()+140; ty=y; face=dir; mode='exit'; }
   requestAnimationFrame(loop);
-  // цикл видимости: показать 15с → спрятать → через 30с снова
-  function show(){ d.classList.remove('hidden'); pick(); setTimeout(hide,15000); }
-  function hide(){ d.classList.add('hidden'); setTimeout(show,30000); }
-  d.classList.add('hidden'); setTimeout(show,600); // при открытии
+  setTimeout(enter,600);
 })();
 </script>
 </body>
