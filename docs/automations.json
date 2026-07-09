@@ -1,5 +1,5 @@
 {
-  "generated_at": "09.07.2026 19:23 МСК",
+  "generated_at": "09.07.2026 19:28 МСК",
   "services": [
     {
       "name": "Scrapfly · оферты",
@@ -38,10 +38,10 @@
     },
     {
       "name": "Удалённый ПК",
-      "value": "не отвечает",
+      "value": "по расписанию",
       "note": "РФ-хост цен Ozon/ЯМ",
-      "dot": "broken",
-      "level": "bad"
+      "dot": "ok",
+      "level": ""
     },
     {
       "name": "MPStats",
