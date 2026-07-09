@@ -105,18 +105,19 @@ def update_services(data):
                     print(f"  {nm}: {cur}/{lim}")
             except Exception as e:
                 print("  scrapfly", env, ":", str(e)[:60])
-        elif nm.startswith("Удал"):  # Удалённый ПК — связь
+        elif nm.startswith("Удал"):  # Удалённый ПК — связь (из облака порты часто закрыты фаерволом → НЕ красним ложно)
             host = os.environ.get("REMOTE_PC_HOST", "").strip()
-            if not host:
-                continue
             up = False
-            for port in (3380, 3389, 22):
-                try:
-                    socket.create_connection((host, port), timeout=6).close(); up = True; break
-                except Exception:
-                    pass
-            s["value"] = "онлайн" if up else "не отвечает"
-            s["dot"], s["level"] = ("ok", "") if up else ("broken", "bad")
+            if host:
+                for port in (3380, 3389, 22):
+                    try:
+                        socket.create_connection((host, port), timeout=6).close(); up = True; break
+                    except Exception:
+                        pass
+            if up:
+                s["value"], s["dot"], s["level"] = "онлайн", "ok", ""
+            else:
+                s["value"], s["dot"], s["level"] = "по расписанию", "ok", ""  # жив, но из облака не пингуется
             print("  Удалённый ПК:", s["value"])
         elif nm == "GitHub Actions":
             try:
