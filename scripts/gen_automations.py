@@ -38,6 +38,13 @@ CHECKS = {
 }
 
 
+def _gh(url):
+    req = urllib.request.Request(url, headers={
+        "Authorization": "token " + TOKEN, "Accept": "application/vnd.github+json"})
+    with urllib.request.urlopen(req, timeout=30, context=_CTX) as r:
+        return json.loads(r.read().decode())
+
+
 def latest_run(repo, wf):
     url = f"https://api.github.com/repos/{repo}/actions/workflows/{wf}/runs?per_page=1"
     req = urllib.request.Request(url, headers={
@@ -119,18 +126,42 @@ def update_services(data):
                 s["value"], s["dot"], s["level"] = "по расписанию", "ok", ""  # жив, но из облака не пингуется
             print("  Удалённый ПК:", s["value"])
         elif nm == "GitHub Actions":
+            # GitHub убил billing-эндпоинт (404). Считаем сами: сумма длительностей
+            # прогонов ПРИВАТНЫХ репо за текущий месяц, каждый округляем вверх до минуты
+            # (публичные репо — Actions бесплатны, в лимит 2000 не идут).
             try:
-                req = urllib.request.Request("https://api.github.com/users/nikooolechka/settings/billing/actions",
-                    headers={"Authorization": "token " + TOKEN, "Accept": "application/vnd.github+json"})
-                with urllib.request.urlopen(req, timeout=25, context=_CTX) as r:
-                    j = json.loads(r.read().decode())
-                used, inc = j.get("total_minutes_used"), j.get("included_minutes") or 2000
-                if used is not None:
-                    s["value"], s["note"] = str(int(used)), f"/ {int(inc)} мин в мес"
-                    s["level"], s["dot"] = _lvl(used / inc)
-                    print("  Actions:", used, "/", inc)
+                import math
+                inc = 2000
+                ms = datetime.now(timezone.utc).strftime("%Y-%m-01")
+                used = 0
+                for repo in (OZ, SELF):
+                    ri = _gh(f"https://api.github.com/repos/{repo}")
+                    if not ri.get("private"):
+                        continue
+                    page = 1
+                    while True:
+                        d = _gh(f"https://api.github.com/repos/{repo}/actions/runs"
+                                f"?created=%3E%3D{ms}&per_page=100&page={page}")
+                        runs = d.get("workflow_runs", [])
+                        if not runs:
+                            break
+                        for r in runs:
+                            st, en = r.get("run_started_at"), r.get("updated_at")
+                            try:
+                                a = datetime.fromisoformat(st.replace("Z", "+00:00"))
+                                b = datetime.fromisoformat(en.replace("Z", "+00:00"))
+                                if b > a:
+                                    used += max(1, math.ceil((b - a).total_seconds() / 60))
+                            except Exception:
+                                pass
+                        if len(runs) < 100:
+                            break
+                        page += 1
+                s["value"], s["note"] = str(used), f"/ {inc} мин в мес"
+                s["level"], s["dot"] = _lvl(used / inc)
+                print("  Actions:", used, "/", inc)
             except Exception as e:
-                print("  actions billing:", str(e)[:70])
+                print("  actions calc:", str(e)[:70])
 
 
 def main():
