@@ -145,6 +145,10 @@ def main():
         if res is None:
             continue
         it["status"], it["reason"] = res
+        # авто-жизненный-цикл: заработавший автомат сам переезжает из «В работе и планах» в свою категорию
+        if it.get("done_category") and it["status"] == "ok" and it["category"] == "В работе и планах":
+            it["category"] = it["done_category"]
+            print(f"  {it['id']}: заработал → переехал в «{it['done_category']}»")
         print(f"  {it['id']}: {it['status']} {it['reason']}")
     # DRIFT-контроль: воркфлоу, которых НЕТ на дашборде (соседняя сессия могла добавить и забыть внести)
     IGNORE = {"oferta_probe.yml", "ym_probe.yml", "ym_probe2.yml", "automations_status.yml",
