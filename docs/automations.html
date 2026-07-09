@@ -38,8 +38,17 @@
   .htitle .kick{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--faint);margin-bottom:9px}
   .htitle h1{font-family:"Manrope",sans-serif;font-weight:800;font-size:clamp(26px,4vw,40px);line-height:1.02;margin:0;
      background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
-  .htitle .sub{color:var(--mut);font-size:13px;margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-  .pill{display:inline-flex;align-items:center;gap:7px;background:var(--glass);border:1px solid var(--stroke);border-radius:100px;padding:5px 13px;font-size:12.5px}
+  .htitle .sub{color:var(--mut);font-size:13px;margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  @property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
+  @keyframes spin{to{--a:360deg}}
+  .pill{position:relative;display:inline-flex;align-items:center;gap:6px;background:var(--glass);
+        border-radius:100px;padding:6px 15px;font-size:12.5px;isolation:isolate}
+  .pill::before{content:"";position:absolute;inset:0;border-radius:100px;padding:1.6px;z-index:-1;
+       background:conic-gradient(from var(--a),transparent 0deg,var(--clr) 70deg,transparent 150deg,transparent 210deg,var(--clr) 290deg,transparent 360deg);
+       -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
+       animation:spin 3.4s linear infinite}
+  .pill .n{font-family:"Manrope";font-weight:700}
+  .pill.ok{--clr:var(--ok)} .pill.broken{--clr:var(--broken)} .pill.wip{--clr:var(--wip)} .pill.planned{--clr:var(--plan)}
 
   .svc{min-width:252px;background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:13px 15px;backdrop-filter:blur(14px)}
   .svc h3{margin:0 0 10px;font-family:"Manrope";font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);font-weight:700}
@@ -132,10 +141,10 @@ fetch('automations.json?v='+Date.now()).then(r=>r.json()).then(d=>{
   const items=d.items||[];
   const c={ok:0,broken:0,wip:0,planned:0}; items.forEach(i=>c[i.status]=(c[i.status]||0)+1);
   document.getElementById('sub').innerHTML=
-    `<span class="pill"><span class="dot ok"></span>${c.ok} работает</span>`+
-    (c.broken?`<span class="pill"><span class="dot broken"></span>${c.broken} сломано</span>`:'')+
-    (c.wip?`<span class="pill"><span class="dot wip"></span>${c.wip} в работе</span>`:'')+
-    (c.planned?`<span class="pill"><span class="dot planned"></span>${c.planned} план</span>`:'');
+    `<span class="pill ok"><span class="n">${c.ok}</span> работает</span>`+
+    (c.broken?`<span class="pill broken"><span class="n">${c.broken}</span> сломано</span>`:'')+
+    (c.wip?`<span class="pill wip"><span class="n">${c.wip}</span> в работе</span>`:'')+
+    (c.planned?`<span class="pill planned"><span class="n">${c.planned}</span> план</span>`:'');
   const svc=document.getElementById('svc');
   svc.innerHTML=(d.services||[]).map(s=>`<div class="r"><span class="snm">${s.dot?`<span class="dot ${s.dot}"></span>`:''}${esc(s.name)}</span>
      <span class="val ${s.level||''}">${esc(s.value)}${s.note?` <small>${esc(s.note)}</small>`:''}</span></div>`).join('') || '<div class="r">—</div>';
