@@ -30,7 +30,6 @@ CHECKS = {
     "gab_unit":        (OZ, "gabariti_monitor.yml", 4),
     "gab_oz_card":     (OZ, "oz_gabariti_monitor.yml", 30),
     "gab_wb":          (OZ, "wb_gabariti_monitor.yml", 200),
-    "wb_pnl":          (OZ, "wb_pnl.yml", 30),
     "recipes":         (OZ, "recipes_1c.yml", 200),
     "posts_digest":    (OZ, "posts.yml", 30),
     "poster_watchdog": (OZ, "poster_sync_watchdog.yml", 30),
