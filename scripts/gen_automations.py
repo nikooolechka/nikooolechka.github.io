@@ -146,6 +146,26 @@ def main():
             continue
         it["status"], it["reason"] = res
         print(f"  {it['id']}: {it['status']} {it['reason']}")
+    # DRIFT-контроль: воркфлоу, которых НЕТ на дашборде (соседняя сессия могла добавить и забыть внести)
+    IGNORE = {"oferta_probe.yml", "ym_probe.yml", "ym_probe2.yml", "automations_status.yml", "pages-build-deployment"}
+    known = {m[1] for m in CHECKS.values()}
+    drift = []
+    for repo in (OZ, SELF):
+        try:
+            url = f"https://api.github.com/repos/{repo}/actions/workflows?per_page=100"
+            req = urllib.request.Request(url, headers={"Authorization": "token " + TOKEN, "Accept": "application/vnd.github+json"})
+            with urllib.request.urlopen(req, timeout=30, context=_CTX) as r:
+                wfs = json.loads(r.read().decode()).get("workflows", [])
+            for w in wfs:
+                fn = w.get("path", "").split("/")[-1]
+                if w.get("state") == "active" and fn not in known and fn not in IGNORE:
+                    drift.append(w.get("name") or fn)
+        except Exception as e:
+            print("drift", repo, ":", str(e)[:50])
+    data["drift"] = drift
+    if drift:
+        print("⚠ DRIFT — не на дашборде:", drift)
+
     data["generated_at"] = (datetime.now(timezone.utc) + timedelta(hours=3)).strftime("%d.%m.%Y %H:%M") + " МСК"
     json.dump(data, open(DOCS, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
     print("обновлено:", data["generated_at"])

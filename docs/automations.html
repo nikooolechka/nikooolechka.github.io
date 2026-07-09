@@ -35,6 +35,7 @@
   .dot.ok::after{border:2px solid var(--ok)} .dot.broken::after{border:2px solid var(--broken);animation-duration:1.1s}
 
   header{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;flex-wrap:wrap;padding:34px 0 22px}
+  .hleft{flex:1 1 440px;min-width:0;display:flex;flex-direction:column;gap:16px}
   .htitle .kick{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--faint);margin-bottom:9px}
   .htitle h1{font-family:"Manrope",sans-serif;font-weight:800;font-size:clamp(26px,4vw,40px);line-height:1.02;margin:0;
      background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -50,11 +51,16 @@
   .pill .n{font-family:"Manrope";font-weight:800;font-size:19px}
 
   /* окошко «В работе и планах» — под шапкой, со скроллом */
-  .plans{margin-top:8px;background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:14px 16px 10px;backdrop-filter:blur(14px)}
-  .plans .ph{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+  /* окошко фиксированной высоты (задаётся JS под высоту правого блока), скролл внутри */
+  .plans{flex:1 1 auto;min-height:120px;display:flex;flex-direction:column;overflow:hidden;
+         background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:14px 16px 8px;backdrop-filter:blur(14px)}
+  .plans .ph{flex:0 0 auto;display:flex;align-items:center;gap:9px;margin-bottom:10px}
   .plans .ph b{font-family:"Manrope";font-weight:700;font-size:14.5px}
   .plans .ph .cnt{font-size:12px;color:var(--faint)}
-  .planlist{max-height:180px;overflow-y:auto;padding-right:4px}
+  .planlist{flex:1 1 auto;min-height:0;overflow-y:auto;padding-right:4px}
+  .drift{margin:14px 0 0;background:rgba(255,90,106,.1);border:1px solid rgba(255,90,106,.4);border-radius:12px;
+         padding:11px 15px;color:#ffb3ba;font-size:12.5px;line-height:1.5}
+  .drift b{color:#fff}
   .planlist::-webkit-scrollbar{width:7px}
   .planlist::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:8px}
   .prow{display:flex;align-items:center;gap:10px;padding:9px 2px;border-top:1px solid rgba(255,255,255,.05)}
@@ -65,7 +71,7 @@
   .prow .pst.wip{color:var(--wip)} .prow .pst.planned{color:var(--plan)}
   .pill.ok{--clr:var(--ok)} .pill.broken{--clr:var(--broken)} .pill.wip{--clr:var(--wip)} .pill.planned{--clr:var(--plan)}
 
-  .svc{min-width:252px;background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:13px 15px;backdrop-filter:blur(14px)}
+  .svc{flex:0 0 262px;background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:13px 15px;backdrop-filter:blur(14px)}
   .svc h3{margin:0 0 10px;font-family:"Manrope";font-size:11.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mut);font-weight:700}
   .svc .r{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0;font-size:12.5px;border-top:1px solid rgba(255,255,255,.05)}
   .svc .r:first-of-type{border-top:0}
@@ -123,10 +129,16 @@
 
 <div class="wrap">
 <header>
-  <div class="htitle">
-    <div class="kick">панель управления</div>
-    <h1>Автоматизации АС Фарм</h1>
-    <div class="sub" id="sub">загрузка…</div>
+  <div class="hleft">
+    <div class="htitle">
+      <div class="kick">панель управления</div>
+      <h1>Автоматизации АС Фарм</h1>
+      <div class="sub" id="sub">загрузка…</div>
+    </div>
+    <div class="plans" id="plansbox" style="display:none">
+      <div class="ph"><span>🧪</span><b>В работе и планах</b><span class="cnt" id="plancnt"></span></div>
+      <div class="planlist" id="plans"></div>
+    </div>
   </div>
   <div class="svc">
     <h3>Сервисы и лимиты</h3>
@@ -134,10 +146,7 @@
   </div>
 </header>
 
-<div class="plans" id="plansbox" style="display:none">
-  <div class="ph"><span>🧪</span><b>В работе и планах</b><span class="cnt" id="plancnt"></span></div>
-  <div class="planlist" id="plans"></div>
-</div>
+<div class="drift" id="drift" style="display:none"></div>
 
 <div id="app"></div>
 
@@ -179,6 +188,10 @@ fetch('automations.json?v='+Date.now()).then(r=>r.json()).then(d=>{
         <span class="psc">${esc(i.schedule)}</span>
         <span class="pst ${i.status}">${i.status==='wip'?'в работе':'план'}</span></div>`).join('');
   }
+  if(d.drift && d.drift.length){
+    const db=document.getElementById('drift');db.style.display='';
+    db.innerHTML=`⚠ <b>${d.drift.length} автоматизаци(й) не на дашборде:</b> ${d.drift.map(esc).join(', ')} — нужно добавить карточки.`;
+  }
   const cats=[...new Set(items.map(i=>i.category))].filter(c=>c!=='В работе и планах');
   const app=document.getElementById('app');
   for(const cat of cats){
@@ -205,7 +218,16 @@ fetch('automations.json?v='+Date.now()).then(r=>r.json()).then(d=>{
       <div class="grid">${cards}</div>`;
     app.appendChild(sec);
   }
+  fitPlans();
 }).catch(()=>{document.getElementById('sub').textContent='не удалось загрузить данные';});
+function fitPlans(){
+  const pb=document.getElementById('plansbox');
+  if(!pb || pb.style.display==='none') return;
+  const svc=document.querySelector('.svc'), ht=document.querySelector('.htitle');
+  if(window.innerWidth<=640 || !svc || !ht){pb.style.height='';return;}
+  pb.style.height=Math.max(svc.offsetHeight - ht.offsetHeight - 16, 120)+'px';
+}
+window.addEventListener('resize',fitPlans);
 </script>
 </body>
 </html>
