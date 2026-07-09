@@ -147,7 +147,8 @@ def main():
         it["status"], it["reason"] = res
         print(f"  {it['id']}: {it['status']} {it['reason']}")
     # DRIFT-контроль: воркфлоу, которых НЕТ на дашборде (соседняя сессия могла добавить и забыть внести)
-    IGNORE = {"oferta_probe.yml", "ym_probe.yml", "ym_probe2.yml", "automations_status.yml", "pages-build-deployment"}
+    IGNORE = {"oferta_probe.yml", "ym_probe.yml", "ym_probe2.yml", "automations_status.yml",
+              "pages-build-deployment", "ok_sync.yml"}  # ok_sync покрыт карточкой «Автосверка календаря»
     known = {m[1] for m in CHECKS.values()}
     drift = []
     for repo in (OZ, SELF):
