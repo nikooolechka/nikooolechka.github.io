@@ -200,7 +200,8 @@ fetch('automations.json?v='+Date.now()).then(r=>r.json()).then(d=>{
     const nbroken=list.filter(x=>x.status==='broken').length;
     const sec=document.createElement('div');sec.className='cat';
     const cards=list.map(i=>{
-      const linkBtn=i.link?`<a class="lnkbtn" href="${esc(i.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🔗 ${esc(i.link_label||'Открыть')} ↗</a>`:'';
+      const _links=i.links||(i.link?[{url:i.link,label:i.link_label}]:[]);
+      const linkBtn=_links.map(l=>`<a class="lnkbtn" href="${esc(l.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🔗 ${esc(l.label||'Открыть')} ↗</a>`).join(' ');
       const dchip=i.launched?`<div class="datechip">🚀 запущено ${esc(i.launched)}</div>`:'';
       return `<div class="item ${i.status==='broken'?'broken':''}" onclick="this.classList.toggle('open')">
         <div class="head">

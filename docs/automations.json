@@ -227,8 +227,16 @@
       "reason": "",
       "launched": "",
       "details": "<b>Что:</b> онлайн-гайд по бренду, доступный по ссылке, со счётчиком просмотров. <b>Зачем:</b> удобно делиться материалами и видеть охват.",
-      "link": "https://guide-web-production.up.railway.app",
-      "link_label": "Открыть гайд"
+      "links": [
+        {
+          "url": "https://guide-web-production.up.railway.app",
+          "label": "Открыть гайд"
+        },
+        {
+          "url": "https://guide-web-production.up.railway.app/stats",
+          "label": "Счётчик просмотров"
+        }
+      ]
     },
     {
       "id": "oz_reviews_auto",
