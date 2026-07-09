@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Автоматизации · АС Фарм</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#07080d; --ink:#eef2f7; --mut:#8b97ab; --faint:#5c677a;
+    --glass:rgba(20,24,34,.55); --glass2:rgba(28,33,46,.75); --stroke:rgba(255,255,255,.07);
+    --ok:#33e39a; --broken:#ff5a6a; --wip:#ffca4a; --plan:#6aa8ff;
+    --grad:linear-gradient(110deg,#33e39a 0%,#43c6ff 45%,#a78bfa 100%);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+       -webkit-font-smoothing:antialiased;overflow-x:hidden;padding-bottom:70px}
+  /* фон-аврора */
+  .aura{position:fixed;inset:0;z-index:-2;pointer-events:none;filter:blur(90px);opacity:.55}
+  .aura::before,.aura::after{content:"";position:absolute;border-radius:50%}
+  .aura::before{width:620px;height:620px;left:-160px;top:-220px;background:radial-gradient(circle,#1f9e73,transparent 62%)}
+  .aura::after{width:680px;height:680px;right:-200px;top:60px;background:radial-gradient(circle,#5b46b8,transparent 62%)}
+  .grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.035;
+         background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+
+  header{padding:64px 20px 26px;text-align:center;position:relative}
+  .kicker{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
+  h1{font-family:"Space Grotesk",sans-serif;font-weight:700;font-size:clamp(34px,6vw,56px);line-height:1.02;margin:0;
+     background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .sub{color:var(--mut);font-size:15px;margin-top:16px}
+  .totals{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:22px 0 4px}
+  .chip{display:flex;align-items:center;gap:8px;background:var(--glass);border:1px solid var(--stroke);
+        border-radius:100px;padding:8px 16px;font-size:13px;font-weight:500;backdrop-filter:blur(12px)}
+  .chip .n{font-family:"Space Grotesk";font-weight:700;font-size:15px}
+
+  h2.cat{display:flex;align-items:center;gap:12px;font-family:"Space Grotesk";font-weight:600;font-size:14px;
+         letter-spacing:2px;text-transform:uppercase;color:var(--mut);margin:44px 0 16px}
+  h2.cat .ln{flex:1;height:1px;background:linear-gradient(90deg,var(--stroke),transparent)}
+  h2.cat .cnt{color:var(--faint);font-size:12px;letter-spacing:1px}
+
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+  .item{position:relative;background:var(--glass);border:1px solid var(--stroke);border-radius:18px;padding:18px 20px;
+        backdrop-filter:blur(14px);transition:transform .2s cubic-bezier(.2,.7,.3,1),border-color .2s,box-shadow .2s;
+        overflow:visible;opacity:0;transform:translateY(14px);animation:rise .5s forwards}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .item::before{content:"";position:absolute;inset:0;border-radius:18px;padding:1px;background:var(--grad);
+                -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+                -webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:.25s}
+  .item:hover{transform:translateY(-4px);box-shadow:0 22px 50px rgba(0,0,0,.5)}
+  .item:hover::before{opacity:.9}
+  .row1{display:flex;align-items:center;gap:11px}
+  .dot{position:relative;width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+  .dot.ok{background:var(--ok)} .dot.broken{background:var(--broken)}
+  .dot.wip{background:var(--wip)} .dot.planned{background:var(--plan)}
+  .dot.ok::after,.dot.broken::after{content:"";position:absolute;inset:-4px;border-radius:50%;
+        border:2px solid currentColor;color:inherit;animation:pulse 2s infinite}
+  .dot.ok::after{border-color:var(--ok)} .dot.broken::after{border-color:var(--broken);animation-duration:1s}
+  @keyframes pulse{0%{transform:scale(.7);opacity:.9}70%{transform:scale(1.7);opacity:0}100%{opacity:0}}
+  .nm{font-weight:600;font-size:15.5px;flex:1;letter-spacing:.1px}
+  .days{font-size:11px;color:var(--mut);background:rgba(255,255,255,.04);border:1px solid var(--stroke);
+        border-radius:9px;padding:3px 9px;white-space:nowrap;font-variant-numeric:tabular-nums}
+  .meta{margin-top:11px;color:var(--mut);font-size:12.5px;line-height:1.6;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .meta .sched{color:#c6d3e2;display:inline-flex;align-items:center;gap:6px}
+  .meta .sep{color:var(--faint)}
+  .stat{margin-top:10px;font-size:12.5px;font-weight:600;display:inline-flex;align-items:center;gap:7px}
+  .stat.ok{color:var(--ok)} .stat.broken{color:var(--broken)} .stat.wip{color:var(--wip)} .stat.planned{color:var(--plan)}
+
+  .pop{visibility:hidden;opacity:0;position:absolute;z-index:30;left:14px;right:14px;top:calc(100% + 8px);
+       background:var(--glass2);border:1px solid rgba(255,255,255,.12);border-radius:14px;padding:15px 17px;
+       font-size:13px;line-height:1.65;color:#d8e2ee;backdrop-filter:blur(20px);
+       box-shadow:0 20px 55px rgba(0,0,0,.6);transition:.2s cubic-bezier(.2,.7,.3,1);transform:translateY(8px) scale(.98)}
+  .pop::before{content:"";position:absolute;top:-6px;left:26px;width:12px;height:12px;background:inherit;
+       border-left:1px solid rgba(255,255,255,.12);border-top:1px solid rgba(255,255,255,.12);transform:rotate(45deg)}
+  .pop b{color:#fff;font-weight:600}
+  .item:hover .pop{visibility:visible;opacity:1;transform:none}
+
+  footer{text-align:center;color:var(--faint);font-size:12.5px;margin-top:48px;line-height:1.8}
+  footer .u{color:var(--mut)}
+  .live{display:inline-flex;align-items:center;gap:7px;color:var(--ok)}
+  .live .d{width:7px;height:7px;border-radius:50%;background:var(--ok);animation:blink 1.6s infinite}
+  @keyframes blink{50%{opacity:.25}}
+  @media(max-width:520px){.grid{grid-template-columns:1fr}header{padding-top:44px}}
+</style>
+</head>
+<body>
+<div class="aura"></div><div class="grain"></div>
+
+<header>
+  <div class="kicker">панель управления</div>
+  <h1>Автоматизации<br>АС&nbsp;Фарм</h1>
+  <div class="sub" id="sub">загрузка…</div>
+  <div class="totals" id="totals"></div>
+</header>
+
+<div class="wrap" id="app"></div>
+
+<footer>
+  <div class="live"><span class="d"></span> статусы обновляются сами, 2 раза в день — 07:00 и 19:00 МСК</div>
+  <div class="u" style="margin-top:6px">последняя проверка: <span id="upd">—</span></div>
+</footer>
+
+<script>
+const CAT_ICON={"Цены":"💸","Отзывы":"⭐","Мониторы изменений":"🛰","Отчёты и данные":"📊","Контент и постинг":"📣","В работе и планах":"🧪"};
+function esc(s){return (s||"").replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
+function statLine(i){
+  if(i.status==='broken') return `🔴 сломалось${i.reason?': '+esc(i.reason):''}`;
+  if(i.status==='ok') return '🟢 работает штатно';
+  if(i.status==='wip') return '🟡 в разработке';
+  return '🔵 в планах';
+}
+fetch('automations.json?v='+Date.now()).then(r=>r.json()).then(d=>{
+  document.getElementById('upd').textContent=d.generated_at||'—';
+  const items=d.items||[];
+  const c={ok:0,broken:0,wip:0,planned:0}; items.forEach(i=>c[i.status]=(c[i.status]||0)+1);
+  const totalDays=items.reduce((s,i)=>s+(+i.dev_days||0),0);
+  document.getElementById('sub').innerHTML=`<b style="color:#fff">${items.length}</b> автоматизаций работают на бренд · суммарно&nbsp;≈&nbsp;<b style="color:#fff">${totalDays}</b>&nbsp;дней разработки`;
+  document.getElementById('totals').innerHTML=
+    `<span class="chip"><span class="dot ok" style="position:static"></span><span class="n">${c.ok}</span> работает</span>`+
+    (c.broken?`<span class="chip"><span class="dot broken" style="position:static"></span><span class="n">${c.broken}</span> сломано</span>`:'')+
+    (c.wip?`<span class="chip"><span class="dot wip" style="position:static"></span><span class="n">${c.wip}</span> в работе</span>`:'')+
+    (c.planned?`<span class="chip"><span class="dot planned" style="position:static"></span><span class="n">${c.planned}</span> план</span>`:'');
+  const cats=[...new Set(items.map(i=>i.category))];
+  const app=document.getElementById('app');
+  let idx=0;
+  for(const cat of cats){
+    const list=items.filter(x=>x.category===cat);
+    const h=document.createElement('h2');h.className='cat';
+    h.innerHTML=`<span>${CAT_ICON[cat]||'•'}</span><span>${esc(cat)}</span><span class="ln"></span><span class="cnt">${list.length}</span>`;
+    app.appendChild(h);
+    const g=document.createElement('div');g.className='grid';
+    for(const i of list){
+      const el=document.createElement('div');el.className='item';el.style.animationDelay=(idx++*40)+'ms';
+      el.innerHTML=`<div class="row1"><span class="dot ${i.status}"></span>
+          <span class="nm">${esc(i.name)}</span><span class="days">≈ ${i.dev_days} дн</span></div>
+        <div class="meta"><span class="sched">⏱ ${esc(i.schedule)}</span>${i.launched?`<span class="sep">•</span>запущено ${esc(i.launched)}`:''}</div>
+        <div class="stat ${i.status}">${statLine(i)}</div>
+        <div class="pop">${i.details||''}</div>`;
+      g.appendChild(el);
+    }
+    app.appendChild(g);
+  }
+}).catch(()=>{document.getElementById('sub').textContent='не удалось загрузить данные';});
+</script>
+</body>
+</html>
