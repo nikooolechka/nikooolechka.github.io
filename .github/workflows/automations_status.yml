@@ -25,6 +25,8 @@ jobs:
         env:
           STATUS_PAT: ${{ secrets.STATUS_PAT }}
           SCRAPFLY_KEY: ${{ secrets.SCRAPFLY_KEY }}
+          SCRAPFLY_KEY_SOCIAL: ${{ secrets.SCRAPFLY_KEY_SOCIAL }}
+          REMOTE_PC_HOST: ${{ secrets.REMOTE_PC_HOST }}
         run: python scripts/gen_automations.py
       - name: Опубликовать обновлённые статусы
         run: |

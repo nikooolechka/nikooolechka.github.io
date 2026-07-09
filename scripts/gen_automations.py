@@ -79,25 +79,46 @@ def _lvl(pct):
     return ("bad", "broken") if pct >= 0.95 else (("warn", "wip") if pct >= 0.8 else ("", "ok"))
 
 
+def _scrapfly(key):
+    with urllib.request.urlopen("https://api.scrapfly.io/account?key=" + key, timeout=25, context=_CTX) as r:
+        j = json.loads(r.read().decode())
+    u = (j.get("subscription") or {}).get("usage") or {}
+    sc = u.get("scrape") or u.get("all") or {}
+    return sc.get("current"), sc.get("limit") or 1000
+
+
 def update_services(data):
+    import socket
     for s in data.get("services", []):
-        if s["name"] == "Scrapfly":
-            key = os.environ.get("SCRAPFLY_KEY", "").strip()
+        nm = s["name"]
+        if nm.startswith("Scrapfly"):
+            env = "SCRAPFLY_KEY" if ("оферт" in nm.lower()) else "SCRAPFLY_KEY_SOCIAL"
+            key = os.environ.get(env, "").strip()
             if not key:
                 continue
             try:
-                with urllib.request.urlopen("https://api.scrapfly.io/account?key=" + key, timeout=25, context=_CTX) as r:
-                    j = json.loads(r.read().decode())
-                u = (j.get("subscription") or {}).get("usage") or {}
-                sc = u.get("scrape") or u.get("all") or {}
-                cur, lim = sc.get("current"), sc.get("limit") or 1000
+                cur, lim = _scrapfly(key)
                 if cur is not None:
-                    s["value"], s["note"] = str(cur), f"/ {lim} в мес · сброс 15-го"
+                    tail = "осн." if env == "SCRAPFLY_KEY" else "2-й акк"
+                    s["value"], s["note"] = str(cur), f"/ {lim} {tail} · сброс 15-го"
                     s["level"], s["dot"] = _lvl(cur / lim)
-                    print("  Scrapfly:", cur, "/", lim)
+                    print(f"  {nm}: {cur}/{lim}")
             except Exception as e:
-                print("  scrapfly:", str(e)[:70])
-        elif s["name"] == "GitHub Actions":
+                print("  scrapfly", env, ":", str(e)[:60])
+        elif nm.startswith("Удал"):  # Удалённый ПК — связь
+            host = os.environ.get("REMOTE_PC_HOST", "").strip()
+            if not host:
+                continue
+            up = False
+            for port in (3380, 3389, 22):
+                try:
+                    socket.create_connection((host, port), timeout=6).close(); up = True; break
+                except Exception:
+                    pass
+            s["value"] = "онлайн" if up else "не отвечает"
+            s["dot"], s["level"] = ("ok", "") if up else ("broken", "bad")
+            print("  Удалённый ПК:", s["value"])
+        elif nm == "GitHub Actions":
             try:
                 req = urllib.request.Request("https://api.github.com/users/nikooolechka/settings/billing/actions",
                     headers={"Authorization": "token " + TOKEN, "Accept": "application/vnd.github+json"})
