@@ -34,7 +34,8 @@
   .dot.ok::after,.dot.broken::after{content:"";position:absolute;inset:-3px;border-radius:50%;animation:pulse 2s infinite}
   .dot.ok::after{border:2px solid var(--ok)} .dot.broken::after{border:2px solid var(--broken);animation-duration:1.1s}
 
-  header{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;flex-wrap:wrap;padding:34px 0 22px}
+  header{display:flex;align-items:flex-start;justify-content:space-between;gap:22px;flex-wrap:wrap;padding:34px 0 0}
+  #app>.cat:first-child{margin-top:12px}
   .hleft{flex:1 1 440px;min-width:0;display:flex;flex-direction:column;gap:16px}
   .htitle .kick{font-size:11px;letter-spacing:2.5px;text-transform:uppercase;color:var(--faint);margin-bottom:9px}
   .htitle h1{font-family:"Manrope",sans-serif;font-weight:800;font-size:clamp(26px,4vw,40px);line-height:1.02;margin:0;
@@ -225,7 +226,7 @@ function fitPlans(){
   if(!pb || pb.style.display==='none') return;
   const svc=document.querySelector('.svc'), ht=document.querySelector('.htitle');
   if(window.innerWidth<=640 || !svc || !ht){pb.style.height='';return;}
-  pb.style.height=Math.max(svc.offsetHeight - ht.offsetHeight - 16, 120)+'px';
+  pb.style.height=Math.max(svc.offsetHeight - ht.offsetHeight - 16 + 38, 120)+'px';
 }
 window.addEventListener('resize',fitPlans);
 </script>
