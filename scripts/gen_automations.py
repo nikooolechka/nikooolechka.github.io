@@ -75,8 +75,46 @@ def check(repo, wf, max_age_h):
     return None  # in_progress / queued — оставляем как было
 
 
+def _lvl(pct):
+    return ("bad", "broken") if pct >= 0.95 else (("warn", "wip") if pct >= 0.8 else ("", "ok"))
+
+
+def update_services(data):
+    for s in data.get("services", []):
+        if s["name"] == "Scrapfly":
+            key = os.environ.get("SCRAPFLY_KEY", "").strip()
+            if not key:
+                continue
+            try:
+                with urllib.request.urlopen("https://api.scrapfly.io/account?key=" + key, timeout=25, context=_CTX) as r:
+                    j = json.loads(r.read().decode())
+                u = (j.get("subscription") or {}).get("usage") or {}
+                sc = u.get("scrape") or u.get("all") or {}
+                cur, lim = sc.get("current"), sc.get("limit") or 1000
+                if cur is not None:
+                    s["value"], s["note"] = str(cur), f"/ {lim} в мес · сброс 15-го"
+                    s["level"], s["dot"] = _lvl(cur / lim)
+                    print("  Scrapfly:", cur, "/", lim)
+            except Exception as e:
+                print("  scrapfly:", str(e)[:70])
+        elif s["name"] == "GitHub Actions":
+            try:
+                req = urllib.request.Request("https://api.github.com/users/nikooolechka/settings/billing/actions",
+                    headers={"Authorization": "token " + TOKEN, "Accept": "application/vnd.github+json"})
+                with urllib.request.urlopen(req, timeout=25, context=_CTX) as r:
+                    j = json.loads(r.read().decode())
+                used, inc = j.get("total_minutes_used"), j.get("included_minutes") or 2000
+                if used is not None:
+                    s["value"], s["note"] = str(int(used)), f"/ {int(inc)} мин в мес"
+                    s["level"], s["dot"] = _lvl(used / inc)
+                    print("  Actions:", used, "/", inc)
+            except Exception as e:
+                print("  actions billing:", str(e)[:70])
+
+
 def main():
     data = json.load(open(DOCS, encoding="utf-8"))
+    update_services(data)
     for it in data["items"]:
         m = CHECKS.get(it["id"])
         if not m:

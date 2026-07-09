@@ -24,6 +24,7 @@ jobs:
       - name: Проверить прогоны и обновить статусы
         env:
           STATUS_PAT: ${{ secrets.STATUS_PAT }}
+          SCRAPFLY_KEY: ${{ secrets.SCRAPFLY_KEY }}
         run: python scripts/gen_automations.py
       - name: Опубликовать обновлённые статусы
         run: |
