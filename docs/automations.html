@@ -41,13 +41,28 @@
   .htitle .sub{color:var(--mut);font-size:13px;margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
   @property --a{syntax:'<angle>';inherits:false;initial-value:0deg}
   @keyframes spin{to{--a:360deg}}
-  .pill{position:relative;display:inline-flex;align-items:center;gap:6px;background:var(--glass);
-        border-radius:100px;padding:6px 15px;font-size:12.5px;isolation:isolate}
+  .pill{position:relative;display:inline-flex;align-items:center;gap:8px;background:var(--glass);
+        border-radius:100px;padding:10px 20px;font-size:14.5px;isolation:isolate}
   .pill::before{content:"";position:absolute;inset:0;border-radius:100px;padding:1.6px;z-index:-1;
        background:conic-gradient(from var(--a),transparent 0deg,var(--clr) 70deg,transparent 150deg,transparent 210deg,var(--clr) 290deg,transparent 360deg);
        -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;
        animation:spin 3.4s linear infinite}
-  .pill .n{font-family:"Manrope";font-weight:700}
+  .pill .n{font-family:"Manrope";font-weight:800;font-size:19px}
+
+  /* окошко «В работе и планах» — под шапкой, со скроллом */
+  .plans{margin-top:8px;background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:14px 16px 10px;backdrop-filter:blur(14px)}
+  .plans .ph{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+  .plans .ph b{font-family:"Manrope";font-weight:700;font-size:14.5px}
+  .plans .ph .cnt{font-size:12px;color:var(--faint)}
+  .planlist{max-height:180px;overflow-y:auto;padding-right:4px}
+  .planlist::-webkit-scrollbar{width:7px}
+  .planlist::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:8px}
+  .prow{display:flex;align-items:center;gap:10px;padding:9px 2px;border-top:1px solid rgba(255,255,255,.05)}
+  .prow:first-child{border-top:0}
+  .prow .pnm{font-weight:500;font-size:13.5px;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .prow .psc{font-size:11.5px;color:var(--faint);white-space:nowrap}
+  .prow .pst{font-size:11px;font-weight:600;white-space:nowrap}
+  .prow .pst.wip{color:var(--wip)} .prow .pst.planned{color:var(--plan)}
   .pill.ok{--clr:var(--ok)} .pill.broken{--clr:var(--broken)} .pill.wip{--clr:var(--wip)} .pill.planned{--clr:var(--plan)}
 
   .svc{min-width:252px;background:var(--glass);border:1px solid var(--stroke);border-radius:16px;padding:13px 15px;backdrop-filter:blur(14px)}
@@ -119,6 +134,11 @@
   </div>
 </header>
 
+<div class="plans" id="plansbox" style="display:none">
+  <div class="ph"><span>🧪</span><b>В работе и планах</b><span class="cnt" id="plancnt"></span></div>
+  <div class="planlist" id="plans"></div>
+</div>
+
 <div id="app"></div>
 
 <footer>
@@ -148,7 +168,18 @@ fetch('automations.json?v='+Date.now()).then(r=>r.json()).then(d=>{
   const svc=document.getElementById('svc');
   svc.innerHTML=(d.services||[]).map(s=>`<div class="r"><span class="snm">${s.dot?`<span class="dot ${s.dot}"></span>`:''}${esc(s.name)}</span>
      <span class="val ${s.level||''}">${esc(s.value)}${s.note?` <small>${esc(s.note)}</small>`:''}</span></div>`).join('') || '<div class="r">—</div>';
-  const cats=[...new Set(items.map(i=>i.category))];
+  // окошко «В работе и планах» — под шапкой, со скроллом
+  const plans=items.filter(i=>i.category==='В работе и планах');
+  if(plans.length){
+    document.getElementById('plansbox').style.display='';
+    document.getElementById('plancnt').textContent='· '+plans.length;
+    document.getElementById('plans').innerHTML=plans.map(i=>`<div class="prow">
+        <span class="dot ${i.status}"></span>
+        <span class="pnm">${esc(i.name)}</span>
+        <span class="psc">${esc(i.schedule)}</span>
+        <span class="pst ${i.status}">${i.status==='wip'?'в работе':'план'}</span></div>`).join('');
+  }
+  const cats=[...new Set(items.map(i=>i.category))].filter(c=>c!=='В работе и планах');
   const app=document.getElementById('app');
   for(const cat of cats){
     const list=items.filter(x=>x.category===cat);
