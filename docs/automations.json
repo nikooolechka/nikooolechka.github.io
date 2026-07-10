@@ -23,6 +23,13 @@
       "level": ""
     },
     {
+      "name": "Anthropic-кредиты",
+      "value": "кредиты кончились",
+      "note": "разбор постов (Haiku) · пополнить",
+      "dot": "broken",
+      "level": "bad"
+    },
+    {
       "name": "WB токен",
       "value": "до 15.12.2026",
       "note": "read-only",
