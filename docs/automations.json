@@ -25,9 +25,9 @@
     {
       "name": "Anthropic-кредиты",
       "value": "кредиты кончились",
-      "note": "разбор постов (Haiku) · пополнить",
-      "dot": "broken",
-      "level": "bad"
+      "note": "не критично: дайджест на Gemini, оферты — фолбэк",
+      "dot": "wip",
+      "level": "warn"
     },
     {
       "name": "WB токен",
