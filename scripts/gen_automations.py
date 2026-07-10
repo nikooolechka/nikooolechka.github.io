@@ -125,6 +125,36 @@ def update_services(data):
             else:
                 s["value"], s["dot"], s["level"] = "по расписанию", "ok", ""  # жив, но из облака не пингуется
             print("  Удалённый ПК:", s["value"])
+        elif nm.startswith("Anthropic"):  # у Anthropic нет API остатка баланса → живой пинг: ключ отвечает / кредиты кончились
+            key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
+            if not key:
+                continue
+            body = json.dumps({"model": "claude-haiku-4-5", "max_tokens": 1,
+                               "messages": [{"role": "user", "content": "."}]}).encode()
+            req = urllib.request.Request(
+                "https://api.anthropic.com/v1/messages", data=body,
+                headers={"x-api-key": key, "anthropic-version": "2023-06-01",
+                         "content-type": "application/json"})
+            try:
+                with urllib.request.urlopen(req, timeout=25, context=_CTX) as r:
+                    r.read()
+                s["value"], s["note"] = "есть кредиты", "разбор постов (Haiku)"
+                s["dot"], s["level"] = "ok", ""
+                print("  Anthropic: есть кредиты")
+            except urllib.error.HTTPError as e:
+                try:
+                    txt = e.read().decode("utf-8", "ignore")
+                except Exception:
+                    txt = ""
+                if "credit balance is too low" in txt:
+                    s["value"], s["note"] = "кредиты кончились", "разбор постов (Haiku) · пополнить"
+                    s["dot"], s["level"] = "broken", "bad"
+                else:
+                    s["value"], s["note"] = "ошибка проверки", f"HTTP {e.code}"
+                    s["dot"], s["level"] = "wip", "warn"
+                print("  Anthropic:", s["value"])
+            except Exception as e:
+                print("  anthropic:", str(e)[:60])  # сеть/таймаут — статус не трогаем
         elif nm == "GitHub Actions":
             # GitHub убил billing-эндпоинт (404). Считаем сами: сумма длительностей
             # прогонов ПРИВАТНЫХ репо за текущий месяц, каждый округляем вверх до минуты
