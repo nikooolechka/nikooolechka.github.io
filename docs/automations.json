@@ -1,5 +1,5 @@
 {
-  "generated_at": "10.07.2026 10:33 МСК",
+  "generated_at": "10.07.2026 13:29 МСК",
   "services": [
     {
       "name": "Scrapfly · оферты",
@@ -17,7 +17,7 @@
     },
     {
       "name": "GitHub Actions",
-      "value": "325",
+      "value": "340",
       "note": "/ 2000 мин в мес",
       "dot": "ok",
       "level": ""
