@@ -138,7 +138,7 @@ def update_services(data):
             try:
                 with urllib.request.urlopen(req, timeout=25, context=_CTX) as r:
                     r.read()
-                s["value"], s["note"] = "есть кредиты", "разбор постов (Haiku)"
+                s["value"], s["note"] = "есть кредиты", "запас Claude (дайджест на Gemini)"
                 s["dot"], s["level"] = "ok", ""
                 print("  Anthropic: есть кредиты")
             except urllib.error.HTTPError as e:
@@ -147,8 +147,8 @@ def update_services(data):
                 except Exception:
                     txt = ""
                 if "credit balance is too low" in txt:
-                    s["value"], s["note"] = "кредиты кончились", "разбор постов (Haiku) · пополнить"
-                    s["dot"], s["level"] = "broken", "bad"
+                    s["value"], s["note"] = "кредиты кончились", "не критично: дайджест на Gemini, оферты — фолбэк"
+                    s["dot"], s["level"] = "wip", "warn"
                 else:
                     s["value"], s["note"] = "ошибка проверки", f"HTTP {e.code}"
                     s["dot"], s["level"] = "wip", "warn"
