@@ -328,6 +328,10 @@
       },
       "ok": {
         "published_at": "2026-06-30T13:55:18+03:00"
+      },
+      "tg": {
+        "posted_at": "2026-07-10T06:36:16.008889+00:00",
+        "url": "https://t.me/asfarm_ru/14"
       }
     },
     "_image_url": "/images/pervyy-stomatolog.jpg"
@@ -509,10 +513,11 @@
         "url": "https://vk.com/wall-239602265_19"
       },
       "dzen": {
-        "released_at": null
+        "released_at": "2026-07-10T06:36:05.673809+00:00"
       },
       "ok": {}
-    }
+    },
+    "_image_url": "/images/zubnoy-kamen.jpg"
   },
   {
     "id": "molochnye-postoyannye",
@@ -630,8 +635,8 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-10T06:36:14.984141+00:00",
+        "url": "https://vk.com/wall-239602265_24"
       },
       "dzen": {
         "released_at": null
