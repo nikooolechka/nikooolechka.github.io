@@ -137,10 +137,8 @@ def update_services(data):
                 continue
             try:
                 est = _railway_cost(tok, "f77f76b2-43eb-48cb-b885-f260662b0eeb")
-                free = max(0.0, 5.0 - est)
                 s["value"] = f"~${est:.2f}/мес"
-                s["note"] = (f"Hobby: прогноз ${est:.2f} из $5 включённых · свободно ~${free:.2f} · "
-                             f"списано ≈$0 · потолок $10, alert $5 · «сон» вкл")
+                s["note"] = "из $5 · списано $0 · сон"
                 s["level"], s["dot"] = _lvl(est / 5.0)
                 print(f"  Railway: прогноз ~${est:.2f}/мес")
             except Exception as e:
