@@ -359,7 +359,11 @@
         "released_at": "2026-06-28T12:00:00+03:00",
         "published_at": "2026-06-30T12:00:00+03:00"
       },
-      "ok": {}
+      "ok": {},
+      "tg": {
+        "posted_at": "2026-07-11T07:57:12.524727+00:00",
+        "url": "https://t.me/asfarm_ru/15"
+      }
     },
     "_image_url": "/images/desny-grudnichka.jpg"
   },
@@ -660,8 +664,8 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-11T07:57:11.158978+00:00",
+        "url": "https://vk.com/wall-239602265_25"
       },
       "dzen": {
         "released_at": null
