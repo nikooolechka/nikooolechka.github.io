@@ -28,6 +28,7 @@ jobs:
           SCRAPFLY_KEY_SOCIAL: ${{ secrets.SCRAPFLY_KEY_SOCIAL }}
           REMOTE_PC_HOST: ${{ secrets.REMOTE_PC_HOST }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: python scripts/gen_automations.py
       - name: Опубликовать обновлённые статусы
         run: |

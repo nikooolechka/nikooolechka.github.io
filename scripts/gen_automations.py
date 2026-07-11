@@ -94,6 +94,25 @@ def _scrapfly(key):
     return sc.get("current"), sc.get("limit") or 1000
 
 
+def _railway_cost(tok, ws):
+    # read-only токен → estimatedUsage (ГБ-мин RAM + vCPU-мин CPU за цикл) → $ по тарифу Railway.
+    # прямого поля "$" API не отдаёт (Railway сам так же считает из сырых цифр); совпадает с Estimated Bill ±копейки.
+    q = ('query{estimatedUsage(measurements:[MEMORY_USAGE_GB,CPU_USAGE],workspaceId:"%s")'
+         '{measurement estimatedValue}}') % ws
+    req = urllib.request.Request(
+        "https://backboard.railway.com/graphql/v2",
+        data=json.dumps({"query": q}).encode(),
+        headers={"Authorization": "Bearer " + tok, "Content-Type": "application/json",
+                 "User-Agent": "Mozilla/5.0 (dashboard usage reader)"})
+    with urllib.request.urlopen(req, timeout=25, context=_CTX) as r:
+        d = json.loads(r.read().decode())
+    rows = (d.get("data") or {}).get("estimatedUsage") or []
+    mem = sum(x["estimatedValue"] for x in rows if x["measurement"] == "MEMORY_USAGE_GB")
+    cpu = sum(x["estimatedValue"] for x in rows if x["measurement"] == "CPU_USAGE")
+    CYCLE_MIN = 43800.0  # 730 ч — тарифный «месяц» Railway
+    return mem / CYCLE_MIN * 10.0 + cpu / CYCLE_MIN * 20.0  # $10/ГБ-мес RAM + $20/vCPU-мес CPU
+
+
 def update_services(data):
     import socket
     for s in data.get("services", []):
@@ -112,6 +131,20 @@ def update_services(data):
                     print(f"  {nm}: {cur}/{lim}")
             except Exception as e:
                 print("  scrapfly", env, ":", str(e)[:60])
+        elif nm.startswith("Railway"):  # платный Hobby $5/мес — следим за $ через read-only токен
+            tok = os.environ.get("RAILWAY_TOKEN", "").strip()
+            if not tok:
+                continue
+            try:
+                est = _railway_cost(tok, "f77f76b2-43eb-48cb-b885-f260662b0eeb")
+                free = max(0.0, 5.0 - est)
+                s["value"] = f"~${est:.2f}/мес"
+                s["note"] = (f"Hobby: прогноз ${est:.2f} из $5 включённых · свободно ~${free:.2f} · "
+                             f"списано ≈$0 · потолок $10, alert $5 · «сон» вкл")
+                s["level"], s["dot"] = _lvl(est / 5.0)
+                print(f"  Railway: прогноз ~${est:.2f}/мес")
+            except Exception as e:
+                print("  railway:", str(e)[:80])
         elif nm.startswith("Удал"):  # Удалённый ПК — связь (из облака порты часто закрыты фаерволом → НЕ красним ложно)
             host = os.environ.get("REMOTE_PC_HOST", "").strip()
             up = False
