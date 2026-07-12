@@ -389,7 +389,11 @@
       "dzen": {
         "released_at": "2026-06-30T06:00:16.430616+00:00"
       },
-      "ok": {}
+      "ok": {},
+      "tg": {
+        "posted_at": "2026-07-12T08:14:10.829679+00:00",
+        "url": "https://t.me/asfarm_ru/17"
+      }
     },
     "_image_url": "/images/sladkoe-i-zuby.jpg"
   },
@@ -543,10 +547,11 @@
         "url": "https://vk.com/wall-239602265_20"
       },
       "dzen": {
-        "released_at": null
+        "released_at": "2026-07-12T08:14:05.114014+00:00"
       },
       "ok": {}
-    }
+    },
+    "_image_url": "/images/molochnye-postoyannye.jpg"
   },
   {
     "id": "uhod-v-detskom-sadu",
@@ -689,8 +694,8 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-12T08:14:09.998397+00:00",
+        "url": "https://vk.com/wall-239602265_27"
       },
       "dzen": {
         "released_at": null
