@@ -1,5 +1,10 @@
 name: publish
 
+# один прогон за раз — чтобы два пересёкшихся не задвоили пост (гонка 12.07)
+concurrency:
+  group: publish-serial
+  cancel-in-progress: false
+
 on:
   workflow_dispatch:
     inputs:
