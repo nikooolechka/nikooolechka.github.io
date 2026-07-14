@@ -449,7 +449,11 @@
       "dzen": {
         "released_at": "2026-07-04T06:36:05.951515+00:00"
       },
-      "ok": {}
+      "ok": {},
+      "tg": {
+        "posted_at": "2026-07-14T07:57:13.374678+00:00",
+        "url": "https://t.me/asfarm_ru/20"
+      }
     },
     "_image_url": "/images/opolaskivatel-kak.jpg"
   },
@@ -577,10 +581,11 @@
         "url": "https://vk.com/wall-239602265_21"
       },
       "dzen": {
-        "released_at": null
+        "released_at": "2026-07-14T07:57:05.978269+00:00"
       },
       "ok": {}
-    }
+    },
+    "_image_url": "/images/uhod-v-detskom-sadu.jpg"
   },
   {
     "id": "nochnoy-uhod-det",
@@ -750,8 +755,8 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-14T07:57:12.049983+00:00",
+        "url": "https://vk.com/wall-239602265_30"
       },
       "dzen": {
         "released_at": null
