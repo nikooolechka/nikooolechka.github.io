@@ -479,7 +479,11 @@
       "dzen": {
         "released_at": "2026-07-06T06:36:05.825224+00:00"
       },
-      "ok": {}
+      "ok": {},
+      "tg": {
+        "posted_at": "2026-07-15T08:01:42.382576+00:00",
+        "url": "https://t.me/asfarm_ru/22"
+      }
     },
     "_image_url": "/images/krovotochivost-desen.jpg"
   },
@@ -805,8 +809,8 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-15T08:01:41.275752+00:00",
+        "url": "https://vk.com/wall-239602265_32"
       },
       "dzen": {
         "released_at": null
