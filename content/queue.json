@@ -509,7 +509,11 @@
       "dzen": {
         "released_at": "2026-07-08T06:36:05.674800+00:00"
       },
-      "ok": {}
+      "ok": {},
+      "tg": {
+        "posted_at": "2026-07-16T08:09:11.143333+00:00",
+        "url": "https://t.me/asfarm_ru/24"
+      }
     },
     "_image_url": "/images/uhod-za-ochkami.jpg"
   },
@@ -611,10 +615,11 @@
         "url": "https://vk.com/wall-239602265_22"
       },
       "dzen": {
-        "released_at": null
+        "released_at": "2026-07-16T08:09:05.236758+00:00"
       },
       "ok": {}
-    }
+    },
+    "_image_url": "/images/nochnoy-uhod-det.jpg"
   },
   {
     "id": "rebenok-otkaz",
@@ -784,8 +789,8 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-16T08:09:10.276428+00:00",
+        "url": "https://vk.com/wall-239602265_34"
       },
       "dzen": {
         "released_at": null
