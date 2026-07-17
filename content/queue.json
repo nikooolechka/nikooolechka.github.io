@@ -539,7 +539,11 @@
       "dzen": {
         "released_at": "2026-07-10T06:36:05.673809+00:00"
       },
-      "ok": {}
+      "ok": {},
+      "tg": {
+        "posted_at": "2026-07-17T08:06:34.525262+00:00",
+        "url": "https://t.me/asfarm_ru/26"
+      }
     },
     "_image_url": "/images/zubnoy-kamen.jpg"
   },
@@ -839,8 +843,8 @@
         "url": null
       },
       "vk": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-07-17T08:06:33.155110+00:00",
+        "url": "https://vk.com/wall-239602265_36"
       },
       "dzen": {
         "released_at": null
