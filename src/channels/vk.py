@@ -68,6 +68,32 @@ class VKClient:
             lines.append(f"Ozon: {links['ozon']}")
         return ("\n\n" + "\n".join(lines)) if lines else ""
 
+    def posted_today(self) -> bool:
+        """Авторитетная анти-дубль проверка: есть ли на стене пост от сегодня (МСК).
+
+        Читает саму стену ВК — источник правды, НЕ зависит от git-состояния.
+        Защищает от дубля при любой гонке (потерянный push отметки, лишний прогон).
+        Ошибка чтения → False (не блокируем публикацию из-за сбоя API; тогда
+        работает запасной механизм — отметка в queue.json).
+        """
+        from datetime import datetime, timezone, timedelta
+        try:
+            self._check_creds()
+            resp = self._call("wall.get", {
+                "owner_id": self.owner_id, "count": 8, "filter": "owner",
+            })
+            msk = timezone(timedelta(hours=3))
+            today = datetime.now(msk).date()
+            for it in resp.get("items", []):
+                ts = it.get("date")
+                if ts and datetime.fromtimestamp(ts, msk).date() == today:
+                    return True
+            return False
+        except Exception as e:
+            print(f"vk: не смог прочитать стену для анти-дубль проверки ({e}); "
+                  f"полагаюсь на git-отметку.")
+            return False
+
     def publish(self, title: str, text: str, image_path: str = None, links: dict = None) -> dict:
         self._check_creds()
         message = f"{title}\n\n{text}".strip() + self._links_block(links)

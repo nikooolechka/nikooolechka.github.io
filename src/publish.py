@@ -136,9 +136,21 @@ def do_channel_post(posts, channel, ClientCls, body_field, force=False):
         print(f"{channel}: интервал не выдержан, следующий пост можно через ~{left} дн.")
         return False
 
+    client = ClientCls()
+
+    # Авторитетная анти-дубль проверка по самому каналу (если адаптер умеет).
+    # Для ВК читаем стену: если сегодня уже постили — не дублируем, даже если
+    # git-отметка потерялась (гонка push) или прогон лишний. Не зависит от гита.
+    if not force and hasattr(client, "posted_today"):
+        try:
+            if client.posted_today():
+                print(f"{channel}: на канале уже есть пост от сегодня — пропуск (анти-дубль).")
+                return False
+        except Exception as e:
+            print(f"{channel}: анти-дубль проверка не сработала ({e}); иду по git-отметке.")
+
     # Берём первый неопубликованный; если он падает (например, битая картинка) —
     # НЕ застреваем на нём, а пробуем следующие, чтобы канал не молчал день за днём.
-    client = ClientCls()
     tried = 0
     for post in q.iter_unposted(posts, channel):
         if tried >= 5:
