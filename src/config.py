@@ -34,7 +34,10 @@ TELEGRAM_CHANNEL = os.environ.get("TELEGRAM_CHANNEL", "")
 # --- Дзен (через RSS-импорт) ---
 # Дзен не имеет API публикации: мы генерим статические страницы + RSS-фид,
 # хостим на GitHub Pages, а в Дзен Студио добавляем URL фида.
-SITE_BASE_URL = os.environ.get("SITE_BASE_URL", "https://nikooolechka.github.io")
+# `or` (не второй аргумент get): пустой секрет SITE_BASE_URL в CI возвращал ""
+# → в RSS-фиде ссылки становились относительными (/posts/…), Дзен такой фид
+# бракует и перестаёт импортировать. Пустое значение → откат на реальный домен.
+SITE_BASE_URL = os.environ.get("SITE_BASE_URL") or "https://nikooolechka.github.io"
 SITE_TITLE = "АС Фарм — уход за полостью рта"
 SITE_DESCRIPTION = "Полезные материалы об уходе за зубами, дёснами и гигиене полости рта."
 DOCS_DIR = os.environ.get(

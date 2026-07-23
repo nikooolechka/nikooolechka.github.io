@@ -170,6 +170,7 @@ def _render_feed(posts: list) -> str:
       <category>format-article</category>{enclosure}
       <description>{html.escape(p.get('body_long','')[:200])}</description>
       <content:encoded><![CDATA[{content_html}]]></content:encoded>
+      <yandex:full-text><![CDATA[{content_html}]]></yandex:full-text>
     </item>""")
     items = "\n".join(items_xml)
     feed_url = f"{config.SITE_BASE_URL.rstrip('/')}/feed.xml"
@@ -179,6 +180,7 @@ def _render_feed(posts: list) -> str:
   xmlns:dc="http://purl.org/dc/elements/1.1/"
   xmlns:media="http://search.yahoo.com/mrss/"
   xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:yandex="http://news.yandex.ru"
   xmlns:georss="http://www.georss.org/georss">
   <channel>
     <title>{html.escape(config.SITE_TITLE)}</title>
