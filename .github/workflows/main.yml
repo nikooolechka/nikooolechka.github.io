@@ -73,4 +73,9 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A || true
           git commit -m "chore: update queue, covers and dzen feed [skip ci]" || echo "nothing to commit"
-          git push || echo "nothing to push"
+          # надёжный push с ретраем: если другой воркфлоу успел коммитнуть — подтягиваем (rebase) и пробуем снова.
+          # Раньше push просто отклонялся и глотался → отметка «опубликовано» терялась → пост уходил ДВАЖДЫ.
+          for i in 1 2 3 4 5; do
+            git pull --rebase --autostash origin "$(git rev-parse --abbrev-ref HEAD)" && git push && { echo "state push OK"; break; }
+            echo "push попытка $i не удалась — повтор"; sleep 3
+          done
