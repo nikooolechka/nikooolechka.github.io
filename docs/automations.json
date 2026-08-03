@@ -1,5 +1,5 @@
 {
-  "generated_at": "03.08.2026 09:58 МСК",
+  "generated_at": "03.08.2026 20:50 МСК",
   "services": [
     {
       "name": "Railway",
@@ -10,7 +10,7 @@
     },
     {
       "name": "Scrapfly · оферты",
-      "value": "301",
+      "value": "331",
       "note": "/ 1000 осн. · сброс 15-го",
       "dot": "ok",
       "level": ""
@@ -24,7 +24,7 @@
     },
     {
       "name": "GitHub Actions",
-      "value": "749",
+      "value": "802",
       "note": "/ 2000 мин в мес",
       "dot": "ok",
       "level": ""
