@@ -907,14 +907,15 @@
         "url": "https://vk.com/wall-239602265_36"
       },
       "dzen": {
-        "released_at": null
+        "released_at": "2026-08-03T06:36:05.754171+00:00"
       },
       "ok": {},
       "tg": {
         "posted_at": "2026-07-29T06:36:12.054844+00:00",
         "url": "https://t.me/asfarm_ru/44"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/rasporyadok-uhoda.jpg"
   },
   {
     "id": "xylit-detyam",
@@ -1031,7 +1032,11 @@
         "url": "https://vk.com/wall-239602265_45"
       },
       "dzen": {},
-      "ok": {}
+      "ok": {},
+      "tg": {
+        "posted_at": "2026-08-03T06:36:08.516033+00:00",
+        "url": "https://t.me/asfarm_ru/49"
+      }
     }
   },
   {
