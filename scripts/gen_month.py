@@ -33,7 +33,7 @@ REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 QUEUE = os.path.join(REPO, "content", "queue.json")
 FILES = "/Users/nikol/Desktop/files"
 MAX_PER_RUN = 3
-GEMINI_MODEL = "gemini-2.0-flash"
+GEMINI_MODEL = "gemini-flash-lite-latest"  # 2.0-flash Google лишил free-tier (429) 2026-07 → генерация встала; lite — единственная с реальным free-лимитом
 
 # --- Товары: ключ -> ссылки + точные факты для брифа (Gemini ничего не выдумывает) ---
 PRODUCTS = {
@@ -62,6 +62,31 @@ PRODUCTS = {
 ROTATION = ["dental100", "pasta_det", "dental40", "irrigator1000", "dental20",
             "dental50", "dental100_zem", "irrigator500", "dental40_zem", "optika"]
 
+# Ракурсы темы — чтобы заголовки не сходились к одному (flash-lite повторяется).
+# Много бытовых углов + осенне-сентябрьские (сад/школа, простуды) — сезонно.
+ANGLES = [
+    "в дороге и путешествии, когда нет раковины",
+    "в детском саду и школе, гигиена вне дома",
+    "осенью в сезон простуд и болезней",
+    "когда режутся зубки у малыша",
+    "перед сном и утренний ритуал",
+    "первый визит к стоматологу без страха",
+    "мифы и заблуждения родителей",
+    "как приучить ребёнка к гигиене играючи",
+    "сладкое и перекусы: как беречь зубы",
+    "уход за молочными зубами с рождения",
+    "гигиена у пожилых и маломобильных близких",
+    "что взять в поездку/на дачу летом и осенью",
+    "почему кровоточат дёсны и что делать",
+    "свежее дыхание в течение дня",
+    "уход при брекетах и после лечения",
+    "гигиена, когда ребёнок болеет и капризничает",
+    "экономия времени занятой мамы",
+    "чек-лист здоровой улыбки на каждый день",
+    "как выбрать формат под возраст ребёнка",
+    "уход в офисе и на работе среди дня",
+]
+
 BRIEF = """Ты — текстолог бренда «АС Фарм» (российская гигиена полости рта). Пиши спокойно, по-человечески, только факты. БЕЗ эмодзи в тексте (кроме финальной подписи), без канцелярита, без «важно отметить/в заключение», без списков-штампов, без восклицаний.
 
 ЖЁСТКИЕ ФАКТЫ (путать НЕЛЬЗЯ):
@@ -73,7 +98,7 @@ BRIEF = """Ты — текстолог бренда «АС Фарм» (росс�
 
 ТОВАР ЭТОГО ПОСТА: {product_fact}.
 
-Напиши УНИКАЛЬНУЮ образовательную статью на тему вокруг этого товара. НЕ повторяй уже занятые заголовки:
+Напиши УНИКАЛЬНУЮ образовательную статью. РАКУРС (угол) ИМЕННО ЭТОГО поста: {angle}. Раскрой этот угол по-настоящему, естественно связав с товаром — заголовок должен отражать именно этот ракурс, а не общий. НЕ повторяй уже занятые заголовки:
 {avoid}
 
 Верни СТРОГО JSON с ключами:
@@ -126,7 +151,7 @@ def _gemini(prompt, key, _tries=4):
         r.raise_for_status()
         data = r.json()
         txt = data["candidates"][0]["content"]["parts"][0]["text"]
-        return json.loads(txt)
+        return json.loads(txt, strict=False)  # strict=False: разрешить сырые \n в строках (flash-lite)
     raise RuntimeError("Gemini: исчерпаны попытки (429)")
 
 
@@ -158,10 +183,79 @@ def needed_count(posts, today):
     return max(0, horizon - unposted)
 
 
+# РАЗНООБРАЗНЫЕ тематические сцены обложек (согласованный стиль владельца 2026-06-27):
+# люди с детьми, детская/взрослая стоматология, здоровые улыбки, немного food, вода.
+# НИКАКОЙ упаковки/товара с текстом (Flux рисует фейк-бренды — владелец резко против).
+# Для людей: лица в мягком фокусе, РУКИ ВНЕ КАДРА, мягкая улыбка с закрытым ртом
+# (открытый рот/детальные зубы Flux деформирует). Каждая сцена — самодостаточный промпт.
+_PHOTO = ", professional photography, soft warm bokeh, shallow depth of field, bright airy pastel tones, cozy natural daylight"
+_NOTXT = ", no text, no letters, no words, no logos, no brand names, no packaging, no bottles, no jars, no tubes, no labels"
+_PPL = ", natural realistic anatomy, no deformed hands, no extra fingers, hands out of frame, gentle soft closed-lip smile, no open mouth, no distorted face, no blurry eyes"
+# Замиксованный набор (по просьбе владельца): каждый пост — другой тип, все в тему
+# детской гигиены полости рта. Перебор по кругу → соседние обложки всегда разные.
+# Люди детей — только БЕЗОПАСНЫЙ кадр (близко «голова-плечи» / со спины), руки не влезают.
+# Большой пул РАЗНЫХ сюжетов — чтобы каждый пост был уникален (мало сцен → повторы,
+# и один тип даёт почти одинаковые кадры). Все безопасны: близкий кадр (руки не влезают),
+# со спины (без лиц/рук) или натюрморт без людей. Кабинета мало (он однообразен).
+_KIDCU = " only face and shoulders fill the frame, no hands, no arms" + _PPL + _NOTXT + _PHOTO
+_BACK = " seen from behind, soft focus, no faces, no hands visible" + _NOTXT + _PHOTO
+_STILL = ", no people, no hands" + _NOTXT + _PHOTO
+_SOFT = _PPL + _NOTXT + _PHOTO
+SCENES = [
+    # дети крупным планом (разный фон/настроение)
+    "an extreme close-up portrait of a cheerful healthy child with a gentle soft smile, warm orange background," + _KIDCU,
+    "an extreme close-up portrait of a giggling happy little child, soft pastel blue background," + _KIDCU,
+    "an extreme close-up portrait of a peaceful smiling toddler, soft green leafy background," + _KIDCU,
+    "an extreme close-up portrait of a joyful child looking up happily, bright clean white background," + _KIDCU,
+    "an extreme close-up portrait of a happy baby with a tiny gentle smile, warm neutral beige background," + _KIDCU,
+    # мама / семья (безопасный кадр)
+    "a happy young mother and her small child cheek to cheek by a bright window, warm tender moment, soft focus faces" + _SOFT,
+    "a tender extreme close-up of a mother softly kissing her happy baby on the cheek, only heads and shoulders," + _KIDCU,
+    "a happy family of three with a small child at a sunny breakfast table, warm joyful morning, soft focus" + _SOFT,
+    "a mother reading a colorful picture book to her child on a cozy couch, warm soft focus, hands out of frame" + _SOFT,
+    "two little siblings hugging each other cheek to cheek, close, warm bright room, soft focus" + _SOFT,
+    "a mother cuddling her toddler wrapped in a soft cozy blanket, warm morning light, soft focus, hands out of frame" + _SOFT,
+    # стоматология (немного, разные ракурсы)
+    "a bright modern cheerful pediatric dental office interior, cozy children's clinic, soft daylight" + _STILL,
+    "a little child sitting happily and relaxed in a friendly bright pediatric dental chair, soft focus" + _SOFT,
+    "a cozy children's dental clinic waiting area with soft toys and books, warm and friendly" + _STILL,
+    # дети на природе / сезон (со спины)
+    "happy children running in a sunny golden autumn park," + _BACK,
+    "a child walking along a path covered with golden autumn leaves in a park," + _BACK,
+    "children playing together in a bright green summer meadow," + _BACK,
+    "a child on a swing in a sunny park in warm daylight," + _BACK,
+    "a family walking together holding a small child in a beautiful autumn park," + _BACK,
+    # натюрморт / еда / сезон
+    "ripe whole pears, fresh red strawberries and a ripe banana with green mint on a light wooden table, natural food photography" + _STILL,
+    "a sliced ripe juicy pear and fresh mint leaves on a clean white plate, natural food photography" + _STILL,
+    "fresh red strawberries in a ceramic bowl with green mint leaves, natural food photography" + _STILL,
+    "a rustic wooden crate of ripe pears and apples by a sunny window, natural food photography" + _STILL,
+    "a cozy warm autumn flatlay with a knitted scarf, acorns, pinecones and colorful leaves on a table" + _STILL,
+    "a bright back-to-school flatlay with a small kids backpack, colorful autumn leaves and pencils on a table" + _STILL,
+    # предметы гигиены (без брендов)
+    "colorful children's toothbrushes standing in a ceramic cup on a bright clean bathroom shelf, soft morning light" + _STILL,
+    "a single clear glass of clean water with a sprig of fresh green mint on a bright clean table in soft morning light" + _STILL,
+    "a clear glass of water on a bright clean bathroom shelf in soft morning sunlight" + _STILL,
+    # интерьеры детские
+    "a bright cheerful cozy children's room interior with soft pastel toys and warm daylight" + _STILL,
+    "a sunny cozy kitchen morning scene with a bowl of oatmeal and fresh berries on the table" + _STILL,
+    # стоматология с ДЕТАЛЯМИ + зубы/инструменты (одобрено владельцем 2026-08)
+    "a clean set of shiny stainless steel dental instruments, a small round dental mirror and probe, neatly arranged on a soft light blue surface, bright clean macro photography" + _STILL,
+    "a friendly dentist gently examining a smiling child's teeth with a small dental mirror in a bright modern clinic, warm reassuring, soft focus, natural realistic anatomy, no deformed hands, no extra fingers" + _NOTXT + _PHOTO,
+    "an extreme close-up of a healthy child's bright cheerful smile showing clean white teeth, only face fills the frame, no hands, realistic natural teeth, warm natural light" + _NOTXT + _PHOTO,
+    # ребёнок ест что-то сладкое (для тем про сладкое/перекусы) — одобрено
+    "a happy little child joyfully eating a sweet cookie snack, close-up, warm cozy light, natural realistic anatomy, no deformed hands, no extra fingers, realistic natural teeth" + _NOTXT + _PHOTO,
+    "a cheerful happy child holding and licking a colorful swirl lollipop, close-up, warm bright light, natural realistic anatomy, no deformed hands, no extra fingers" + _NOTXT + _PHOTO,
+    # тёплые сцены заботы (болезнь/прорезывание/температура) — одобрено
+    "a young mother tenderly cuddling and comforting her little child wrapped in a soft cozy blanket at home, warm loving caring moment, soft focus faces" + _SOFT,
+    "a cute peaceful baby sleeping calmly and serenely in a cozy soft pastel crib, warm gentle morning light, tender quiet scene, soft focus, natural realistic anatomy, no deformed hands" + _NOTXT + _PHOTO,
+    "a little child resting cozily in bed under a warm soft blanket, gentle daylight through the window, calm and peaceful, soft focus, natural realistic anatomy, no deformed hands" + _NOTXT + _PHOTO,
+    "a cozy warm get-well scene on a bedside table, a mug of herbal tea, a soft folded knitted blanket and a small vase of flowers by a sunny window" + _STILL,
+]
+
+
 def generate(n, posts, gkey):
     from scripts.gen_cf import gen as gen_cover
-    SUF = (", soft pastel palette, bright airy, clean minimal, professional product photography, "
-           "shallow depth of field, no text, no watermark, no logos, no brand names, no faces")
     used_ids = {p["id"] for p in posts}
     used_titles = [p["title"] for p in posts]
     made = 0
@@ -171,7 +265,8 @@ def generate(n, posts, gkey):
         attempts += 1
         pkey = rot[(len(posts) + made) % len(rot)]
         wb, ozon, fact = PRODUCTS[pkey]
-        prompt = BRIEF.format(product_fact=fact,
+        angle = ANGLES[(len(posts) + attempts) % len(ANGLES)]
+        prompt = BRIEF.format(product_fact=fact, angle=angle,
                               avoid="\n".join("- " + t for t in used_titles[-40:]))
         try:
             post = _gemini(prompt, gkey)
@@ -185,8 +280,8 @@ def generate(n, posts, gkey):
         img = f"content/images/{pid}.jpg"
         # короткий визуальный промпт по товару
         try:
-            gen_cover(f"clean tidy still life related to oral hygiene and family care, {fact}" + SUF,
-                      os.path.join(REPO, img))
+            scene = SCENES[(len(posts) + made) % len(SCENES)]
+            gen_cover(scene, os.path.join(REPO, img))
         except Exception as e:
             print(f"  обложка не вышла ({str(e)[:50]}), пропуск"); continue
         post.update(id=pid, image=img, links={"wb": wb, "ozon": ozon},
