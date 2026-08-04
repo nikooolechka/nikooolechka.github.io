@@ -71,7 +71,9 @@ class VCClient:
     def _save_rt(self, new_rt, exp=None):
         if not self.creds_path:
             return
-        os.makedirs(os.path.dirname(self.creds_path), exist_ok=True)
+        d = os.path.dirname(self.creds_path)
+        if d:  # для голого имени файла (напр. vc_creds_ci.txt в CI) dirname='' → makedirs('') падает
+            os.makedirs(d, exist_ok=True)
         with open(self.creds_path, "w") as f:
             f.write(f"subsite_id={self.subsite_id}\nrefresh-token={new_rt}\nrefresh-exp={exp or ''}\n")
 
