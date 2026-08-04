@@ -171,6 +171,8 @@ def do_channel_post(posts, channel, ClientCls, body_field, force=False):
             )
         except Exception as e:
             print(f"{channel}: ошибка публикации «{post['id']}» ({e}); пробую следующий пост.")
+            import traceback as _tb
+            _tb.print_exc()
             continue
         q.mark_posted(post, channel, _now_iso(), out.get("url"))
         print(f"{channel}: опубликован «{post['id']}» → {out.get('url')}")
