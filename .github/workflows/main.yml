@@ -60,12 +60,28 @@ jobs:
         env:
           VK_TOKEN: ${{ secrets.VK_TOKEN }}
           VK_OWNER_ID: ${{ secrets.VK_OWNER_ID }}
-          VC_TOKEN: ${{ secrets.VC_TOKEN }}
+          VC_REFRESH_TOKEN: ${{ secrets.VC_REFRESH_TOKEN }}
           VC_SUBSITE_ID: ${{ secrets.VC_SUBSITE_ID }}
+          VC_CREDS_PATH: vc_creds_ci.txt
           SITE_BASE_URL: ${{ secrets.SITE_BASE_URL }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
           TELEGRAM_CHANNEL: ${{ secrets.TELEGRAM_CHANNEL }}
         run: python -m src.publish --channel "${{ github.event.inputs.channel || 'all' }}"
+
+      - name: Rotate VC refresh token back into secret (RT одноразовый)
+        if: always()
+        env:
+          GH_PAT: ${{ secrets.PAT_SECRETS_WRITE }}
+        run: |
+          if [ -f vc_creds_ci.txt ]; then
+            NEWRT=$(grep '^refresh-token=' vc_creds_ci.txt | cut -d'=' -f2)
+            if [ -n "$NEWRT" ] && [ -n "$GH_PAT" ]; then
+              python scripts/set_secret.py VC_REFRESH_TOKEN "$NEWRT" && echo "VC RT проротирован в секрет"
+            else
+              echo "VC RT rotation пропущена (нет нового RT или PAT)"
+            fi
+            rm -f vc_creds_ci.txt
+          fi
 
       - name: Commit state
         run: |
