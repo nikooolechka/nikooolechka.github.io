@@ -1,9 +1,9 @@
 {
-  "generated_at": "05.08.2026 20:28 МСК",
+  "generated_at": "06.08.2026 09:29 МСК",
   "services": [
     {
       "name": "Railway",
-      "value": "~$6.34/мес",
+      "value": "~$6.35/мес",
       "note": "из $5 · списано $0 · сон",
       "dot": "broken",
       "level": "bad"
@@ -24,7 +24,7 @@
     },
     {
       "name": "GitHub Actions",
-      "value": "899",
+      "value": "917",
       "note": "/ 2000 мин в мес",
       "dot": "ok",
       "level": ""
