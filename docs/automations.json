@@ -1,5 +1,5 @@
 {
-  "generated_at": "09.08.2026 19:33 МСК",
+  "generated_at": "10.08.2026 08:25 МСК",
   "services": [
     {
       "name": "Railway",
@@ -24,7 +24,7 @@
     },
     {
       "name": "GitHub Actions",
-      "value": "1212",
+      "value": "1227",
       "note": "/ 2000 мин в мес",
       "dot": "ok",
       "level": ""
