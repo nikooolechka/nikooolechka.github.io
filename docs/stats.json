@@ -2,12 +2,12 @@
   "vk": {
     "subscribers": 46,
     "posts": 56,
-    "views": 1467,
+    "views": 1472,
     "url": "https://vk.com/asfarm_ru"
   },
   "dzen": {
     "subscribers": null,
-    "posts": 0,
+    "posts": 13,
     "views": null,
     "url": "https://dzen.ru/asfarm_ru"
   },
@@ -16,5 +16,17 @@
     "posts": 2,
     "views": null,
     "url": "https://vc.ru/id6010646"
+  },
+  "tg": {
+    "subscribers": 33,
+    "posts": 45,
+    "views": 2252,
+    "url": "https://t.me/asfarm_ru"
+  },
+  "ok": {
+    "subscribers": null,
+    "posts": 6,
+    "views": null,
+    "url": "https://ok.ru/group/70000052376502"
   }
 }

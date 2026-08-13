@@ -10,9 +10,11 @@
 - VC.ru: число наших публикаций (из очереди). Просмотры/подписчики best-effort.
 """
 import os, json, ssl, urllib.request, urllib.parse
+from datetime import date
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(REPO_ROOT, "docs", "stats.json")
+HIST = os.path.join(REPO_ROOT, "docs", "stats_history.json")
 QUEUE = os.path.join(REPO_ROOT, "content", "queue.json")
 CTX = ssl._create_unverified_context()
 
@@ -20,6 +22,25 @@ VK_GROUP_ID = "239602265"      # owner_id = -239602265
 VK_SCREEN = "asfarm_ru"
 DZEN_URL = "https://dzen.ru/asfarm_ru"
 VC_URL = "https://vc.ru/id6010646"
+TG_URL = "https://t.me/asfarm_ru"
+TG_CHAT = "@asfarm_ru"          # bot @asfarmru_post_bot — админ канала
+OK_URL = "https://ok.ru/group/70000052376502"
+
+
+def _tg_token():
+    t = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
+    if not t:
+        p = os.path.expanduser("~/.asfarm_tg")
+        t = open(p).read().strip() if os.path.exists(p) else ""
+    # файл/значение может быть в формате dotenv (KEY=VALUE, несколько строк) — достаём токен
+    if "=" in t or "\n" in t:
+        val = ""
+        for line in t.splitlines():
+            line = line.strip()
+            if "TELEGRAM_BOT_TOKEN" in line:
+                val = line.split("=", 1)[-1].strip(); break
+        t = val or t.splitlines()[0].split("=", 1)[-1].strip()
+    return t
 
 
 def _vk_token():
@@ -57,15 +78,80 @@ def vk_stats():
 
 
 def dzen_stats(posts):
-    # ВАЖНО: released_at = статья отдана в RSS-ленту, а НЕ опубликована на Дзене.
-    # Лента ещё на модерации Дзена; реально опубликованных статей пока 0.
-    # Публичного API подтверждённых публикаций у канала нет → показываем 0.
-    return dict(subscribers=None, posts=0, views=None, url=DZEN_URL)
+    # Дзен сам публикует из RSS. Считаем РЕАЛЬНО вышедшие статьи — их по факту
+    # отмечает dzen_sync.py (Scrapfly) полем channels.dzen.published_at.
+    # released_at (отдано в ленту) — НЕ публикация, не считаем. Подписчиков/просмотров
+    # публичного API у канала нет → null.
+    published = len([p for p in posts if p["channels"].get("dzen", {}).get("published_at")])
+    return dict(subscribers=None, posts=published, views=None, url=DZEN_URL)
 
 
 def vc_stats(posts):
     published = len([p for p in posts if p["channels"].get("vc", {}).get("posted_at")])
     return dict(subscribers=None, posts=published, views=None, url=VC_URL)
+
+
+def _tg_views_total():
+    """Сумма просмотров по всем постам канала с публичной превью-страницы t.me/s/<chan>
+    (с пагинацией по ?before=). Возвращает int или None."""
+    import re
+    def num(s):
+        s = s.strip().replace(" ", "").replace(" ", "")
+        mul = 1
+        if s[-1:].upper() == "K":
+            mul, s = 1000, s[:-1]
+        elif s[-1:].upper() == "M":
+            mul, s = 1_000_000, s[:-1]
+        try:
+            return int(float(s.replace(",", ".")) * mul)
+        except ValueError:
+            return 0
+    total, before, seen = 0, None, set()
+    try:
+        for _ in range(12):  # предохранитель от бесконечной пагинации
+            url = f"https://t.me/s/{TG_CHAT.lstrip('@')}"
+            if before:
+                url += f"?before={before}"
+            req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+            html = urllib.request.urlopen(req, context=CTX, timeout=30).read().decode("utf-8", "ignore")
+            ids = [int(x) for x in re.findall(r'data-post="[^"]*?/(\d+)"', html)]
+            fresh = [i for i in ids if i not in seen]
+            if not fresh:
+                break
+            for v in re.findall(r'tgme_widget_message_views">([^<]+)<', html):
+                total += num(v)
+            seen.update(ids)
+            before = min(ids) if ids else None
+            if not before:
+                break
+    except Exception as e:
+        print("tg_views error:", e)
+        return None
+    return total or None
+
+
+def tg_stats(posts):
+    # посты — по факту отправки (tg.posted_at); подписчики — Bot API getChatMemberCount
+    # (бот @asfarmru_post_bot админ канала); просмотры — сумма с t.me/s (публично).
+    published = len([p for p in posts if p["channels"].get("tg", {}).get("posted_at")])
+    subs = None
+    tok = _tg_token()
+    if tok:
+        try:
+            url = f"https://api.telegram.org/bot{tok}/getChatMemberCount?chat_id={TG_CHAT}"
+            d = json.load(urllib.request.urlopen(url, context=CTX, timeout=20))
+            if d.get("ok"):
+                subs = d.get("result")
+        except Exception as e:
+            print("tg_stats error:", e)
+    return dict(subscribers=subs, posts=published, views=_tg_views_total(), url=TG_URL)
+
+
+def ok_stats(posts):
+    # OK постим вручную; факт публикации отмечает ok_sync.py (Scrapfly) полем
+    # channels.ok.published_at. Публичного API подписчиков/просмотров нет → null.
+    published = len([p for p in posts if p["channels"].get("ok", {}).get("published_at")])
+    return dict(subscribers=None, posts=published, views=None, url=OK_URL)
 
 
 def collect():
@@ -74,6 +160,8 @@ def collect():
         "vk": vk_stats() or dict(url=f"https://vk.com/{VK_SCREEN}"),
         "dzen": dzen_stats(posts),
         "vc": vc_stats(posts),
+        "tg": tg_stats(posts),
+        "ok": ok_stats(posts),
     }
 
 
@@ -82,6 +170,8 @@ def main():
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+    # TODO: ежедневный снимок subscribers/views копить в ЛИЧНОЙ Google-таблице
+    # (для стрелок ↑/↓ % «сегодня vs 7 дней назад») — ждём ID таблицы от владельца.
     print("stats ->", OUT)
     print(json.dumps(data, ensure_ascii=False))
 

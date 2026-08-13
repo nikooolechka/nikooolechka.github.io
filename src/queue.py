@@ -117,6 +117,10 @@ def release_dzen(post: dict, when: str) -> None:
 
 
 def feed_posts(posts: list, limit: int = None):
-    """В фид Дзена идут только выпущенные статьи, новейшие — лимит."""
+    """В фид Дзена идут только выпущенные статьи — НОВЕЙШИЕ `limit` штук.
+    Сортируем по дате релиза (по убыванию), иначе срез брал старейшие и новые
+    релизы после FEED_MAX_ITEMS не попадали в фид (фид замерзал)."""
     limit = limit or config.FEED_MAX_ITEMS
-    return dzen_released(posts)[:limit]
+    rel = dzen_released(posts)
+    rel.sort(key=lambda p: p["channels"]["dzen"]["released_at"], reverse=True)
+    return rel[:limit]
