@@ -91,7 +91,10 @@ def build_events(posts, today):
     for p in pubd:
         ev.append(dict(date=_d(p["channels"]["dzen"]["published_at"]), channel="dzen",
                        title=p["title"], id=p["id"], status="published", time="—"))
-    dd = today
+    # план начинаем ПОСЛЕ последней активности Дзена (+2 дня), чтобы не наслаивать
+    # планы на день, где уже есть публикации (иначе «сегодня» кажется завалено планами).
+    last_pub = max([_d(p["channels"]["dzen"]["published_at"]) for p in pubd], default=None)
+    dd = max(today, last_pub + timedelta(days=DZEN_EVERY_DAYS)) if last_pub else today
     for p in posts:
         if p["channels"].get("dzen", {}).get("published_at"):
             continue
