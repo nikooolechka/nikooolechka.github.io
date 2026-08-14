@@ -245,7 +245,8 @@ def main():
         print(f"  {it['id']}: {it['status']} {it['reason']}")
     # DRIFT-контроль: воркфлоу, которых НЕТ на дашборде (соседняя сессия могла добавить и забыть внести)
     IGNORE = {"oferta_probe.yml", "ym_probe.yml", "ym_probe2.yml", "automations_status.yml",
-              "pages-build-deployment", "ok_sync.yml"}  # ok_sync покрыт карточкой «Автосверка календаря»
+              "pages-build-deployment", "ok_sync.yml",   # ok_sync покрыт карточкой «Автосверка календаря»
+              "digest_eval.yml"}  # ручной тест качества классификатора дайджеста (по кнопке, не автомат)
     known = {m[1] for m in CHECKS.values()}
     drift = []
     for repo in (OZ, SELF):
