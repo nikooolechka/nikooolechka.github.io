@@ -165,13 +165,94 @@ def collect():
     }
 
 
+# --- история снимков в ЛИЧНОЙ таблице Claude «АС ФАРМ клод код», вкладка stats_history ---
+STATS_SHEET_ID = os.environ.get("STATS_SHEET_ID", "1Gz0zU-fT34Tr3LG-WSMZFVy5sgAFgjyC880_79S3Wms")
+STATS_TAB = os.environ.get("STATS_HISTORY_TAB", "stats_history")
+CH_ORDER = ["vk", "tg", "dzen", "ok", "vc"]
+HIST_HEADER = ["date"] + [f"{c}_{m}" for c in CH_ORDER for m in ("subs", "views", "posts")]
+
+
+def _sheets_creds():
+    """Credentials из GSHEETS_SA_JSON (json-строка) / GOOGLE_APPLICATION_CREDENTIALS /
+    локального файла сервис-аккаунта. None — если ничего нет (тогда историю пропускаем)."""
+    from google.oauth2.service_account import Credentials
+    scopes = ["https://www.googleapis.com/auth/spreadsheets"]
+    raw = os.environ.get("GSHEETS_SA_JSON", "").strip()
+    if raw:
+        return Credentials.from_service_account_info(json.loads(raw), scopes=scopes)
+    for p in (os.environ.get("GOOGLE_APPLICATION_CREDENTIALS", ""),
+              "/Users/nikol/Desktop/files/claude-sheets-497816-f533a416fa81.json"):
+        if p and os.path.exists(p):
+            return Credentials.from_service_account_file(p, scopes=scopes)
+    return None
+
+
+def _num(x):
+    try:
+        return float(x)
+    except (TypeError, ValueError):
+        return None
+
+
+def _pick_prev(rows, today_iso):
+    """Строка для сравнения: с датой ≤ сегодня−7 (ближайшая); если истории меньше
+    недели — самая ранняя из прошлых. rows — список dict по HIST_HEADER."""
+    from datetime import date as _date
+    y, m, d = map(int, today_iso.split("-"))
+    target = (_date(y, m, d) - __import__("datetime").timedelta(days=7)).isoformat()
+    past = sorted([r for r in rows if r.get("date", "") < today_iso], key=lambda r: r["date"])
+    if not past:
+        return None
+    le7 = [r for r in past if r["date"] <= target]
+    return le7[-1] if le7 else past[0]
+
+
+def _save_history_sheet(data):
+    """Апсертит строку за сегодня в stats_history и возвращает снимок ~7-дневной
+    давности {channel: {subs, views}} для стрелок. Тихо пропускает без кредов."""
+    try:
+        import gspread
+        creds = _sheets_creds()
+        if not creds:
+            print("history: нет кредов Google — снимок в таблицу пропущен"); return {}
+        gc = gspread.authorize(creds)
+        sh = gc.open_by_key(STATS_SHEET_ID)
+        try:
+            ws = sh.worksheet(STATS_TAB)
+        except gspread.WorksheetNotFound:
+            ws = sh.add_worksheet(title=STATS_TAB, rows=400, cols=len(HIST_HEADER))
+            ws.update([HIST_HEADER], "A1", value_input_option="RAW")
+        today_iso = date.today().isoformat()
+        row = [today_iso]
+        for c in CH_ORDER:
+            s = data.get(c, {}) or {}
+            row += [s.get("subscribers"), s.get("views"), s.get("posts")]
+        existing = ws.get_all_records()  # список dict по заголовку (без строки сегодня учитываем ниже)
+        col_a = ws.col_values(1)
+        if today_iso in col_a:
+            ws.update([row], f"A{col_a.index(today_iso) + 1}", value_input_option="RAW")
+        else:
+            ws.append_row(row, value_input_option="RAW")
+        print(f"history: снимок за {today_iso} записан в {STATS_TAB}")
+        prev = _pick_prev(existing, today_iso)
+        if not prev:
+            return {}
+        return {c: {"subs": _num(prev.get(f"{c}_subs")), "views": _num(prev.get(f"{c}_views"))}
+                for c in CH_ORDER}
+    except Exception as e:
+        print("history: ошибка записи в таблицу:", str(e)[:150])
+        return {}
+
+
 def main():
     data = collect()
+    prev = _save_history_sheet(data)          # пишет снимок + отдаёт значения 7-дн давности
+    for c, p in (prev or {}).items():          # вкладываем «неделю назад» для стрелок в календаре
+        if c in data:
+            data[c]["prev"] = p
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
-    # TODO: ежедневный снимок subscribers/views копить в ЛИЧНОЙ Google-таблице
-    # (для стрелок ↑/↓ % «сегодня vs 7 дней назад») — ждём ID таблицы от владельца.
     print("stats ->", OUT)
     print(json.dumps(data, ensure_ascii=False))
 

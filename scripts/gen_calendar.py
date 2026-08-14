@@ -163,8 +163,26 @@ def _fmt(n):
     return f"{n:,}".replace(",", " ")
 
 
+def _delta_html(cur, prev):
+    """Стрелка ↑/↓ и % изменения «сегодня vs ~7 дней назад». Пусто, если данных нет."""
+    if cur is None or prev is None:
+        return ""
+    try:
+        cur, prev = float(cur), float(prev)
+    except (TypeError, ValueError):
+        return ""
+    if prev == 0:
+        return ""
+    pct = (cur - prev) / prev * 100
+    if abs(pct) < 0.5:
+        return '<span class="dlt" style="color:#8a8f98;font-size:.8em;margin-left:4px;font-weight:600">→ 0%</span>'
+    up = pct > 0
+    arrow, color = ("▲", "#1a9d54") if up else ("▼", "#d64545")
+    return f'<span class="dlt" style="color:{color};font-size:.8em;margin-left:4px;font-weight:600">{arrow} {abs(pct):.0f}%</span>'
+
+
 def _networks_html(stats):
-    """Карточки соцсетей с живыми счётчиками и кликабельным названием-ссылкой."""
+    """Карточки соцсетей с живыми счётчиками, ссылкой и стрелками неделя-к-неделе."""
     meta = [
         ("vk",   "ВКонтакте",     "g-vk"),
         ("dzen", "Дзен",          "g-dz"),
@@ -176,13 +194,15 @@ def _networks_html(stats):
     for key, name, dotcls in meta:
         s = stats.get(key, {}) or {}
         url = s.get("url", "#")
-        rows = []
-        rows.append(("Подписчики", _fmt(s.get("subscribers"))))
-        rows.append(("Постов", _fmt(s.get("posts"))))
-        rows.append(("Просмотры", _fmt(s.get("views"))))
+        prev = s.get("prev", {}) or {}
+        rows = [
+            ("Подписчики", _fmt(s.get("subscribers")), _delta_html(s.get("subscribers"), prev.get("subs"))),
+            ("Постов", _fmt(s.get("posts")), ""),
+            ("Просмотры", _fmt(s.get("views")), _delta_html(s.get("views"), prev.get("views"))),
+        ]
         metrics = "".join(
-            f'<div class="metric"><span class="mv">{v}</span><span class="ml">{l}</span></div>'
-            for l, v in rows
+            f'<div class="metric"><span class="mv">{v} {dl}</span><span class="ml">{l}</span></div>'
+            for l, v, dl in rows
         )
         cards.append(
             f'<a class="net" href="{url}" target="_blank" rel="noopener">'
