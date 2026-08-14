@@ -197,11 +197,14 @@ def _networks_html(stats):
     for key, name, dotcls in meta:
         s = stats.get(key, {}) or {}
         url = s.get("url", "#")
-        prev = s.get("prev", {}) or {}
+        wc = s.get("wcmp", {}) or {}
+        def _d(metric):
+            o = wc.get(metric) or {}
+            return _delta_html(o.get("cur"), o.get("prev"))
         rows = [
-            ("Подписчики", _fmt(s.get("subscribers")), _delta_html(s.get("subscribers"), prev.get("subs"))),
+            ("Подписчики", _fmt(s.get("subscribers")), _d("subs")),
             ("Постов", _fmt(s.get("posts")), ""),
-            ("Просмотры", _fmt(s.get("views")), _delta_html(s.get("views"), prev.get("views"))),
+            ("Просмотры", _fmt(s.get("views")), _d("views")),
         ]
         metrics = "".join(
             f'<div class="metric"><span class="mv">{v} {dl}</span><span class="ml">{l}</span></div>'

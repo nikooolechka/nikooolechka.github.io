@@ -194,17 +194,34 @@ def _num(x):
         return None
 
 
-def _pick_prev(rows, today_iso):
-    """Строка для сравнения: с датой ≤ сегодня−7 (ближайшая); если истории меньше
-    недели — самая ранняя из прошлых. rows — список dict по HIST_HEADER."""
-    from datetime import date as _date
+def _period_avg(rows, lo, hi, field):
+    """Средняя непустых значений field по строкам с датой в [lo, hi] (ISO)."""
+    vals = [_num(r.get(field)) for r in rows if lo <= str(r.get("date", "")) <= hi]
+    vals = [v for v in vals if v is not None]
+    return round(sum(vals) / len(vals), 2) if vals else None
+
+
+def _week_compare(rows, today_iso):
+    """Сравнение ПРОШЛАЯ неделя (по вчера) vs ПОЗАПРОШЛАЯ. Сегодня НЕ учитываем
+    (неполный день). Возвращает {channel: {'subs':{cur,prev}, 'views':{cur,prev}}}."""
+    from datetime import date as _date, timedelta as _td
     y, m, d = map(int, today_iso.split("-"))
-    target = (_date(y, m, d) - __import__("datetime").timedelta(days=7)).isoformat()
-    past = sorted([r for r in rows if r.get("date", "") < today_iso], key=lambda r: r["date"])
-    if not past:
-        return None
-    le7 = [r for r in past if r["date"] <= target]
-    return le7[-1] if le7 else past[0]
+    t = _date(y, m, d)
+    def iso(n):
+        return (t - _td(days=n)).isoformat()
+    lw_lo, lw_hi = iso(7), iso(1)     # прошлая неделя: сегодня−7 … вчера
+    pw_lo, pw_hi = iso(14), iso(8)    # позапрошлая: сегодня−14 … сегодня−8
+    out = {}
+    for c in CH_ORDER:
+        o = {}
+        for key, field in (("subs", f"{c}_subs"), ("views", f"{c}_views")):
+            cur = _period_avg(rows, lw_lo, lw_hi, field)
+            prev = _period_avg(rows, pw_lo, pw_hi, field)
+            if cur is not None and prev is not None:
+                o[key] = {"cur": cur, "prev": prev}
+        if o:
+            out[c] = o
+    return out
 
 
 def _save_history_sheet(data):
@@ -234,11 +251,7 @@ def _save_history_sheet(data):
         else:
             ws.append_row(row, value_input_option="RAW")
         print(f"history: снимок за {today_iso} записан в {STATS_TAB}")
-        prev = _pick_prev(existing, today_iso)
-        if not prev:
-            return {}
-        return {c: {"subs": _num(prev.get(f"{c}_subs")), "views": _num(prev.get(f"{c}_views"))}
-                for c in CH_ORDER}
+        return _week_compare(existing, today_iso)
     except Exception as e:
         print("history: ошибка записи в таблицу:", str(e)[:150])
         return {}
@@ -246,10 +259,10 @@ def _save_history_sheet(data):
 
 def main():
     data = collect()
-    prev = _save_history_sheet(data)          # пишет снимок + отдаёт значения 7-дн давности
-    for c, p in (prev or {}).items():          # вкладываем «неделю назад» для стрелок в календаре
+    wcmp = _save_history_sheet(data)           # пишет снимок + сравнение прошлая/позапрошлая неделя
+    for c, o in (wcmp or {}).items():          # вкладываем для стрелок в календаре
         if c in data:
-            data[c]["prev"] = p
+            data[c]["wcmp"] = o
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
