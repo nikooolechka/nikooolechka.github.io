@@ -1075,13 +1075,16 @@
         "posted_at": "2026-07-24T06:36:10.268366+00:00",
         "url": "https://vk.com/wall-239602265_48"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-08-15T05:45:40.113966+00:00"
+      },
       "ok": {},
       "tg": {
         "posted_at": "2026-08-04T06:36:08.656030+00:00",
         "url": "https://t.me/asfarm_ru/50"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/detskaya-vs-vzroslaya.jpg"
   },
   {
     "id": "zapah-u-rebenka",
@@ -1341,7 +1344,11 @@
         "posted_at": "2026-08-04T10:00:55.079826+00:00",
         "url": "https://vk.com/wall-239602265_58"
       },
-      "dzen": {}
+      "dzen": {},
+      "tg": {
+        "posted_at": "2026-08-15T05:45:46.839159+00:00",
+        "url": "https://t.me/asfarm_ru/62"
+      }
     }
   },
   {
@@ -1508,7 +1515,10 @@
     },
     "channels": {
       "vc": {},
-      "vk": {},
+      "vk": {
+        "posted_at": "2026-08-15T05:45:45.852165+00:00",
+        "url": "https://vk.com/wall-239602265_69"
+      },
       "dzen": {}
     }
   },
