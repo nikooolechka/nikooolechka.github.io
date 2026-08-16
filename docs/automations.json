@@ -1,9 +1,9 @@
 {
-  "generated_at": "15.08.2026 19:22 МСК",
+  "generated_at": "16.08.2026 07:33 МСК",
   "services": [
     {
       "name": "Railway",
-      "value": "~$2.91/мес",
+      "value": "~$3.01/мес",
       "note": "из $5 · списано $0 · сон",
       "dot": "ok",
       "level": ""
@@ -24,10 +24,10 @@
     },
     {
       "name": "GitHub Actions",
-      "value": "1584",
+      "value": "1606",
       "note": "/ 2000 мин в мес",
-      "dot": "ok",
-      "level": ""
+      "dot": "wip",
+      "level": "warn"
     },
     {
       "name": "Anthropic-кредиты",
