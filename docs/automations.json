@@ -1,30 +1,30 @@
 {
-  "generated_at": "17.08.2026 07:39 МСК",
+  "generated_at": "17.08.2026 19:26 МСК",
   "services": [
     {
       "name": "Railway",
-      "value": "~$3.21/мес",
+      "value": "~$3.30/мес",
       "note": "из $5 · списано $0 · сон",
       "dot": "ok",
       "level": ""
     },
     {
       "name": "Scrapfly · оферты",
-      "value": "30",
+      "value": "60",
       "note": "/ 1000 осн. · сброс 15-го",
       "dot": "ok",
       "level": ""
     },
     {
       "name": "Scrapfly · соцсети",
-      "value": "195",
+      "value": "225",
       "note": "/ 1000 2-й акк · сброс 15-го",
       "dot": "ok",
       "level": ""
     },
     {
       "name": "GitHub Actions",
-      "value": "1688",
+      "value": "1752",
       "note": "/ 2000 мин в мес",
       "dot": "wip",
       "level": "warn"
@@ -123,8 +123,8 @@
       "category": "Отзывы",
       "name": "Еженедельная сводка отзывов Ozon",
       "schedule": "каждый понедельник в 15:00",
-      "status": "ok",
-      "reason": "",
+      "status": "broken",
+      "reason": "последний прогон 17.08 19:23 завершился ошибкой",
       "launched": "02.08.2026",
       "link": "https://docs.google.com/spreadsheets/d/1Gz0zU-fT34Tr3LG-WSMZFVy5sgAFgjyC880_79S3Wms",
       "link_label": "Архив отзывов",
