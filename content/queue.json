@@ -1102,13 +1102,16 @@
         "posted_at": "2026-07-25T06:36:12.962656+00:00",
         "url": "https://vk.com/wall-239602265_49"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-08-17T05:54:25.979939+00:00"
+      },
       "ok": {},
       "tg": {
         "posted_at": "2026-08-05T06:00:46.919794+00:00",
         "url": "https://t.me/asfarm_ru/51"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/zapah-u-rebenka.jpg"
   },
   {
     "id": "vypal-zub",
@@ -1390,7 +1393,11 @@
         "posted_at": "2026-08-08T06:00:51.392730+00:00",
         "url": "https://vk.com/wall-239602265_62"
       },
-      "dzen": {}
+      "dzen": {},
+      "tg": {
+        "posted_at": "2026-08-17T05:54:32.803313+00:00",
+        "url": "https://t.me/asfarm_ru/64"
+      }
     }
   },
   {
@@ -1557,7 +1564,10 @@
     },
     "channels": {
       "vc": {},
-      "vk": {},
+      "vk": {
+        "posted_at": "2026-08-17T05:54:31.826510+00:00",
+        "url": "https://vk.com/wall-239602265_71"
+      },
       "dzen": {}
     }
   },
