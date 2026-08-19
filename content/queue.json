@@ -1131,13 +1131,16 @@
         "posted_at": "2026-07-26T06:36:12.389978+00:00",
         "url": "https://vk.com/wall-239602265_50"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-08-19T05:50:56.995883+00:00"
+      },
       "ok": {},
       "tg": {
         "posted_at": "2026-08-06T06:00:31.531509+00:00",
         "url": "https://t.me/asfarm_ru/52"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/vypal-zub.jpg"
   },
   {
     "id": "salfetki-vs-shchetka",
@@ -1441,7 +1444,11 @@
         "posted_at": "2026-08-10T06:00:26.396916+00:00",
         "url": "https://vk.com/wall-239602265_64"
       },
-      "dzen": {}
+      "dzen": {},
+      "tg": {
+        "posted_at": "2026-08-19T05:51:10.559186+00:00",
+        "url": "https://t.me/asfarm_ru/66"
+      }
     }
   },
   {
@@ -1624,7 +1631,10 @@
     },
     "channels": {
       "vc": {},
-      "vk": {},
+      "vk": {
+        "posted_at": "2026-08-19T05:51:09.491449+00:00",
+        "url": "https://vk.com/wall-239602265_73"
+      },
       "dzen": {}
     }
   },
