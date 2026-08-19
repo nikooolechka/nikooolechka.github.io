@@ -1,16 +1,16 @@
 {
-  "generated_at": "19.08.2026 07:34 МСК",
+  "generated_at": "19.08.2026 19:29 МСК",
   "services": [
     {
       "name": "Railway",
-      "value": "~$3.57/мес",
+      "value": "~$3.67/мес",
       "note": "из $5 · списано $0 · сон",
       "dot": "ok",
       "level": ""
     },
     {
       "name": "Scrapfly · оферты",
-      "value": "90",
+      "value": "120",
       "note": "/ 1000 осн. · сброс 15-го",
       "dot": "ok",
       "level": ""
@@ -24,10 +24,10 @@
     },
     {
       "name": "GitHub Actions",
-      "value": "1854",
+      "value": "1901",
       "note": "/ 2000 мин в мес",
-      "dot": "wip",
-      "level": "warn"
+      "dot": "broken",
+      "level": "bad"
     },
     {
       "name": "Anthropic-кредиты",
