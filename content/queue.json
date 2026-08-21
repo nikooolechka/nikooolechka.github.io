@@ -1159,13 +1159,16 @@
         "posted_at": "2026-07-27T06:36:17.628146+00:00",
         "url": "https://vk.com/wall-239602265_51"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-08-21T05:52:39.231578+00:00"
+      },
       "ok": {},
       "tg": {
         "posted_at": "2026-08-07T06:00:38.817333+00:00",
         "url": "https://t.me/asfarm_ru/53"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/salfetki-vs-shchetka.jpg"
   },
   {
     "id": "semeynaya-gigiena",
@@ -1491,7 +1494,11 @@
         "posted_at": "2026-08-12T06:00:27.797549+00:00",
         "url": "https://vk.com/wall-239602265_66"
       },
-      "dzen": {}
+      "dzen": {},
+      "tg": {
+        "posted_at": "2026-08-21T05:52:48.607318+00:00",
+        "url": "https://t.me/asfarm_ru/68"
+      }
     }
   },
   {
@@ -1658,7 +1665,10 @@
     },
     "channels": {
       "vc": {},
-      "vk": {},
+      "vk": {
+        "posted_at": "2026-08-21T05:52:46.786803+00:00",
+        "url": "https://vk.com/wall-239602265_75"
+      },
       "dzen": {}
     }
   },
