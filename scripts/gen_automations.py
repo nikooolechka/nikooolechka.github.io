@@ -47,40 +47,49 @@ def _gh(url):
         return json.loads(r.read().decode())
 
 
-def latest_run(repo, wf):
-    url = f"https://api.github.com/repos/{repo}/actions/workflows/{wf}/runs?per_page=1"
+def last_runs(repo, wf, n=8):
+    url = f"https://api.github.com/repos/{repo}/actions/workflows/{wf}/runs?per_page={n}"
     req = urllib.request.Request(url, headers={
         "Authorization": "token " + TOKEN, "Accept": "application/vnd.github+json"})
     with urllib.request.urlopen(req, timeout=30, context=_CTX) as r:
-        runs = (json.loads(r.read().decode()).get("workflow_runs") or [])
-    return runs[0] if runs else None
+        return (json.loads(r.read().decode()).get("workflow_runs") or [])
 
 
-def check(repo, wf, max_age_h):
-    try:
-        run = latest_run(repo, wf)
-    except Exception as e:
-        print("  ошибка проверки", wf, str(e)[:60])
-        return None  # не трогаем прежний статус
-    if not run:
-        return ("wip", "ещё ни разу не запускалась")
-    concl = run.get("conclusion")
+def _age(run):
     when = run.get("run_started_at") or run.get("updated_at")
     try:
         dt = datetime.fromisoformat(when.replace("Z", "+00:00"))
     except Exception:
-        dt = None
-    age_h = (datetime.now(timezone.utc) - dt).total_seconds() / 3600 if dt else 1e9
-    dstr = (dt + timedelta(hours=3)).strftime("%d.%m %H:%M") if dt else "?"
+        return None, 1e9, "?"
+    age_h = (datetime.now(timezone.utc) - dt).total_seconds() / 3600
+    return dt, age_h, (dt + timedelta(hours=3)).strftime("%d.%m %H:%M")
+
+
+def check(repo, wf, max_age_h):
+    # Смотрим НЕ только последний прогон, а последние N: если был УСПЕШНЫЙ прогон
+    # в пределах расписания (max_age_h) — карточка ok, даже если позже случился
+    # транзиентный сбой или ретрай упал (напр. 3 прогона/день у сводок, Google 503).
+    try:
+        runs = last_runs(repo, wf, 8)
+    except Exception as e:
+        print("  ошибка проверки", wf, str(e)[:60])
+        return None  # не трогаем прежний статус
+    if not runs:
+        return ("wip", "ещё ни разу не запускалась")
+    for run in runs:  # newest-first
+        if run.get("conclusion") == "success":
+            _, age_h, dstr = _age(run)
+            if age_h <= max_age_h:
+                return ("ok", "")
+            return ("broken", f"давно не запускалась (последний успешный {dstr})")
+    # ни одного успеха среди последних N — берём последний прогон для причины
+    concl = runs[0].get("conclusion")
+    _, _, dstr = _age(runs[0])
     if concl in ("failure", "timed_out", "startup_failure"):
         return ("broken", f"последний прогон {dstr} завершился ошибкой")
     if concl == "cancelled":
         return ("broken", f"последний прогон {dstr} отменён")
-    if concl == "success":
-        if age_h > max_age_h:
-            return ("broken", f"давно не запускалась (последний успешный {dstr})")
-        return ("ok", "")
-    return None  # in_progress / queued — оставляем как было
+    return None  # in_progress / queued без прежних успехов — оставляем как было
 
 
 def _lvl(pct):
@@ -230,6 +239,20 @@ def update_services(data):
 def main():
     data = json.load(open(DOCS, encoding="utf-8"))
     update_services(data)
+    # ссылка «Проверить прогон» на каждую карточку: страница последнего запуска её
+    # воркфлоу на GitHub (🟢 прошёл / 🔴 упал + время). Для ПК-парсеров цен (нет своего
+    # облачного воркфлоу) — ведём на «Сторож цен», который и проверяет их свежесть.
+    CHECK_EXTRA = {
+        "price_oz": (OZ, "price_watchdog.yml"),
+        "price_ym": (OZ, "price_watchdog.yml"),
+        "oz_reviews_auto": (OZ, "oz_reviews_weekly.yml"),
+    }
+    for it in data["items"]:
+        mm = CHECKS.get(it["id"]) or CHECK_EXTRA.get(it["id"])
+        if mm:
+            it["check_url"] = f"https://github.com/{mm[0]}/actions/workflows/{mm[1]}"
+        else:
+            it.pop("check_url", None)
     for it in data["items"]:
         m = CHECKS.get(it["id"])
         if not m:
