@@ -49,6 +49,12 @@ PRODUCTS = {
                       "детские дентальные салфетки с ксилитом, вкус земляника, 100 штук"),
     "dental40_zem":  ("https://www.wildberries.ru/catalog/860793985/detail.aspx", "https://www.ozon.ru/product/3571493450",
                       "детские дентальные салфетки с ксилитом, вкус земляника, 40 штук"),
+    "dental20_zem":  ("https://www.wildberries.ru/catalog/860789726/detail.aspx", "https://www.ozon.ru/product/3571496840",
+                      "детские дентальные салфетки с ксилитом, вкус земляника, 20 штук — компактный формат"),
+    "dental40_nat":  ("https://www.wildberries.ru/catalog/892991707/detail.aspx", "https://www.ozon.ru/product/3731025845",
+                      "детские дентальные салфетки с ксилитом, БЕЗ вкуса (натуральные), 40 штук"),
+    "dental100_ban": ("https://www.wildberries.ru/catalog/583155047/detail.aspx", "https://www.ozon.ru/product/3044386906",
+                      "детские дентальные салфетки с ксилитом, вкус банан-шоколад (банан и шоколад вместе — ОДИН вкус), 100 штук"),
     "pasta_det":     ("https://www.wildberries.ru/catalog/917665198/detail.aspx", "https://www.ozon.ru/product/3761797186",
                       "детская зубная паста для молочных зубов"),
     "irrigator500":  ("https://www.wildberries.ru/catalog/227067968/detail.aspx", "https://www.ozon.ru/product/1560047806",
@@ -69,7 +75,8 @@ NONORAL = {"makeup", "extract_romashka", "extract_pihta"}
 # порядок ротации по товарам (детский уход чаще — ~половина)
 ROTATION = ["dental100", "pasta_det", "dental40", "irrigator1000", "dental20",
             "dental50", "makeup", "dental100_zem", "irrigator500", "extract_romashka",
-            "dental40_zem", "optika", "extract_pihta"]
+            "dental40_zem", "optika", "extract_pihta", "dental100_ban", "dental20_zem",
+            "dental40_nat"]
 
 # Ракурсы темы — чтобы заголовки не сходились к одному (flash-lite повторяется).
 # Много бытовых углов + осенне-сентябрьские (сад/школа, простуды) — сезонно.
