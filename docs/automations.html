@@ -203,13 +203,14 @@ fetch('automations.json?v='+Date.now()).then(r=>r.json()).then(d=>{
       const _links=i.links||(i.link?[{url:i.link,label:i.link_label}]:[]);
       const linkBtn=_links.map(l=>`<a class="lnkbtn" href="${esc(l.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">🔗 ${esc(l.label||'Открыть')} ↗</a>`).join(' ');
       const dchip=i.launched?`<div class="datechip">🚀 запущено ${esc(i.launched)}</div>`:'';
+      const checkBtn=i.check_url?`<a class="lnkbtn" href="${esc(i.check_url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="открыть последний прогон на GitHub: 🟢 прошёл / 🔴 упал + время">🔄 Проверить прогон ↗</a>`:'';
       return `<div class="item ${i.status==='broken'?'broken':''}" onclick="this.classList.toggle('open')">
         <div class="head">
           <div class="row1"><span class="dot ${i.status}"></span><span class="nm">${esc(i.name)}</span><span class="chev2">▸</span></div>
           <div class="meta"><span class="sched">⏱ ${esc(i.schedule)}</span></div>
           <div class="st ${i.status}">${stLine(i)}</div>
         </div>
-        <div class="body"><div class="in">${i.details||''}<br>${dchip}${linkBtn}</div></div>
+        <div class="body"><div class="in">${i.details||''}<br>${dchip}${checkBtn} ${linkBtn}</div></div>
       </div>`;
     }).join('');
     sec.innerHTML=`<div class="cathead" onclick="this.parentNode.classList.toggle('collapsed')">
