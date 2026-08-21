@@ -229,8 +229,12 @@ def update_services(data):
                         if len(runs) < 100:
                             break
                         page += 1
-                s["value"], s["note"] = str(used), f"/ {inc} мин в мес"
-                s["level"], s["dot"] = _lvl(used / inc)
+                if used == 0:  # все репо публичны → Actions бесплатны и безлимитны
+                    s["value"], s["note"] = "безлимит", "оба репо публичны — Actions бесплатны"
+                    s["level"], s["dot"] = "", "ok"
+                else:
+                    s["value"], s["note"] = str(used), f"/ {inc} мин в мес"
+                    s["level"], s["dot"] = _lvl(used / inc)
                 print("  Actions:", used, "/", inc)
             except Exception as e:
                 print("  actions calc:", str(e)[:70])

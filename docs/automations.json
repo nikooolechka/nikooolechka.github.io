@@ -24,10 +24,10 @@
     },
     {
       "name": "GitHub Actions",
-      "value": "1921",
-      "note": "/ 2000 мин в мес",
-      "dot": "broken",
-      "level": "bad"
+      "value": "безлимит",
+      "note": "оба репо публичны — Actions бесплатны",
+      "dot": "ok",
+      "level": ""
     },
     {
       "name": "Anthropic-кредиты",
