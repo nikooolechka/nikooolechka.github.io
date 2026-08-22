@@ -27,6 +27,7 @@ CHECKS = {
     "reviews_weekly":  (OZ, "wb_reviews_weekly.yml", 200),
     "reviews_archive": (OZ, "wb_reviews_weekly.yml", 200),
     "oz_reviews_weekly": (OZ, "oz_reviews_weekly.yml", 200),
+    "oz_reviews_watchdog": (OZ, "oz_reviews_watchdog.yml", 30),
     "plesen":          (OZ, "plesen_monitor.yml", 150),
     "oferta":          (OZ, "check.yml", 30),
     "gab_unit":        (OZ, "gabariti_monitor.yml", 4),
