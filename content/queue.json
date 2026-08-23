@@ -1186,7 +1186,9 @@
         "posted_at": "2026-07-28T06:36:11.327302+00:00",
         "url": "https://vk.com/wall-239602265_52"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-08-23T05:50:07.300698+00:00"
+      },
       "ok": {
         "published_at": "2026-06-30T13:55:18+03:00"
       },
@@ -1194,7 +1196,8 @@
         "posted_at": "2026-08-08T06:00:52.972837+00:00",
         "url": "https://t.me/asfarm_ru/54"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/semeynaya-gigiena.jpg"
   },
   {
     "id": "pozhilye-suhost",
@@ -1540,7 +1543,11 @@
         "posted_at": "2026-08-14T06:00:24.136792+00:00",
         "url": "https://vk.com/wall-239602265_68"
       },
-      "dzen": {}
+      "dzen": {},
+      "tg": {
+        "posted_at": "2026-08-23T05:50:21.227717+00:00",
+        "url": "https://t.me/asfarm_ru/72"
+      }
     }
   },
   {
@@ -1707,7 +1714,10 @@
     },
     "channels": {
       "vc": {},
-      "vk": {},
+      "vk": {
+        "posted_at": "2026-08-23T05:50:19.818287+00:00",
+        "url": "https://vk.com/wall-239602265_77"
+      },
       "dzen": {}
     }
   },
