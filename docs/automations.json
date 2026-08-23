@@ -1,9 +1,9 @@
 {
-  "generated_at": "22.08.2026 19:21 МСК",
+  "generated_at": "23.08.2026 07:34 МСК",
   "services": [
     {
       "name": "Railway",
-      "value": "~$4.22/мес",
+      "value": "~$4.33/мес",
       "note": "из $5 · списано $0 · сон",
       "dot": "wip",
       "level": "warn"
@@ -141,12 +141,13 @@
       "category": "Отзывы",
       "name": "Сторож свежести архива отзывов Ozon",
       "schedule": "каждый день в 09:30 МСК",
-      "status": "ok",
-      "reason": "",
+      "status": "wip",
+      "reason": "ещё ни разу не запускалась",
       "launched": "22.08.2026",
       "details": "<b>Что:</b> следит, что архив отзывов Ozon (reviews_ozon) пополняется. Отзывы Озон собирает браузер на удалённом ПК — если сбор там встанет, архив перестанет расти и еженедельная сводка опустеет. <b>Как:</b> ежедневно смотрит, вырос ли архив; если 8+ дней без единого нового отзыва — ОДИН раз шлёт алерт в «АС Фарм изменения» («Николь, зайди проверь»). При возобновлении роста — перевзводится. <b>Зачем:</b> не пропустить тихую смерть сбора отзывов Ozon на ПК.",
       "link": "https://docs.google.com/spreadsheets/d/1Gz0zU-fT34Tr3LG-WSMZFVy5sgAFgjyC880_79S3Wms",
-      "link_label": "Архив отзывов"
+      "link_label": "Архив отзывов",
+      "check_url": "https://github.com/nikooolechka/wb-oz-monitor/actions/workflows/oz_reviews_watchdog.yml"
     },
     {
       "id": "plesen",
