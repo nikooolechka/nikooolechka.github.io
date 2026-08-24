@@ -1,16 +1,16 @@
 {
-  "generated_at": "24.08.2026 07:41 МСК",
+  "generated_at": "24.08.2026 19:35 МСК",
   "services": [
     {
       "name": "Railway",
-      "value": "~$4.53/мес",
+      "value": "~$4.62/мес",
       "note": "из $5 · списано $0 · сон",
       "dot": "wip",
       "level": "warn"
     },
     {
       "name": "Scrapfly · оферты",
-      "value": "210",
+      "value": "240",
       "note": "/ 1000 осн. · сброс 15-го",
       "dot": "ok",
       "level": ""
