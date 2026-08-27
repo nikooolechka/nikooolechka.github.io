@@ -1245,7 +1245,9 @@
         "posted_at": "2026-07-30T06:36:17.118673+00:00",
         "url": "https://vk.com/wall-239602265_54"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-08-27T06:00:13.731139+00:00"
+      },
       "ok": {
         "published_at": "2026-06-30T13:55:18+03:00"
       },
@@ -1253,7 +1255,8 @@
         "posted_at": "2026-08-10T06:00:27.545523+00:00",
         "url": "https://t.me/asfarm_ru/57"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/irrigator-500-1000.jpg"
   },
   {
     "id": "opolaskivatel-deti",
@@ -1641,7 +1644,11 @@
         "posted_at": "2026-08-18T05:49:54.904989+00:00",
         "url": "https://vk.com/wall-239602265_72"
       },
-      "dzen": {}
+      "dzen": {},
+      "tg": {
+        "posted_at": "2026-08-27T06:00:27.610180+00:00",
+        "url": "https://t.me/asfarm_ru/76"
+      }
     }
   },
   {
@@ -1808,7 +1815,10 @@
     },
     "channels": {
       "vc": {},
-      "vk": {},
+      "vk": {
+        "posted_at": "2026-08-27T06:00:26.655237+00:00",
+        "url": "https://vk.com/wall-239602265_81"
+      },
       "dzen": {}
     }
   },
