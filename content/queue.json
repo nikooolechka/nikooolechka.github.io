@@ -1274,13 +1274,16 @@
         "posted_at": "2026-07-31T06:36:17.221211+00:00",
         "url": "https://vk.com/wall-239602265_55"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-08-29T06:00:17.206795+00:00"
+      },
       "ok": {},
       "tg": {
         "posted_at": "2026-08-11T06:00:21.704329+00:00",
         "url": "https://t.me/asfarm_ru/58"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/opolaskivatel-deti.jpg"
   },
   {
     "id": "zubki-i-pitanie",
