@@ -1303,13 +1303,16 @@
         "posted_at": "2026-08-01T06:36:11.754508+00:00",
         "url": "https://vk.com/wall-239602265_56"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-08-31T06:00:18.009226+00:00"
+      },
       "ok": {},
       "tg": {
         "posted_at": "2026-08-12T06:00:29.100542+00:00",
         "url": "https://t.me/asfarm_ru/59"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/zubki-i-pitanie.jpg"
   },
   {
     "title": "Мягкое очищение полости рта во время болезни ребенка",
@@ -1741,7 +1744,11 @@
         "posted_at": "2026-08-22T05:47:39.950440+00:00",
         "url": "https://vk.com/wall-239602265_76"
       },
-      "dzen": {}
+      "dzen": {},
+      "tg": {
+        "posted_at": "2026-08-31T06:00:31.381317+00:00",
+        "url": "https://t.me/asfarm_ru/81"
+      }
     }
   },
   {
@@ -1908,7 +1915,10 @@
     },
     "channels": {
       "vc": {},
-      "vk": {},
+      "vk": {
+        "posted_at": "2026-08-31T06:00:30.093938+00:00",
+        "url": "https://vk.com/wall-239602265_85"
+      },
       "dzen": {}
     }
   },

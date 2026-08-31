@@ -1,8 +1,8 @@
 {
   "vk": {
     "subscribers": 45,
-    "posts": 73,
-    "views": 1769,
+    "posts": 74,
+    "views": 1770,
     "url": "https://vk.com/asfarm_ru",
     "wcmp": {
       "subs": {
@@ -10,8 +10,8 @@
         "prev": 45.0
       },
       "views": {
-        "cur": 1736.29,
-        "prev": 1583.57
+        "cur": 1745.43,
+        "prev": 1607.86
       }
     }
   },
@@ -28,18 +28,18 @@
     "url": "https://vc.ru/id6010646"
   },
   "tg": {
-    "subscribers": 40,
+    "subscribers": 41,
     "posts": 62,
-    "views": 3292,
+    "views": 3321,
     "url": "https://t.me/asfarm_ru",
     "wcmp": {
       "subs": {
-        "cur": 38.71,
-        "prev": 36.43
+        "cur": 39.14,
+        "prev": 36.71
       },
       "views": {
-        "cur": 3080.57,
-        "prev": 2609.71
+        "cur": 3142.86,
+        "prev": 2672.14
       }
     }
   },
