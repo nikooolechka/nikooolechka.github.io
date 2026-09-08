@@ -37,6 +37,7 @@ CHECKS = {
     "posts_digest":    (OZ, "posts.yml", 30),
     "poster_watchdog": (OZ, "poster_sync_watchdog.yml", 30),
     "poster":          (SELF, "main.yml", 30),
+    "fbs_kazan":       (OZ, "fbs_kazan_monitor.yml", 30),
     "calendar_sync":   (SELF, "main.yml", 30),
 }
 
