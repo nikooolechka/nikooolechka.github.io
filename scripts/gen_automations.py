@@ -30,7 +30,7 @@ CHECKS = {
     "oz_reviews_watchdog": (OZ, "oz_reviews_watchdog.yml", 30),
     "plesen":          (OZ, "plesen_monitor.yml", 150),
     "oferta":          (OZ, "check.yml", 30),
-    "gab_unit":        (OZ, "gabariti_monitor.yml", 4),
+    "gab_unit":        (OZ, "gabariti_monitor.yml", 7),
     "gab_oz_card":     (OZ, "oz_gabariti_monitor.yml", 30),
     "gab_wb":          (OZ, "wb_gabariti_monitor.yml", 200),
     "recipes":         (OZ, "recipes_1c.yml", 200),
@@ -275,7 +275,8 @@ def main():
     # DRIFT-контроль: воркфлоу, которых НЕТ на дашборде (соседняя сессия могла добавить и забыть внести)
     IGNORE = {"oferta_probe.yml", "ym_probe.yml", "ym_probe2.yml", "automations_status.yml",
               "pages-build-deployment", "ok_sync.yml",   # ok_sync покрыт карточкой «Автосверка календаря»
-              "digest_eval.yml"}  # ручной тест качества классификатора дайджеста (по кнопке, не автомат)
+              "digest_eval.yml",  # ручной тест качества классификатора дайджеста (по кнопке, не автомат)
+              "oz_reviews_freshness.yml"}  # второй сторож свежести Ozon-отзывов — покрыт карточкой «Сторож свежести отзывов Ozon» (кандидат на дедуп с oz_reviews_watchdog)
     known = {m[1] for m in CHECKS.values()}
     drift = []
     for repo in (OZ, SELF):
