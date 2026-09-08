@@ -1,5 +1,5 @@
 {
-  "generated_at": "08.09.2026 14:16 МСК",
+  "generated_at": "08.09.2026 22:16 МСК",
   "services": [
     {
       "name": "Railway",
@@ -17,7 +17,7 @@
     },
     {
       "name": "Scrapfly · соцсети",
-      "value": "0",
+      "value": "60",
       "note": "/ 1000 2-й акк · сброс 15-го",
       "dot": "ok",
       "level": ""
