@@ -1573,12 +1573,15 @@
         "posted_at": "2026-08-13T06:00:30.936742+00:00",
         "url": "https://vk.com/wall-239602265_67"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-09-20T06:01:10.394086+00:00"
+      },
       "tg": {
         "posted_at": "2026-08-22T05:47:41.283081+00:00",
         "url": "https://t.me/asfarm_ru/71"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/auto-гигиена-полости-рта-посл.jpg"
   },
   {
     "title": "Утро занятой мамы: как найти минуту на себя и гигиену",
@@ -2231,7 +2234,11 @@
     "channels": {
       "vc": {},
       "vk": {},
-      "dzen": {}
+      "dzen": {},
+      "tg": {
+        "posted_at": "2026-09-20T06:01:15.201038+00:00",
+        "url": "https://t.me/asfarm_ru/102"
+      }
     }
   },
   {
