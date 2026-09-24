@@ -1,9 +1,9 @@
 {
-  "generated_at": "23.09.2026 22:27 МСК",
+  "generated_at": "24.09.2026 12:00 МСК",
   "services": [
     {
       "name": "Railway",
-      "value": "~$4.39/мес",
+      "value": "~$4.50/мес",
       "note": "из $5 · списано $0 · сон",
       "dot": "wip",
       "level": "warn"
