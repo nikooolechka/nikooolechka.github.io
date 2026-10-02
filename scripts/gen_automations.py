@@ -41,6 +41,8 @@ CHECKS = {
     "arrivals":        (OZ, "arrivals_monitor.yml", 30),
     "prices_snapshot_chat": (OZ, "price_screenshot.yml", 30),
     "calendar_sync":   (SELF, "main.yml", 30),
+    "unanswered_qa_monitor": (OZ, "unanswered_qa_monitor.yml", 6),
+    "stock_1c_alerts":       (OZ, "ostatki_monitor.yml", 30),
 }
 
 
@@ -278,7 +280,7 @@ def main():
     IGNORE = {"oferta_probe.yml", "ym_probe.yml", "ym_probe2.yml", "automations_status.yml",
               "pages-build-deployment", "ok_sync.yml",   # ok_sync покрыт карточкой «Автосверка календаря»
               "digest_eval.yml",  # ручной тест качества классификатора дайджеста (по кнопке, не автомат)
-              "oz_reviews_freshness.yml"}  # второй сторож свежести Ozon-отзывов — покрыт карточкой «Сторож свежести отзывов Ozon» (кандидат на дедуп с oz_reviews_watchdog)
+              "oz_reviews_freshness.yml", "monthly_dategot.yml", "dategot_fg_sync.yml"}  # второй сторож свежести Ozon-отзывов — покрыт карточкой «Сторож свежести отзывов Ozon» (кандидат на дедуп с oz_reviews_watchdog)
     known = {m[1] for m in CHECKS.values()}
     drift = []
     for repo in (OZ, SELF):
