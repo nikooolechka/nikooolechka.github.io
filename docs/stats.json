@@ -1,8 +1,8 @@
 {
   "vk": {
     "subscribers": 45,
-    "posts": 84,
-    "views": 2297,
+    "posts": 85,
+    "views": 2309,
     "url": "https://vk.com/asfarm_ru"
   },
   "dzen": {
@@ -20,16 +20,16 @@
   "tg": {
     "subscribers": 58,
     "posts": 95,
-    "views": 5366,
+    "views": 5377,
     "url": "https://t.me/asfarm_ru",
     "wcmp": {
       "subs": {
-        "cur": 57.71,
-        "prev": 49.0
+        "cur": 57.86,
+        "prev": 50.43
       },
       "views": {
-        "cur": 5144.71,
-        "prev": 4574.57
+        "cur": 5209.43,
+        "prev": 4651.71
       }
     }
   },
