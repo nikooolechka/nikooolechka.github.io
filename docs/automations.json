@@ -1,5 +1,5 @@
 {
-  "generated_at": "06.10.2026 23:48 МСК",
+  "generated_at": "07.10.2026 13:51 МСК",
   "services": [
     {
       "name": "Railway",
@@ -10,7 +10,7 @@
     },
     {
       "name": "Scrapfly · оферты",
-      "value": "390",
+      "value": "420",
       "note": "/ 1000 осн. · сброс 15-го",
       "dot": "ok",
       "level": ""
