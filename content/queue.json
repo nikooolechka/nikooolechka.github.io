@@ -2666,7 +2666,11 @@
     "channels": {
       "vc": {},
       "vk": {},
-      "dzen": {}
+      "dzen": {},
+      "tg": {
+        "posted_at": "2026-10-09T06:01:20.667041+00:00",
+        "url": "https://t.me/asfarm_ru/123"
+      }
     }
   }
 ]
