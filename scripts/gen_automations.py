@@ -35,7 +35,6 @@ CHECKS = {
     "gab_wb":          (OZ, "wb_gabariti_monitor.yml", 200),
     "recipes":         (OZ, "recipes_1c.yml", 200),
     "posts_digest":    (OZ, "posts.yml", 30),
-    "poster_watchdog": (OZ, "poster_sync_watchdog.yml", 30),
     "poster":          (SELF, "main.yml", 30),
     "fbs_kazan":       (OZ, "fbs_kazan_monitor.yml", 30),
     "arrivals":        (OZ, "arrivals_monitor.yml", 30),
@@ -43,6 +42,7 @@ CHECKS = {
     "calendar_sync":   (SELF, "main.yml", 30),
     "unanswered_qa_monitor": (OZ, "unanswered_qa_monitor.yml", 6),
     "stock_1c_alerts":       (OZ, "ostatki_monitor.yml", 30),
+    "wb_ff_lowstock":        (OZ, "wb_ff_lowstock.yml", 30),
 }
 
 
@@ -280,7 +280,8 @@ def main():
     IGNORE = {"oferta_probe.yml", "ym_probe.yml", "ym_probe2.yml", "automations_status.yml",
               "pages-build-deployment", "ok_sync.yml",   # ok_sync покрыт карточкой «Автосверка календаря»
               "digest_eval.yml",  # ручной тест качества классификатора дайджеста (по кнопке, не автомат)
-              "oz_reviews_freshness.yml", "monthly_dategot.yml", "dategot_fg_sync.yml"}  # второй сторож свежести Ozon-отзывов — покрыт карточкой «Сторож свежести отзывов Ozon» (кандидат на дедуп с oz_reviews_watchdog)
+              "oz_reviews_freshness.yml", "monthly_dategot.yml", "dategot_fg_sync.yml",
+              "content_depth_alert.yml", "poster_sync_watchdog.yml"}  # монитор запаса контента и сторож постера влиты в объединённую карточку «Автопостер контента»; второй сторож Ozon-отзывов покрыт карточкой «Сторож свежести отзывов Ozon»
     known = {m[1] for m in CHECKS.values()}
     drift = []
     for repo in (OZ, SELF):
@@ -306,3 +307,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
