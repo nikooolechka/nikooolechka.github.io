@@ -1,23 +1,23 @@
 {
-  "generated_at": "14.10.2026 12:17 МСК",
+  "generated_at": "15.10.2026 22:42 МСК",
   "services": [
     {
       "name": "Railway",
-      "value": "~$0.33/мес",
+      "value": "~$0.37/мес",
       "note": "из $5 · списано $0 · сон",
       "dot": "ok",
       "level": ""
     },
     {
       "name": "Scrapfly · оферты",
-      "value": "600",
+      "value": "0",
       "note": "/ 1000 осн. · сброс 15-го",
       "dot": "ok",
       "level": ""
     },
     {
       "name": "Scrapfly · соцсети",
-      "value": "540",
+      "value": "570",
       "note": "/ 1000 2-й акк · сброс 15-го",
       "dot": "ok",
       "level": ""
@@ -469,7 +469,8 @@
       "launched": "2026-10-06",
       "name": "Низкий остаток по ФФ-складам ВБ → поставка",
       "schedule": "будни 10:00 МСК",
-      "check_url": "https://github.com/nikooolechka/wb-oz-monitor/actions/workflows/wb_ff_lowstock.yml"
+      "check_url": "https://github.com/nikooolechka/wb-oz-monitor/actions/workflows/wb_ff_lowstock.yml",
+      "reason": ""
     },
     {
       "id": "price_dist_regions_oz",
@@ -504,5 +505,7 @@
       ]
     }
   ],
-  "drift": []
+  "drift": [
+    "Сторож остатков-по-запросу (приёмник + слушатель ПК)"
+  ]
 }
