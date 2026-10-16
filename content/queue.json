@@ -1898,12 +1898,15 @@
         "posted_at": "2026-08-25T05:52:26.942477+00:00",
         "url": "https://vk.com/wall-239602265_79"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-10-16T06:00:16.699881+00:00"
+      },
       "tg": {
         "posted_at": "2026-09-03T06:01:52.051028+00:00",
         "url": "https://t.me/asfarm_ru/84"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/auto-сладкие-перекусы-на-ходу.jpg"
   },
   {
     "title": "Уход за зубами маломобильных близких: особенности ежедневной гигиены",
@@ -2842,8 +2845,8 @@
         "url": null
       },
       "tg": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-10-16T06:00:21.908388+00:00",
+        "url": "https://t.me/asfarm_ru/128"
       }
     }
   },
