@@ -1,16 +1,16 @@
 {
-  "generated_at": "19.10.2026 12:35 МСК",
+  "generated_at": "19.10.2026 13:33 МСК",
   "services": [
     {
       "name": "Railway",
-      "value": "~$0.47/мес",
+      "value": "~$0.48/мес",
       "note": "из $5 · списано $0 · сон",
       "dot": "ok",
       "level": ""
     },
     {
       "name": "Cloudflare Workers",
-      "value": "7 / 100k",
+      "value": "8 / 100k",
       "note": "Workers · приёмник+сторож остатков · /сут",
       "dot": "ok",
       "level": ""
