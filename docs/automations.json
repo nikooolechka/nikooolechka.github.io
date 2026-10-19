@@ -9,6 +9,13 @@
       "level": ""
     },
     {
+      "name": "Cloudflare Workers",
+      "value": "7 / 100k",
+      "note": "Workers · приёмник+сторож остатков · /сут",
+      "dot": "ok",
+      "level": ""
+    },
+    {
       "name": "Scrapfly · оферты",
       "value": "120",
       "note": "/ 1000 осн. · сброс 15-го",
