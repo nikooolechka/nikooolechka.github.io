@@ -1952,12 +1952,15 @@
         "posted_at": "2026-08-27T06:00:26.655237+00:00",
         "url": "https://vk.com/wall-239602265_81"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-10-20T06:00:15.505593+00:00"
+      },
       "tg": {
         "posted_at": "2026-09-05T06:01:49.293321+00:00",
         "url": "https://t.me/asfarm_ru/86"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/auto-кровоточивость-де-сен-пр.jpg"
   },
   {
     "title": "Уход за полостью рта маломобильных близких: особенности гигиены",
@@ -2982,8 +2985,8 @@
         "url": null
       },
       "tg": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-10-20T06:00:20.670649+00:00",
+        "url": "https://t.me/asfarm_ru/132"
       }
     }
   },
