@@ -1,5 +1,5 @@
 {
-  "generated_at": "21.10.2026 22:50 МСК",
+  "generated_at": "21.10.2026 22:55 МСК",
   "services": [
     {
       "name": "Railway",
@@ -10,7 +10,7 @@
     },
     {
       "name": "Cloudflare Workers",
-      "value": "126 / 100k",
+      "value": "127 / 100k",
       "note": "Workers · приёмник+сторож остатков · /сут",
       "dot": "ok",
       "level": ""
