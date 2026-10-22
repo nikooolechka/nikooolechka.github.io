@@ -191,7 +191,7 @@ const MP_ORDER=["WB","OZ","YM","DM"], MP_LABEL={WB:"ВБ",OZ:"Озон",YM:"ЯМ
 let activeCats=new Set(), activeMarkets=new Set();  // пусто = фильтр не применяется (показываем всё)
 function applyFilters(){
   document.querySelectorAll('#list .item').forEach(it=>{
-    const okCat = activeCats.size===0 ? true : [...activeCats].some(c=>
+    const okCat = activeCats.size===0 ? true : [...activeCats].every(c=>
       c==="__stm__" ? it.dataset.stm==="1" : it.dataset.category===c);
     const okMp = activeMarkets.size===0 ? true : activeMarkets.has(it.dataset.platform);
     it.classList.toggle('hide', !(okCat&&okMp));
