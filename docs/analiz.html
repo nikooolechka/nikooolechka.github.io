@@ -99,6 +99,20 @@
     background:linear-gradient(160deg,rgba(72,229,155,.12),rgba(46,230,200,.04) 50%,transparent);box-shadow:0 0 50px -28px var(--green)}
   .ideal h3{color:var(--green)}
   .ideal li::before{background:var(--green);box-shadow:0 0 12px var(--green)}
+  .filters{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:26px}
+  .fgroup{display:flex;flex-wrap:wrap;gap:8px}
+  .fgroup.mp{flex:0 0 auto;flex-wrap:nowrap}
+  .fchip{font-size:12.5px;font-weight:700;color:var(--mut);padding:7px 14px;border-radius:999px;
+    border:1px solid var(--line);background:var(--glass);cursor:pointer;user-select:none;white-space:nowrap;
+    transition:transform .2s,box-shadow .3s,color .3s,background .3s,border-color .3s}
+  .fchip:hover{color:var(--txt);border-color:rgba(255,255,255,.22)}
+  .fchip .cnt{opacity:.65;font-weight:600;margin-left:5px}
+  .fchip.active{color:#04121a;border-color:transparent;background:linear-gradient(100deg,var(--cyan),var(--cyan2));
+    box-shadow:0 0 22px -4px var(--cyan2),0 6px 18px -8px rgba(0,0,0,.5);transform:translateY(-1px)}
+  .fchip.active .cnt{opacity:.75}
+  .fchip.stm.active{background:linear-gradient(100deg,var(--violet),#b794f6);box-shadow:0 0 22px -4px var(--violet)}
+  .fchip.mpbtn.active{background:linear-gradient(100deg,var(--green),#2ee6c8);box-shadow:0 0 22px -4px var(--green)}
+  .item.hide{display:none}
   .empty{color:var(--mut);text-align:center;padding:50px 0}
   .foot{color:var(--mut);font-size:12px;text-align:center;margin-top:36px;opacity:.7}
   @media(max-width:560px){h1{font-size:25px}.thumb{width:54px;height:54px}.open-btn{padding:8px 11px;font-size:11.5px}}
@@ -113,6 +127,10 @@
     <h1>Анализ карточек товаров</h1>
     <div class="sub">Каждый товар — отдельный блок. Нажмите, чтобы раскрыть разбор. У каждого вывода помечен источник: <b style="color:var(--gold)">из инфографики продавца</b> или <b style="color:var(--cyan)">из отзывов покупателей</b>.</div>
   </header>
+  <div class="filters" id="filters" style="display:none">
+    <div class="fgroup" id="catgroup"></div>
+    <div class="fgroup mp" id="mpgroup"></div>
+  </div>
   <div id="list"><div class="empty">Загрузка…</div></div>
   <div class="foot" id="foot"></div>
 </div>
@@ -131,7 +149,7 @@ const gaps=arr=>(arr||[]).map(g=>`<div class="gap"><div class="c">${g.claim}</di
 const chips=arr=>(arr&&arr.length)?`<div class="chips">`+arr.map(x=>`<span class="chip">${x}</span>`).join("")+`</div>`:'<div style="color:var(--mut);font-size:13px">Других вариантов под этой карточкой не выявлено.</div>';
 function card(p,i){
   const price = p.price!=null ? `<span class="price">${p.price.toLocaleString('ru-RU')} ₽${p.price_old?`<span class="old">${p.price_old.toLocaleString('ru-RU')} ₽</span>`:''}</span>` : '';
-  return `<div class="item" style="animation-delay:${i*90}ms">
+  return `<div class="item" data-platform="${p.platform||''}" data-category="${(p.category||'').replace(/"/g,'&quot;')}" data-stm="${p.is_stm?'1':'0'}" style="animation-delay:${i*90}ms">
     <div class="head">
       <img class="thumb" src="${p.photo}" referrerpolicy="no-referrer" onerror="this.style.visibility='hidden'">
       <div class="htxt">
@@ -169,11 +187,61 @@ function toggle(item,ev){
   if(open){ body.style.maxHeight=body.scrollHeight+'px'; item.querySelectorAll('.track i').forEach(i=>i.style.width=i.dataset.w+'%'); }
   else body.style.maxHeight='0';
 }
+const MP_ORDER=["WB","OZ","YM","DM"], MP_LABEL={WB:"ВБ",OZ:"Озон",YM:"ЯМ",DM:"ДМ"};
+let activeCat="Все", activePlatform="Все";
+function applyFilters(){
+  document.querySelectorAll('#list .item').forEach(it=>{
+    const okCat = activeCat==="Все" ? true
+      : activeCat==="__stm__" ? it.dataset.stm==="1"
+      : it.dataset.category===activeCat;
+    const okMp = activePlatform==="Все" ? true : it.dataset.platform===activePlatform;
+    it.classList.toggle('hide', !(okCat&&okMp));
+  });
+  const vis=document.querySelectorAll('#list .item:not(.hide)').length;
+  const list=document.getElementById('list');
+  let none=list.querySelector('.emptyfilter');
+  if(vis===0){
+    if(!none){none=document.createElement('div');none.className='empty emptyfilter';none.textContent='Нет товаров в этой категории.';list.appendChild(none);}
+  } else if(none){none.remove();}
+}
+function renderFilters(products){
+  const box=document.getElementById('filters');
+  if(!products.length){box.style.display='none';return;}
+  box.style.display='flex';
+  const catCounts={};
+  products.forEach(p=>{const c=p.category;if(c) catCounts[c]=(catCounts[c]||0)+1;});
+  const stmCount=products.filter(p=>p.is_stm).length;
+  const cats=Object.keys(catCounts).sort((a,b)=>a.localeCompare(b,'ru'));
+  const catgroup=document.getElementById('catgroup');
+  const chipHtml=(key,label,cnt,extraCls)=>`<span class="fchip ${extraCls||''} ${activeCat===key?'active':''}" data-cat="${key.replace(/"/g,'&quot;')}">${label}<span class="cnt">${cnt}</span></span>`;
+  let html=chipHtml("Все","Все",products.length);
+  if(stmCount>0) html+=chipHtml("__stm__","Наш СТМ",stmCount,"stm");
+  cats.forEach(c=>{html+=chipHtml(c,c,catCounts[c]);});
+  catgroup.innerHTML=html;
+  catgroup.querySelectorAll('.fchip').forEach(ch=>ch.addEventListener('click',()=>{
+    activeCat=ch.dataset.cat;
+    catgroup.querySelectorAll('.fchip').forEach(x=>x.classList.remove('active'));
+    ch.classList.add('active');
+    applyFilters();
+  }));
+  const mpCounts={}; products.forEach(p=>{mpCounts[p.platform]=(mpCounts[p.platform]||0)+1;});
+  const mpgroup=document.getElementById('mpgroup');
+  let mhtml=chipHtml("Все","Все",products.length,"mpbtn");
+  MP_ORDER.forEach(pl=>{mhtml+=chipHtml(pl,MP_LABEL[pl],mpCounts[pl]||0,"mpbtn");});
+  mpgroup.innerHTML=mhtml;
+  mpgroup.querySelectorAll('.fchip').forEach(ch=>ch.addEventListener('click',()=>{
+    activePlatform=ch.dataset.cat;
+    mpgroup.querySelectorAll('.fchip').forEach(x=>x.classList.remove('active'));
+    ch.classList.add('active');
+    applyFilters();
+  }));
+}
 fetch('analiz_data.json?v='+Date.now()).then(r=>r.json()).then(d=>{
   const el=document.getElementById('list');
   if(!d.products||!d.products.length){el.innerHTML='<div class="empty">Пока нет изученных товаров.</div>';return;}
   el.innerHTML=d.products.map((p,i)=>{try{return card(p,i)}catch(e){console.error('card render failed:',p&&p.id,e);return ''}}).join("");
   el.querySelectorAll('.head').forEach(h=>h.addEventListener('click',e=>toggle(h.parentNode,e)));
+  renderFilters(d.products);
   document.getElementById('foot').textContent='Обновлено '+(d.updated||'')+' · товаров в разборе: '+d.products.length;
 }).catch(()=>{document.getElementById('list').innerHTML='<div class="empty">Ошибка загрузки данных.</div>';});
 </script>
