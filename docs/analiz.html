@@ -145,11 +145,12 @@ function card(p,i){
       <div class="sec"><h3><span class="bar"></span>Кто покупает и зачем</h3><div class="ca">${p.ca}</div></div>
       <div class="sec"><h3><span class="bar"></span>Что обещает продавец <span class="tag claim">из инфографики и описания</span></h3>${ul(p.seller_claims,'claimlist')}</div>
       <div class="sec"><h3><span class="bar"></span>Что говорят покупатели <span class="tag rev">по ${p.reviews_total.toLocaleString('ru-RU')} отзывам</span></h3>
-        ${stars(p.stars)}
+        ${p.stars ? stars(p.stars) : ''}
+        <div style="color:var(--mut);font-size:12px;margin-top:8px">${p.stars_note||''}</div>
         <div class="subh">За что хвалят</div>${ul(p.praise)}
       </div>
       <div class="sec"><h3><span class="bar"></span>На что жалуются <span class="tag rev">по отзывам</span></h3>
-        <div class="negbadge"><b>${p.neg_total.toLocaleString('ru-RU')}</b> отзывов на 1–3★ · это <b>${p.neg_share}</b> от всех ${p.reviews_total.toLocaleString('ru-RU')}</div>
+        ${p.neg_total ? `<div class="negbadge"><b>${p.neg_total.toLocaleString('ru-RU')}</b> отзывов на 1–3★ · это <b>${p.neg_share}</b> от всех ${p.reviews_total.toLocaleString('ru-RU')}</div>` : ''}
         ${cplx(p.complaints)}
       </div>
       <div class="sec"><h3><span class="bar"></span>Слабые места: обещание ↔ реальность</h3>${gaps(p.gaps)}</div>
