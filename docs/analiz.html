@@ -62,7 +62,7 @@
 <div class="wrap">
   <header>
     <h1>Анализ конкурентов <span class="acc">АС-Фарм</span></h1>
-    <div class="sub">Каждый изученный товар — отдельный блок. Нажми, чтобы раскрыть полную карту: УТП продавца, слабые места из отзывов, склейка и «идеальный продукт».</div>
+    <div class="sub">Каждый изученный товар — отдельный блок. Нажмите на него, чтобы раскрыть полный разбор: чем продавец цепляет, за что хвалят, на что жалуются и каким товар стоило бы сделать.</div>
   </header>
   <div id="list"><div class="empty">Загрузка…</div></div>
 </div>
@@ -93,14 +93,14 @@ function card(p){
       <span class="chev">▾</span>
     </div>
     <div class="body">
-      <div class="sec"><h3>Целевая аудитория</h3><div class="ca">${p.ca}</div></div>
-      <div class="sec"><h3>УТП — что <span class="em">заявил продавец</span></h3>${ulList(p.utp)}</div>
-      <div class="sec"><h3>Оценки по товару</h3>${stars(p.stars,p.reviews_total)}<div style="color:var(--mut);font-size:12px;margin-top:6px">${p.stars_note}</div></div>
-      <div class="sec weak"><h3 style="color:var(--red)">Слабые места — заявлено против реальности отзывов</h3>${ulList(p.weak,'weak')}</div>
-      <div class="sec"><h3>Топ-жалобы (с числами)</h3>${complaints(p.complaints)}</div>
-      <div class="sec"><h3>Преимущества (кратко)</h3>${ulList(p.advantages)}</div>
-      <div class="sec"><h3>Склейка / варианты</h3>${ulList(p.skleyka)}</div>
-      <div class="ideal"><h3>🎯 Идеальный продукт для покупателя</h3>${ulList(p.ideal,'ideal')}</div>
+      <div class="sec"><h3>Кто покупает и зачем</h3><div class="ca">${p.ca}</div></div>
+      <div class="sec"><h3>Чем продавец <span class="em">цепляет покупателя</span> (обещания в карточке)</h3>${ulList(p.utp)}</div>
+      <div class="sec"><h3>Оценки покупателей</h3>${stars(p.stars,p.reviews_total)}<div style="color:var(--mut);font-size:12px;margin-top:6px">${p.stars_note}</div></div>
+      <div class="sec weak"><h3 style="color:var(--red)">Слабые места: что обещано — и что на деле в отзывах</h3>${ulList(p.weak,'weak')}</div>
+      <div class="sec"><h3>На что жалуются чаще всего</h3>${complaints(p.complaints)}</div>
+      <div class="sec"><h3>За что хвалят</h3>${ulList(p.advantages)}</div>
+      <div class="sec"><h3>Другие варианты под той же карточкой (вкусы, объёмы)</h3>${ulList(p.skleyka)}</div>
+      <div class="ideal"><h3>🎯 Каким стоило бы сделать товар — идеальный для покупателя</h3>${ulList(p.ideal,'ideal')}</div>
       <a class="src" href="${p.url}" target="_blank" rel="noopener">Открыть карточку товара →</a>
     </div>
   </div>`;
