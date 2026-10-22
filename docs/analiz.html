@@ -145,7 +145,7 @@ function card(p,i){
       <div class="sec"><h3><span class="bar"></span>Кто покупает и зачем</h3><div class="ca">${p.ca}</div></div>
       <div class="sec"><h3><span class="bar"></span>Что обещает продавец <span class="tag claim">из инфографики и описания</span></h3>${ul(p.seller_claims,'claimlist')}</div>
       <div class="sec"><h3><span class="bar"></span>Что говорят покупатели <span class="tag rev">по ${p.reviews_total.toLocaleString('ru-RU')} отзывам</span></h3>
-        ${p.stars ? stars(p.stars) : ''}
+        ${(p.stars && (!p.stars_collected || p.stars_collected >= p.reviews_total*0.9)) ? stars(p.stars) : ''}
         <div style="color:var(--mut);font-size:12px;margin-top:8px">${p.stars_note||''}</div>
         <div class="subh">За что хвалят</div>${ul(p.praise)}
       </div>
