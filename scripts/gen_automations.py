@@ -43,6 +43,7 @@ CHECKS = {
     "unanswered_qa_monitor": (OZ, "unanswered_qa_monitor.yml", 6),
     "stock_1c_alerts":       (OZ, "ostatki_monitor.yml", 30),
     "wb_ff_lowstock":        (OZ, "wb_ff_lowstock.yml", 30),
+    "wb_paid_storage":       (OZ, "wb_paid_storage_watch.yml", 200),
 }
 
 
