@@ -188,20 +188,19 @@ function toggle(item,ev){
   else body.style.maxHeight='0';
 }
 const MP_ORDER=["WB","OZ","YM","DM"], MP_LABEL={WB:"ВБ",OZ:"Озон",YM:"ЯМ",DM:"ДМ"};
-let activeCat="Все", activePlatform="Все";
+let activeCats=new Set(), activeMarkets=new Set();  // пусто = фильтр не применяется (показываем всё)
 function applyFilters(){
   document.querySelectorAll('#list .item').forEach(it=>{
-    const okCat = activeCat==="Все" ? true
-      : activeCat==="__stm__" ? it.dataset.stm==="1"
-      : it.dataset.category===activeCat;
-    const okMp = activePlatform==="Все" ? true : it.dataset.platform===activePlatform;
+    const okCat = activeCats.size===0 ? true : [...activeCats].some(c=>
+      c==="__stm__" ? it.dataset.stm==="1" : it.dataset.category===c);
+    const okMp = activeMarkets.size===0 ? true : activeMarkets.has(it.dataset.platform);
     it.classList.toggle('hide', !(okCat&&okMp));
   });
   const vis=document.querySelectorAll('#list .item:not(.hide)').length;
   const list=document.getElementById('list');
   let none=list.querySelector('.emptyfilter');
   if(vis===0){
-    if(!none){none=document.createElement('div');none.className='empty emptyfilter';none.textContent='Нет товаров в этой категории.';list.appendChild(none);}
+    if(!none){none=document.createElement('div');none.className='empty emptyfilter';none.textContent='Нет товаров под этим набором фильтров.';list.appendChild(none);}
   } else if(none){none.remove();}
 }
 function renderFilters(products){
@@ -213,26 +212,28 @@ function renderFilters(products){
   const stmCount=products.filter(p=>p.is_stm).length;
   const cats=Object.keys(catCounts).sort((a,b)=>a.localeCompare(b,'ru'));
   const catgroup=document.getElementById('catgroup');
-  const chipHtml=(key,label,cnt,extraCls)=>`<span class="fchip ${extraCls||''} ${activeCat===key?'active':''}" data-cat="${key.replace(/"/g,'&quot;')}">${label}<span class="cnt">${cnt}</span></span>`;
-  let html=chipHtml("Все","Все",products.length);
-  if(stmCount>0) html+=chipHtml("__stm__","Наш СТМ",stmCount,"stm");
-  cats.forEach(c=>{html+=chipHtml(c,c,catCounts[c]);});
+  const chipHtml=(key,label,cnt,extraCls,active)=>`<span class="fchip ${extraCls||''} ${active?'active':''}" data-cat="${key.replace(/"/g,'&quot;')}">${label}<span class="cnt">${cnt}</span></span>`;
+  let html=chipHtml("Все","Все",products.length,"",activeCats.size===0);
+  if(stmCount>0) html+=chipHtml("__stm__","Наш СТМ",stmCount,"stm",activeCats.has("__stm__"));
+  cats.forEach(c=>{html+=chipHtml(c,c,catCounts[c],"",activeCats.has(c));});
   catgroup.innerHTML=html;
   catgroup.querySelectorAll('.fchip').forEach(ch=>ch.addEventListener('click',()=>{
-    activeCat=ch.dataset.cat;
-    catgroup.querySelectorAll('.fchip').forEach(x=>x.classList.remove('active'));
-    ch.classList.add('active');
+    const key=ch.dataset.cat;
+    if(key==="Все"){ activeCats.clear(); }
+    else{ activeCats.has(key)?activeCats.delete(key):activeCats.add(key); }
+    catgroup.querySelectorAll('.fchip').forEach(x=>x.classList.toggle('active',
+      x.dataset.cat==="Все" ? activeCats.size===0 : activeCats.has(x.dataset.cat)));
     applyFilters();
   }));
   const mpCounts={}; products.forEach(p=>{mpCounts[p.platform]=(mpCounts[p.platform]||0)+1;});
   const mpgroup=document.getElementById('mpgroup');
-  let mhtml=chipHtml("Все","Все",products.length,"mpbtn");
-  MP_ORDER.forEach(pl=>{mhtml+=chipHtml(pl,MP_LABEL[pl],mpCounts[pl]||0,"mpbtn");});
+  let mhtml="";
+  MP_ORDER.forEach(pl=>{mhtml+=chipHtml(pl,MP_LABEL[pl],mpCounts[pl]||0,"mpbtn",activeMarkets.has(pl));});
   mpgroup.innerHTML=mhtml;
   mpgroup.querySelectorAll('.fchip').forEach(ch=>ch.addEventListener('click',()=>{
-    activePlatform=ch.dataset.cat;
-    mpgroup.querySelectorAll('.fchip').forEach(x=>x.classList.remove('active'));
-    ch.classList.add('active');
+    const key=ch.dataset.cat;
+    activeMarkets.has(key)?activeMarkets.delete(key):activeMarkets.add(key);
+    ch.classList.toggle('active',activeMarkets.has(key));
     applyFilters();
   }));
 }
