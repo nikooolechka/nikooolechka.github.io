@@ -35,14 +35,15 @@ CHECKS = {
     "gab_wb":          (OZ, "wb_gabariti_monitor.yml", 200),
     "recipes":         (OZ, "recipes_1c.yml", 200),
     "posts_digest":    (OZ, "posts.yml", 30),
-    "poster_watchdog": (OZ, "poster_sync_watchdog.yml", 30),
     "poster":          (SELF, "main.yml", 30),
     "fbs_kazan":       (OZ, "fbs_kazan_monitor.yml", 30),
+    "uderzhaniya_monitor": (OZ, "uderzhaniya_monitor.yml", 30),
     "arrivals":        (OZ, "arrivals_monitor.yml", 30),
     "prices_snapshot_chat": (OZ, "price_screenshot.yml", 30),
     "calendar_sync":   (SELF, "main.yml", 30),
     "unanswered_qa_monitor": (OZ, "unanswered_qa_monitor.yml", 6),
     "stock_1c_alerts":       (OZ, "ostatki_monitor.yml", 30),
+    "wb_ff_lowstock":        (OZ, "wb_ff_lowstock.yml", 30),
 }
 
 
@@ -159,6 +160,23 @@ def update_services(data):
                 print(f"  Railway: прогноз ~${est:.2f}/мес")
             except Exception as e:
                 print("  railway:", str(e)[:80])
+        elif nm.startswith("Cloudflare"):  # Workers free 100k/сут — приёмник+сторож остатков (не Яндекс/GitHub)
+            tok = os.environ.get("CF_TOKEN", "").strip(); acc = os.environ.get("CF_ACCOUNT", "").strip()
+            if not (tok and acc):
+                continue
+            try:
+                import datetime as _dt
+                q = {"query": "query($acc:String!,$d:String!){viewer{accounts(filter:{accountTag:$acc}){workersInvocationsAdaptive(limit:100,filter:{date:$d}){sum{requests}}}}}",
+                     "variables": {"acc": acc, "d": _dt.date.today().isoformat()}}
+                req = urllib.request.Request("https://api.cloudflare.com/client/v4/graphql", data=json.dumps(q).encode(),
+                        headers={"Authorization": "Bearer " + tok, "Content-Type": "application/json"})
+                r = json.loads(urllib.request.urlopen(req, context=_CTX, timeout=20).read())
+                tot = sum(x["sum"]["requests"] for a in r["data"]["viewer"]["accounts"] for x in a["workersInvocationsAdaptive"])
+                s["value"] = f"{tot} / 100k"; s["note"] = "Workers · приёмник+сторож остатков · /сут"
+                s["level"], s["dot"] = _lvl(tot / 100000.0)
+                print(f"  Cloudflare: {tot}/100k запросов сегодня")
+            except Exception as e:
+                print("  cloudflare:", str(e)[:80])
         elif nm.startswith("Удал"):  # Удалённый ПК — связь (из облака порты часто закрыты фаерволом → НЕ красним ложно)
             host = os.environ.get("REMOTE_PC_HOST", "").strip()
             up = False
@@ -280,7 +298,8 @@ def main():
     IGNORE = {"oferta_probe.yml", "ym_probe.yml", "ym_probe2.yml", "automations_status.yml",
               "pages-build-deployment", "ok_sync.yml",   # ok_sync покрыт карточкой «Автосверка календаря»
               "digest_eval.yml",  # ручной тест качества классификатора дайджеста (по кнопке, не автомат)
-              "oz_reviews_freshness.yml", "monthly_dategot.yml", "dategot_fg_sync.yml"}  # второй сторож свежести Ozon-отзывов — покрыт карточкой «Сторож свежести отзывов Ozon» (кандидат на дедуп с oz_reviews_watchdog)
+              "oz_reviews_freshness.yml", "monthly_dategot.yml", "dategot_fg_sync.yml",
+              "content_depth_alert.yml", "poster_sync_watchdog.yml"}  # монитор запаса контента и сторож постера влиты в объединённую карточку «Автопостер контента»; второй сторож Ozon-отзывов покрыт карточкой «Сторож свежести отзывов Ozon»
     known = {m[1] for m in CHECKS.values()}
     drift = []
     for repo in (OZ, SELF):
@@ -306,3 +325,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

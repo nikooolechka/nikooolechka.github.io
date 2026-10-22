@@ -4,7 +4,7 @@
   },
   "dzen": {
     "subscribers": null,
-    "posts": 45,
+    "posts": 50,
     "views": null,
     "url": "https://dzen.ru/asfarm_ru"
   },
@@ -15,18 +15,18 @@
     "url": "https://vc.ru/id6010646"
   },
   "tg": {
-    "subscribers": 61,
-    "posts": 105,
-    "views": 6310,
+    "subscribers": 68,
+    "posts": 112,
+    "views": 6809,
     "url": "https://t.me/asfarm_ru",
     "wcmp": {
       "subs": {
-        "cur": 58.4,
-        "prev": 57.71
+        "cur": 63.86,
+        "prev": 59.2
       },
       "views": {
-        "cur": 6100.4,
-        "prev": 5475.71
+        "cur": 6554.86,
+        "prev": 6199.2
       }
     }
   },
