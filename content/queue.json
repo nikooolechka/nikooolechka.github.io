@@ -1979,12 +1979,15 @@
         "posted_at": "2026-08-27T22:12:32.583935+00:00",
         "url": "https://vk.com/wall-239602265_82"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-10-22T06:00:16.679828+00:00"
+      },
       "tg": {
         "posted_at": "2026-09-06T06:01:07.845797+00:00",
         "url": "https://t.me/asfarm_ru/87"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/auto-уход-за-полостью-рта-мал.jpg"
   },
   {
     "title": "Кровоточивость дёсен у детей: причины и бережные методы ухода",
@@ -3052,8 +3055,8 @@
         "url": null
       },
       "tg": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-10-22T06:00:21.148705+00:00",
+        "url": "https://t.me/asfarm_ru/134"
       }
     }
   },
