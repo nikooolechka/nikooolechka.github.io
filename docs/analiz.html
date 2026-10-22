@@ -169,7 +169,6 @@ fetch('analiz_data.json?v='+Date.now()).then(r=>r.json()).then(d=>{
   if(!d.products||!d.products.length){el.innerHTML='<div class="empty">Пока нет изученных товаров.</div>';return;}
   el.innerHTML=d.products.map(card).join("");
   el.querySelectorAll('.head').forEach(h=>h.addEventListener('click',e=>toggle(h.parentNode,e)));
-  const first=el.querySelector('.item'); if(first) setTimeout(()=>toggle(first),400);
   document.getElementById('foot').textContent='Обновлено '+(d.updated||'')+' · товаров в разборе: '+d.products.length;
 }).catch(()=>{document.getElementById('list').innerHTML='<div class="empty">Ошибка загрузки данных.</div>';});
 </script>
