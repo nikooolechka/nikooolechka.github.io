@@ -124,10 +124,10 @@ function stars(obj){
     return `<div class="starbar"><span class="lbl">${k}★</span><span class="track"><i data-w="${w}" style="background:${COL[k]};box-shadow:0 0 14px -2px ${COL[k]}"></i></span><span class="n">${n.toLocaleString('ru-RU')}</span></div>`;
   }).join("");
 }
-const ul=(arr,cls)=>`<ul class="${cls||''}">`+arr.map(x=>`<li>${x}</li>`).join("")+`</ul>`;
-const cplx=arr=>`<ul class="cplx">`+arr.map(c=>`<li>${c.t}${c.n?`<span class="note">${c.n}</span>`:''}</li>`).join("")+`</ul>`;
-const gaps=arr=>arr.map(g=>`<div class="gap"><div class="c">${g.claim}</div><div class="r">${g.reality}</div></div>`).join("");
-const chips=arr=>`<div class="chips">`+arr.map(x=>`<span class="chip">${x}</span>`).join("")+`</div>`;
+const ul=(arr,cls)=>`<ul class="${cls||''}">`+(arr||[]).map(x=>`<li>${x}</li>`).join("")+`</ul>`;
+const cplx=arr=>`<ul class="cplx">`+(arr||[]).map(c=>`<li>${c.t}${c.n?`<span class="note">${c.n}</span>`:''}</li>`).join("")+`</ul>`;
+const gaps=arr=>(arr||[]).map(g=>`<div class="gap"><div class="c">${g.claim}</div><div class="r">${g.reality}</div></div>`).join("");
+const chips=arr=>(arr&&arr.length)?`<div class="chips">`+arr.map(x=>`<span class="chip">${x}</span>`).join("")+`</div>`:'<div style="color:var(--mut);font-size:13px">Других вариантов под этой карточкой не выявлено.</div>';
 function card(p,i){
   const price = p.price!=null ? `<span class="price">${p.price.toLocaleString('ru-RU')} ₽${p.price_old?`<span class="old">${p.price_old.toLocaleString('ru-RU')} ₽</span>`:''}</span>` : '';
   return `<div class="item" style="animation-delay:${i*90}ms">
@@ -168,7 +168,7 @@ function toggle(item,ev){
 fetch('analiz_data.json?v='+Date.now()).then(r=>r.json()).then(d=>{
   const el=document.getElementById('list');
   if(!d.products||!d.products.length){el.innerHTML='<div class="empty">Пока нет изученных товаров.</div>';return;}
-  el.innerHTML=d.products.map(card).join("");
+  el.innerHTML=d.products.map((p,i)=>{try{return card(p,i)}catch(e){console.error('card render failed:',p&&p.id,e);return ''}}).join("");
   el.querySelectorAll('.head').forEach(h=>h.addEventListener('click',e=>toggle(h.parentNode,e)));
   document.getElementById('foot').textContent='Обновлено '+(d.updated||'')+' · товаров в разборе: '+d.products.length;
 }).catch(()=>{document.getElementById('list').innerHTML='<div class="empty">Ошибка загрузки данных.</div>';});
