@@ -3,114 +3,178 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>АС-Фарм · Анализ конкурентов</title>
+<title>Анализ карточек товаров · АС-Фарм</title>
 <style>
   :root{
-    --bg:#0f1720; --card:#17212b; --card2:#1d2a36; --line:#2a3a48;
-    --txt:#e8eef3; --mut:#9fb0bd; --acc:#2bb3a3; --accd:#1f8d80;
-    --red:#ff6b6b; --redbg:#2a1a1e; --amber:#ffc266; --good:#52c77a;
+    --cyan:#2ee6c8; --cyan2:#19b6ff; --violet:#8b5cf6; --pink:#ff5d9e;
+    --txt:#eaf2f7; --mut:#8ea3b4; --red:#ff6b7d; --green:#48e59b; --gold:#ffd23f;
+    --glass:rgba(255,255,255,.045); --glass2:rgba(255,255,255,.07); --line:rgba(255,255,255,.09);
   }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--txt);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.5}
-  .wrap{max-width:860px;margin:0 auto;padding:22px 16px 60px}
-  header h1{font-size:24px;margin:0 0 4px;font-weight:800;letter-spacing:.2px}
-  header .sub{color:var(--mut);font-size:14px;margin-bottom:22px}
-  header .acc{color:var(--acc)}
-  .item{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:12px 0;overflow:hidden}
-  .head{display:flex;gap:14px;align-items:center;padding:14px 16px;cursor:pointer;user-select:none}
-  .head:hover{background:var(--card2)}
-  .thumb{width:58px;height:58px;border-radius:10px;object-fit:cover;background:#0b1118;flex:0 0 auto}
+  html{scroll-behavior:smooth}
+  body{margin:0;min-height:100vh;color:var(--txt);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;line-height:1.5;
+    background:#070b11;overflow-x:hidden}
+  /* живой фон с плавающими подсвеченными орбами */
+  .bg{position:fixed;inset:0;z-index:-2;background:
+    radial-gradient(1200px 700px at 15% -10%,rgba(25,182,255,.14),transparent 60%),
+    radial-gradient(1000px 800px at 110% 10%,rgba(139,92,246,.14),transparent 55%),
+    radial-gradient(900px 900px at 50% 120%,rgba(46,230,200,.10),transparent 60%),#070b11}
+  .orb{position:fixed;z-index:-1;border-radius:50%;filter:blur(70px);opacity:.5;animation:float 18s ease-in-out infinite}
+  .orb.a{width:340px;height:340px;background:radial-gradient(circle,#19b6ff,transparent 70%);top:-80px;left:-60px}
+  .orb.b{width:300px;height:300px;background:radial-gradient(circle,#8b5cf6,transparent 70%);top:30%;right:-80px;animation-delay:-6s}
+  .orb.c{width:360px;height:360px;background:radial-gradient(circle,#2ee6c8,transparent 70%);bottom:-120px;left:30%;animation-delay:-11s}
+  @keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(40px,-30px) scale(1.08)}66%{transform:translate(-30px,25px) scale(.95)}}
+  .wrap{max-width:900px;margin:0 auto;padding:40px 18px 80px}
+  header{margin-bottom:30px}
+  .kicker{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:700;letter-spacing:1.4px;
+    text-transform:uppercase;color:var(--cyan);padding:6px 13px;border:1px solid var(--line);border-radius:999px;
+    background:var(--glass);backdrop-filter:blur(10px);margin-bottom:16px}
+  .kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 10px var(--cyan);animation:pulse 2s infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+  h1{font-size:40px;line-height:1.08;margin:0 0 10px;font-weight:850;letter-spacing:-.5px;
+    background:linear-gradient(110deg,#fff 10%,var(--cyan) 45%,var(--cyan2) 70%,var(--violet));
+    -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+  header .sub{color:var(--mut);font-size:15px;max-width:640px}
+  /* карточка товара — стекло */
+  .item{position:relative;margin:16px 0;border-radius:20px;border:1px solid var(--line);
+    background:var(--glass);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    overflow:hidden;opacity:0;transform:translateY(16px);animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards;
+    transition:box-shadow .35s,border-color .35s,transform .35s}
+  @keyframes rise{to{opacity:1;transform:translateY(0)}}
+  .item::before{content:"";position:absolute;inset:0;border-radius:20px;padding:1px;pointer-events:none;
+    background:linear-gradient(130deg,rgba(46,230,200,.5),rgba(25,182,255,.15) 40%,transparent 60%,rgba(139,92,246,.4));
+    -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor;mask-composite:exclude;opacity:.6;transition:opacity .35s}
+  .item:hover{transform:translateY(-3px);box-shadow:0 20px 60px -20px rgba(25,182,255,.4)}
+  .item:hover::before,.item.open::before{opacity:1}
+  .head{display:flex;gap:16px;align-items:center;padding:16px 18px;cursor:pointer;user-select:none;position:relative;z-index:1}
+  .thumb{width:64px;height:64px;border-radius:14px;object-fit:cover;background:#0b1118;flex:0 0 auto;
+    box-shadow:0 0 0 1px var(--line),0 8px 24px -8px rgba(0,0,0,.6)}
   .htxt{flex:1;min-width:0}
-  .htxt .nm{font-weight:700;font-size:15px;margin:0 0 3px}
-  .htxt .meta{color:var(--mut);font-size:13px;display:flex;gap:12px;flex-wrap:wrap}
-  .pill{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;
-    background:rgba(43,179,163,.15);color:var(--acc);text-transform:uppercase;letter-spacing:.5px}
-  .star{color:#ffc93c;font-weight:700}
-  .chev{color:var(--mut);transition:transform .2s;flex:0 0 auto}
-  .item.open .chev{transform:rotate(180deg)}
-  .body{display:none;padding:4px 16px 18px;border-top:1px solid var(--line)}
-  .item.open .body{display:block}
-  .sec{margin:16px 0 0}
-  .sec h3{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--mut);margin:0 0 8px;font-weight:700}
-  .sec h3 .em{color:var(--acc)}
-  ul{margin:0;padding:0 0 0 2px;list-style:none}
-  li{position:relative;padding:5px 0 5px 20px;font-size:14px;color:var(--txt)}
-  li::before{content:"";position:absolute;left:4px;top:11px;width:6px;height:6px;border-radius:50%;background:var(--acc)}
-  .weak li::before{background:var(--red)}
-  .weak li{color:#ffd9d9}
-  .ideal{background:linear-gradient(180deg,rgba(43,179,163,.08),transparent);border:1px solid var(--line);
-    border-radius:12px;padding:12px 14px 14px;margin-top:16px}
-  .ideal h3{color:var(--good)}
-  .ideal li::before{background:var(--good)}
-  .price{font-weight:800}
-  .starbar{display:flex;align-items:center;gap:8px;margin:4px 0;font-size:13px}
-  .starbar .lbl{width:28px;color:var(--mut);text-align:right}
-  .bar{flex:1;height:9px;background:#0b1118;border-radius:6px;overflow:hidden}
-  .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accd),var(--acc))}
-  .starbar .n{width:38px;color:var(--mut);font-size:12px}
-  .cplx{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
-  .cnt{color:var(--red);font-weight:800;font-size:13px;white-space:nowrap}
-  a.src{display:inline-block;margin-top:14px;color:var(--acc);text-decoration:none;font-size:13px;font-weight:600;
-    border:1px solid var(--line);padding:7px 13px;border-radius:9px}
-  a.src:hover{background:var(--card2)}
-  .ca{font-size:14px;background:var(--card2);border-radius:10px;padding:10px 12px}
-  .empty{color:var(--mut);font-size:14px;padding:30px 0;text-align:center}
+  .htxt .nm{font-weight:750;font-size:16px;margin:0 0 6px;letter-spacing:-.2px}
+  .meta{display:flex;gap:9px;flex-wrap:wrap;align-items:center;font-size:13px;color:var(--mut)}
+  .pill{font-size:11px;font-weight:800;padding:3px 10px;border-radius:999px;letter-spacing:.6px;color:#04121a;
+    background:linear-gradient(100deg,var(--cyan),var(--cyan2));box-shadow:0 0 16px -3px var(--cyan2)}
+  .rate{display:inline-flex;align-items:center;gap:4px;font-weight:800;color:var(--gold);
+    text-shadow:0 0 14px rgba(255,210,63,.5)}
+  .price{font-weight:800;color:var(--txt)}
+  .chev{color:var(--mut);font-size:18px;transition:transform .35s;flex:0 0 auto}
+  .item.open .chev{transform:rotate(180deg);color:var(--cyan)}
+  /* раскрытие */
+  .body{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.2,.7,.2,1);position:relative;z-index:1}
+  .inner{padding:2px 18px 22px}
+  .sep{height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin:2px 0 6px}
+  .sec{margin:18px 0 0}
+  .sec h3{display:flex;align-items:center;gap:9px;font-size:12px;text-transform:uppercase;letter-spacing:.8px;
+    color:var(--mut);margin:0 0 10px;font-weight:800}
+  .sec h3::before{content:"";width:16px;height:2px;border-radius:2px;background:linear-gradient(90deg,var(--cyan),transparent)}
+  .sec h3 .em{color:var(--cyan)}
+  ul{margin:0;padding:0;list-style:none}
+  li{position:relative;padding:7px 0 7px 22px;font-size:14.5px}
+  li::before{content:"";position:absolute;left:3px;top:14px;width:7px;height:7px;border-radius:50%;
+    background:var(--cyan);box-shadow:0 0 10px var(--cyan)}
+  .ca{font-size:14.5px;background:var(--glass2);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+  /* звёзды */
+  .starbar{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:13px}
+  .starbar .lbl{width:30px;color:var(--gold);text-align:right;font-weight:700}
+  .track{flex:1;height:10px;background:rgba(255,255,255,.06);border-radius:8px;overflow:hidden;box-shadow:inset 0 0 0 1px var(--line)}
+  .track i{display:block;height:100%;width:0;border-radius:8px;transition:width 1s cubic-bezier(.2,.8,.2,1);
+    background:linear-gradient(90deg,var(--cyan2),var(--cyan));box-shadow:0 0 14px -2px var(--cyan)}
+  .starbar.low .track i{background:linear-gradient(90deg,#ff8a3d,var(--red));box-shadow:0 0 14px -2px var(--red)}
+  .starbar .n{width:42px;color:var(--mut);font-size:12px}
+  /* слабые места */
+  .weakbox{border:1px solid rgba(255,107,125,.3);background:linear-gradient(180deg,rgba(255,107,125,.08),transparent);
+    border-radius:16px;padding:6px 15px 14px;box-shadow:inset 0 0 40px -25px var(--red)}
+  .weakbox h3{color:var(--red)}
+  .weakbox h3::before{background:linear-gradient(90deg,var(--red),transparent)}
+  .weakbox li::before{background:var(--red);box-shadow:0 0 10px var(--red)}
+  .weakbox li{color:#ffd9de}
+  /* жалобы */
+  .cplx{display:flex;justify-content:space-between;gap:12px;align-items:center}
+  .cnt{color:#fff;font-weight:800;font-size:12px;white-space:nowrap;padding:3px 10px;border-radius:999px;
+    background:linear-gradient(100deg,#ff6b7d,#ff3d6e);box-shadow:0 0 16px -4px var(--red)}
+  /* идеальный продукт */
+  .ideal{border:1px solid rgba(72,229,155,.3);border-radius:18px;padding:8px 16px 16px;margin-top:20px;
+    background:linear-gradient(160deg,rgba(72,229,155,.12),rgba(46,230,200,.04) 50%,transparent);
+    box-shadow:0 0 50px -28px var(--green)}
+  .ideal h3{color:var(--green);font-size:13px}
+  .ideal h3::before{background:linear-gradient(90deg,var(--green),transparent)}
+  .ideal li::before{background:var(--green);box-shadow:0 0 12px var(--green)}
+  a.src{display:inline-flex;align-items:center;gap:8px;margin-top:18px;color:#04121a;text-decoration:none;
+    font-size:14px;font-weight:800;padding:11px 20px;border-radius:12px;
+    background:linear-gradient(100deg,var(--cyan),var(--cyan2));box-shadow:0 10px 30px -10px var(--cyan2);
+    transition:transform .25s,box-shadow .25s}
+  a.src:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px var(--cyan2)}
+  .empty{color:var(--mut);text-align:center;padding:50px 0}
+  .foot{color:var(--mut);font-size:12px;text-align:center;margin-top:36px;opacity:.7}
+  @media(max-width:560px){h1{font-size:30px}.thumb{width:54px;height:54px}}
 </style>
 </head>
 <body>
+<div class="bg"></div><div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
 <div class="wrap">
   <header>
-    <h1>Анализ конкурентов <span class="acc">АС-Фарм</span></h1>
-    <div class="sub">Каждый изученный товар — отдельный блок. Нажмите на него, чтобы раскрыть полный разбор: чем продавец цепляет, за что хвалят, на что жалуются и каким товар стоило бы сделать.</div>
+    <div class="kicker"><span class="dot"></span>АС-Фарм · аналитика</div>
+    <h1>Анализ карточек<br>товаров</h1>
+    <div class="sub">Каждый изученный товар — отдельный блок. Нажмите, чтобы раскрыть полный разбор: чем продавец цепляет, за что хвалят, на что жалуются и каким товар стоило бы сделать.</div>
   </header>
   <div id="list"><div class="empty">Загрузка…</div></div>
+  <div class="foot" id="foot"></div>
 </div>
 <script>
-function stars(obj, total){
+const plural=(n,a,b,c)=>{const m=n%100,d=n%10;return m>=11&&m<=14?c:d===1?a:d>=2&&d<=4?b:c};
+function stars(obj){
   const order=["5","4","3","2","1"];
   const max=Math.max(1,...order.map(k=>obj[k]||0));
   return order.map(k=>{
     const n=obj[k]||0, w=Math.round((n/max)*100);
-    return `<div class="starbar"><span class="lbl">${k}★</span><span class="bar"><i style="width:${w}%"></i></span><span class="n">${n}</span></div>`;
+    const low=(k==="1"||k==="2")?" low":"";
+    return `<div class="starbar${low}"><span class="lbl">${k}★</span><span class="track"><i data-w="${w}"></i></span><span class="n">${n}</span></div>`;
   }).join("");
 }
-function ulList(arr,cls){ return `<ul class="${cls||''}">`+arr.map(x=>`<li>${x}</li>`).join("")+`</ul>`; }
-function complaints(arr){
-  return `<ul>`+arr.map(c=>`<li><span class="cplx"><span>${c.text}</span><span class="cnt">${c.count} жалоб${c.count%10===1&&c.count%100!==11?'а':''}</span></span></li>`).join("")+`</ul>`;
-}
-function card(p){
-  const price = p.price!=null ? p.price.toLocaleString('ru-RU')+' ₽' : '<span style="color:var(--mut)">цена с витрины — добавляется</span>';
-  return `<div class="item">
-    <div class="head" onclick="this.parentNode.classList.toggle('open')">
+const ul=(arr,cls)=>`<ul class="${cls||''}">`+arr.map(x=>`<li>${x}</li>`).join("")+`</ul>`;
+const complaints=arr=>`<ul>`+arr.map(c=>`<li><span class="cplx"><span>${c.text}</span><span class="cnt">${c.count} ${plural(c.count,'жалоба','жалобы','жалоб')}</span></span></li>`).join("")+`</ul>`;
+function card(p,i){
+  const price = p.price!=null ? '<span class="price">'+p.price.toLocaleString('ru-RU')+' ₽</span>' : '<span style="color:var(--mut)">цена с витрины — скоро</span>';
+  return `<div class="item" style="animation-delay:${i*90}ms">
+    <div class="head">
       <img class="thumb" src="${p.photo}" referrerpolicy="no-referrer" onerror="this.style.visibility='hidden'">
       <div class="htxt">
         <p class="nm">${p.name}</p>
-        <div class="meta"><span class="pill">${p.platform}</span><span>${p.brand}</span>
-          <span class="star">★ ${p.rating}</span><span>${p.reviews_total.toLocaleString('ru-RU')} отзывов</span>
-          <span class="price">${price}</span></div>
+        <div class="meta"><span class="pill">${p.platform}</span>
+          <span>${p.brand}</span><span class="rate">★ ${p.rating}</span>
+          <span>${p.reviews_total.toLocaleString('ru-RU')} отзывов</span>${price}</div>
       </div>
       <span class="chev">▾</span>
     </div>
-    <div class="body">
+    <div class="body"><div class="inner"><div class="sep"></div>
       <div class="sec"><h3>Кто покупает и зачем</h3><div class="ca">${p.ca}</div></div>
-      <div class="sec"><h3>Чем продавец <span class="em">цепляет покупателя</span> (обещания в карточке)</h3>${ulList(p.utp)}</div>
-      <div class="sec"><h3>Оценки покупателей</h3>${stars(p.stars,p.reviews_total)}<div style="color:var(--mut);font-size:12px;margin-top:6px">${p.stars_note}</div></div>
-      <div class="sec weak"><h3 style="color:var(--red)">Слабые места: что обещано — и что на деле в отзывах</h3>${ulList(p.weak,'weak')}</div>
+      <div class="sec"><h3>Чем продавец <span class="em">цепляет покупателя</span></h3>${ul(p.utp)}</div>
+      <div class="sec"><h3>Оценки покупателей</h3>${stars(p.stars)}<div style="color:var(--mut);font-size:12px;margin-top:8px">${p.stars_note}</div></div>
+      <div class="sec"><div class="weakbox"><h3>Слабые места: обещано — и что на деле</h3>${ul(p.weak)}</div></div>
       <div class="sec"><h3>На что жалуются чаще всего</h3>${complaints(p.complaints)}</div>
-      <div class="sec"><h3>За что хвалят</h3>${ulList(p.advantages)}</div>
-      <div class="sec"><h3>Другие варианты под той же карточкой (вкусы, объёмы)</h3>${ulList(p.skleyka)}</div>
-      <div class="ideal"><h3>🎯 Каким стоило бы сделать товар — идеальный для покупателя</h3>${ulList(p.ideal,'ideal')}</div>
+      <div class="sec"><h3>За что хвалят</h3>${ul(p.advantages)}</div>
+      <div class="sec"><h3>Другие варианты под этой карточкой</h3>${ul(p.skleyka)}</div>
+      <div class="ideal"><h3>🎯 Каким стоило бы сделать товар — идеальный для покупателя</h3>${ul(p.ideal)}</div>
       <a class="src" href="${p.url}" target="_blank" rel="noopener">Открыть карточку товара →</a>
-    </div>
+    </div></div>
   </div>`;
+}
+function toggle(item){
+  const body=item.querySelector('.body'), open=item.classList.toggle('open');
+  if(open){ body.style.maxHeight=body.scrollHeight+'px';
+    item.querySelectorAll('.track i').forEach(i=>i.style.width=i.dataset.w+'%');
+  } else { body.style.maxHeight='0'; }
 }
 fetch('analiz_data.json?v='+Date.now()).then(r=>r.json()).then(d=>{
   const el=document.getElementById('list');
   if(!d.products||!d.products.length){el.innerHTML='<div class="empty">Пока нет изученных товаров.</div>';return;}
   el.innerHTML=d.products.map(card).join("");
-  el.firstChild.classList.add('open');
-}).catch(e=>{document.getElementById('list').innerHTML='<div class="empty">Ошибка загрузки данных.</div>';});
+  el.querySelectorAll('.head').forEach(h=>h.addEventListener('click',()=>toggle(h.parentNode)));
+  const first=el.querySelector('.item'); if(first) setTimeout(()=>toggle(first),400);
+  document.getElementById('foot').textContent='Обновлено '+(d.updated||'')+' · товаров в разборе: '+d.products.length;
+}).catch(()=>{document.getElementById('list').innerHTML='<div class="empty">Ошибка загрузки данных.</div>';});
 </script>
 </body>
 </html>
