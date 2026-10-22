@@ -37,6 +37,7 @@ CHECKS = {
     "posts_digest":    (OZ, "posts.yml", 30),
     "poster":          (SELF, "main.yml", 30),
     "fbs_kazan":       (OZ, "fbs_kazan_monitor.yml", 30),
+    "uderzhaniya_monitor": (OZ, "uderzhaniya_monitor.yml", 30),
     "arrivals":        (OZ, "arrivals_monitor.yml", 30),
     "prices_snapshot_chat": (OZ, "price_screenshot.yml", 30),
     "calendar_sync":   (SELF, "main.yml", 30),
