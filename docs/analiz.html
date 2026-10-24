@@ -142,9 +142,15 @@
   .lg::before{content:"";width:9px;height:9px;border-radius:2px;display:inline-block}
   .lg.lgu::before{background:linear-gradient(180deg,var(--green),var(--cyan))}
   .lg.lgr::before{background:linear-gradient(180deg,var(--violet),#b794f6)}
-  .chart.daily{height:110px;align-items:flex-end;gap:2px}
+  .chart.daily{height:104px;align-items:flex-end;gap:2px}
   .chart.daily .col .vlabel{font-size:9px;color:var(--txt);font-weight:800;margin-bottom:2px;min-height:11px;opacity:.95}
-  .chart.daily .col .cl.day{font-size:9px;color:var(--mut);font-weight:600;margin-top:4px;white-space:nowrap;transform:rotate(-45deg);transform-origin:center;height:14px}
+  .daxis{display:flex;justify-content:space-between;font-size:10px;color:var(--mut);opacity:.75;margin-top:6px;padding:0 2px}
+  .mprow{display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start}
+  .mprow .mphalf{flex:1 1 300px;min-width:0}
+  .mprow .mphalf .mpsub{margin-top:15px}
+  .mprow .combo{gap:3px;height:118px}
+  .mprow .combo .pair i{width:11px}
+  .mprow .chart.month{height:118px}
   .combo{display:flex;align-items:flex-end;gap:5px;height:124px}
   .combo .mg{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;min-width:0}
   .combo .pair{display:flex;align-items:flex-end;justify-content:center;gap:4px;height:100%;width:100%}
@@ -219,16 +225,16 @@ function barChart(arr,valKey,cls,labelFn,titleFn){
     return `<div class="col" title="${titleFn?titleFn(x):''}"><i style="height:${h}%"></i>${labelFn?`<span class="cl">${labelFn(x)}</span>`:''}</div>`;
   }).join("")+`</div>`;
 }
-// дневной график: число продаж над столбиком + дата (ДД.ММ) под некоторыми
+// дневной график: число продаж над столбиком; даты — отдельной осью снизу (6 равномерных)
 function dailyChart(a){
-  const max=Math.max(1,...a.map(x=>x.u||0)), n=a.length;
-  return `<div class="chart daily">`+a.map((x,i)=>{
+  const max=Math.max(1,...a.map(x=>x.u||0));
+  const bars=`<div class="chart daily">`+a.map(x=>{
     const v=x.u||0, h=Math.round(v/max*100), dd=dmy(x.d);
-    const lbl = (i===0||i===n-1||x.d.slice(3)==='01'||i%6===0) ? dd : '&nbsp;';
-    return `<div class="col" title="${dd}: ${v} шт · ${rub(x.r)} ₽">`+
-      `<span class="vlabel">${v>0?v:''}</span><i style="height:${h}%"></i>`+
-      `<span class="cl day">${lbl}</span></div>`;
+    return `<div class="col" title="${dd}: ${v} шт · ${rub(x.r)} ₽"><span class="vlabel">${v>0?v:''}</span><i style="height:${h}%"></i></div>`;
   }).join("")+`</div>`;
+  const n=a.length, ticks=[0,1,2,3,4,5].map(k=>a[Math.round(k*(n-1)/5)]);
+  const axis=`<div class="daxis">`+ticks.map(t=>`<span>${dmy(t.d)}</span>`).join("")+`</div>`;
+  return bars+axis;
 }
 // объединённый график: продажи (шт) и выручка (₽) по месяцам, две независимые шкалы
 function comboChart(a){
@@ -256,30 +262,34 @@ function mpblock(m){
     h+=`<div class="mpsub"><span>Продажи по дням, шт · ${m.daily_from}–${m.daily_to}</span><span class="r">итого ${rub(m.sales30_u)} шт</span></div>`;
     h+=dailyChart(m.daily);
   }
-  // продажи + выручка объединённо по месяцам
-  if(m.monthly&&m.monthly.length){
-    h+=`<div class="mpsub"><span>Продажи и выручка по месяцам · полгода, ${m.months_year||''}</span>`+
-       `<span class="r"><span class="lg lgu">продажи, шт</span><span class="lg lgr">выручка, ₽</span></span></div>`;
-    h+=comboChart(m.monthly);
+  // продажи+выручка (слева) и рост отзывов (справа) — в одну строку
+  const hasMonthly=m.monthly&&m.monthly.length, hasRev=m.reviews_growth&&m.reviews_growth.length;
+  if(hasMonthly||hasRev){
+    h+=`<div class="mprow">`;
+    if(hasMonthly){
+      h+=`<div class="mphalf"><div class="mpsub"><span>Продажи и выручка · ${m.months_year||''}</span>`+
+         `<span class="r"><span class="lg lgu">шт</span><span class="lg lgr">₽</span></span></div>`+
+         comboChart(m.monthly)+`</div>`;
+    }
+    if(hasRev){
+      const r=m.reviews_growth, net=(r[r.length-1].c||0)-(r[0].c||0);
+      h+=`<div class="mphalf"><div class="mpsub"><span>Рост числа отзывов</span><span class="r">+${rub(net)} за полгода</span></div>`+
+         barChart(r,'c','month',x=>`<b>${rub(x.c)}</b><em>${x.m}</em>`,x=>`${x.m}: ${rub(x.c)} отзывов${x.delta!=null?' (+'+x.delta+')':''}`)+`</div>`;
+    }
+    h+=`</div>`;
   }
   // нет в наличии
   if(m.oos&&m.oos.length){
     h+=`<div class="mpsub"><span>Периоды «нет в наличии» за полгода</span></div>`;
     h+=`<div class="oosbox">📦 ${m.oos.map(x=>'с '+x).join('   ·   ')}</div>`;
   }
-  // рост отзывов
-  if(m.reviews_growth&&m.reviews_growth.length){
-    const r=m.reviews_growth, net=(r[r.length-1].c||0)-(r[0].c||0);
-    h+=`<div class="mpsub"><span>Рост числа отзывов · полгода, ${m.months_year||''}</span><span class="r">+${rub(net)} за полгода</span></div>`;
-    h+=barChart(r,'c','month',x=>`<b>${rub(x.c)}</b><em>${x.m}${x.delta!=null?' +'+x.delta:''}</em>`,x=>`${x.m}: ${rub(x.c)} отзывов${x.delta!=null?' (+'+x.delta+')':''}`);
-  }
-  // позиция в категории
+  // средняя позиция по категориям товара
   if(m.position&&m.position.points&&m.position.points.length){
     const p=m.position.points, first=p[0].p, last=p[p.length-1].p, better=last<first;
     const mx=Math.max(...p.map(y=>y.p));
     const inv=p.map(x=>({v:Math.max(1,mx-x.p+1)}));
-    h+=`<div class="mpsub"><span>Позиция в категории · ${m.position.from}–${m.position.to}</span></div>`;
-    h+=`<div class="mpnote">Категория: <b style="color:var(--txt)">${m.position.category}</b></div>`;
+    h+=`<div class="mpsub"><span>Средняя позиция в категориях товара · ${m.position.from}–${m.position.to}</span></div>`;
+    h+=`<div class="mpnote">Основная категория: <b style="color:var(--txt)">${m.position.category}</b>${m.position.count?` · товар в ${m.position.count} категориях`:''}</div>`;
     h+=`<div class="postat">${first} → ${last} место <span class="${better?'up':'down'}">${better?'↑ растёт':'↓ падает'}</span></div>`;
     h+=barChart(inv,'v','',null,null);
   }
