@@ -729,8 +729,7 @@
      ],
      "win_rev": 4388578
     },
-    "balance_oos": true,
-    "nodata": false
+    "nodata": true
    }
   },
   {
@@ -1344,8 +1343,7 @@
      ],
      "win_rev": 1530527
     },
-    "balance_oos": true,
-    "nodata": false
+    "nodata": true
    }
   },
   {
@@ -1897,8 +1895,7 @@
      ],
      "win_rev": 1530527
     },
-    "balance_oos": true,
-    "nodata": false
+    "nodata": true
    }
   },
   {
@@ -2459,7 +2456,6 @@
      ],
      "win_rev": 1530527
     },
-    "balance_oos": false,
     "nodata": false
    }
   },
@@ -2992,7 +2988,6 @@
      ],
      "win_rev": 1571577
     },
-    "balance_oos": false,
     "nodata": false
    }
   },
@@ -3634,7 +3629,6 @@
      ],
      "win_rev": 2296032
     },
-    "balance_oos": false,
     "nodata": false
    }
   },
@@ -4361,7 +4355,6 @@
      ],
      "win_rev": 1878427
     },
-    "balance_oos": false,
     "nodata": false
    }
   },
@@ -4901,8 +4894,7 @@
      ],
      "win_rev": 1530527
     },
-    "balance_oos": true,
-    "nodata": false
+    "nodata": true
    }
   },
   {
@@ -5573,7 +5565,6 @@
      ],
      "win_rev": 8652590
     },
-    "balance_oos": false,
     "nodata": false
    }
   },
@@ -6292,7 +6283,6 @@
      ],
      "win_rev": 4282636
     },
-    "balance_oos": false,
     "nodata": false
    }
   },
@@ -6960,7 +6950,6 @@
      ],
      "win_rev": 1207682
     },
-    "balance_oos": false,
     "nodata": false
    }
   },
@@ -7564,7 +7553,6 @@
      ],
      "win_rev": 734126
     },
-    "balance_oos": false,
     "nodata": false
    }
   },
@@ -8134,8 +8122,7 @@
      ],
      "win_rev": 1530527
     },
-    "balance_oos": true,
-    "nodata": false
+    "nodata": true
    }
   },
   {
@@ -8830,7 +8817,6 @@
      ],
      "win_rev": 2342570
     },
-    "balance_oos": false,
     "nodata": false
    }
   }
