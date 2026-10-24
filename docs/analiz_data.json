@@ -730,7 +730,8 @@
      "win_rev": 4388578
     },
     "nodata": true
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "oz-3731025845",
@@ -1344,7 +1345,8 @@
      "win_rev": 1530527
     },
     "nodata": true
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "oz-3044396307",
@@ -1896,7 +1898,8 @@
      "win_rev": 1530527
     },
     "nodata": true
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "oz-3108617802",
@@ -2457,7 +2460,8 @@
      "win_rev": 1530527
     },
     "nodata": false
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "oz-3108547395",
@@ -2989,7 +2993,8 @@
      "win_rev": 1571577
     },
     "nodata": false
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "wb-583155047",
@@ -3630,7 +3635,8 @@
      "win_rev": 2296032
     },
     "nodata": false
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "wb-281901960",
@@ -4356,7 +4362,8 @@
      "win_rev": 1878427
     },
     "nodata": false
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "oz-2924204286",
@@ -4895,7 +4902,8 @@
      "win_rev": 1530527
     },
     "nodata": true
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "wb-93054004",
@@ -5566,7 +5574,8 @@
      "win_rev": 8652590
     },
     "nodata": false
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "wb-227067968",
@@ -6284,7 +6293,8 @@
      "win_rev": 4282636
     },
     "nodata": false
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "wb-195959204",
@@ -6951,7 +6961,8 @@
      "win_rev": 1207682
     },
     "nodata": false
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "wb-140595726",
@@ -7554,7 +7565,8 @@
      "win_rev": 734126
     },
     "nodata": false
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "oz-1829369911",
@@ -8123,7 +8135,8 @@
      "win_rev": 1530527
     },
     "nodata": true
-   }
+   },
+   "in_stock": true
   },
   {
    "id": "wb-76952248",
@@ -8818,7 +8831,8 @@
      "win_rev": 2342570
     },
     "nodata": false
-   }
+   },
+   "in_stock": true
   }
  ]
 }
