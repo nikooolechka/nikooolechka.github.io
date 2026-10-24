@@ -505,15 +505,14 @@
     "updated": "2026-10-23",
     "niche": {
      "name": "Детские салфетки для чистки зубов и дёсен",
-     "total": 14,
-     "win_rev": 1536088,
-     "win_sales": 1955,
-     "win_n": 14,
-     "avg_price": 807,
+     "total": 17,
+     "win_rev": 1571577,
+     "win_sales": 2061,
+     "win_n": 17,
+     "avg_price": 810,
      "price_min": 196,
-     "price_med": 747,
+     "price_med": 766,
      "price_max": 1544,
-     "our_rev": 115292,
      "our_rank": 5,
      "top5": [
       {
@@ -561,25 +560,25 @@
      "segments": [
       {
        "label": "до 500",
-       "n": 1,
-       "sales_pct": 1,
-       "rev_pct": 0
+       "n": 2,
+       "sales_pct": 6,
+       "rev_pct": 2
       },
       {
        "label": "500–800",
        "n": 8,
-       "sales_pct": 52,
-       "rev_pct": 42
+       "sales_pct": 50,
+       "rev_pct": 41
       },
       {
        "label": "800–1100",
-       "n": 3,
-       "sales_pct": 37,
+       "n": 4,
+       "sales_pct": 35,
        "rev_pct": 39
       },
       {
        "label": "1100–1500",
-       "n": 0,
+       "n": 1,
        "sales_pct": 0,
        "rev_pct": 0
       },
@@ -590,53 +589,7 @@
        "rev_pct": 18
       }
      ],
-     "free": {
-      "parent": "Гигиена полости рта",
-      "items": [
-       {
-        "name": "Ирригаторы",
-        "brands": 430,
-        "rev_per": 118293,
-        "rating": 4.62,
-        "opp": false
-       },
-       {
-        "name": "Электрические зубные щетки",
-        "brands": 328,
-        "rev_per": 95585,
-        "rating": 4.66,
-        "opp": true
-       },
-       {
-        "name": "Межзубные ершики",
-        "brands": 296,
-        "rev_per": 74524,
-        "rating": 4.66,
-        "opp": true
-       },
-       {
-        "name": "Зубные пасты и порошки",
-        "brands": 1632,
-        "rev_per": 63119,
-        "rating": 4.36,
-        "opp": false
-       },
-       {
-        "name": "Средства гигиены полости рта",
-        "brands": 1051,
-        "rev_per": 58964,
-        "rating": 4.67,
-        "opp": false
-       },
-       {
-        "name": "Зубные щетки",
-        "brands": 937,
-        "rev_per": 42807,
-        "rating": 4.66,
-        "opp": false
-       }
-      ]
-     }
+     "our_rev": 115292
     },
     "market": {
      "brands": [
@@ -648,21 +601,21 @@
       },
       {
        "name": "Dr. Bormann",
-       "rev": 401964,
-       "items": 2,
+       "rev": 406572,
+       "items": 3,
        "share": 26
       },
       {
        "name": "—",
-       "rev": 364694,
-       "items": 3,
-       "share": 24
+       "rev": 390927,
+       "items": 4,
+       "share": 25
       },
       {
        "name": "eilimix",
        "rev": 223015,
        "items": 3,
-       "share": 15
+       "share": 14
       },
       {
        "name": "Lovular",
@@ -672,9 +625,9 @@
       },
       {
        "name": "АС-ФАРМ",
-       "rev": 5561,
-       "items": 1,
-       "share": 0
+       "rev": 10209,
+       "items": 2,
+       "share": 1
       }
      ],
      "sellers": [
@@ -685,7 +638,7 @@
       },
       {
        "name": "MUSH",
-       "rev": 401964,
+       "rev": 406572,
        "share": 26
       },
       {
@@ -696,7 +649,7 @@
       {
        "name": "elimix",
        "rev": 223015,
-       "share": 15
+       "share": 14
       },
       {
        "name": "ООО \"ОРГАНИК трейд\"",
@@ -706,7 +659,7 @@
       {
        "name": "РусТорг",
        "rev": 101866,
-       "share": 7
+       "share": 6
       }
      ],
      "rising": [
@@ -732,7 +685,7 @@
        "url": "https://www.ozon.ru/product/2926694251/"
       }
      ],
-     "win_rev": 1536088
+     "win_rev": 1571577
     }
    }
   },
@@ -1198,16 +1151,15 @@
     "updated": "2026-10-23",
     "niche": {
      "name": "Детские салфетки для чистки зубов и дёсен",
-     "total": 7,
-     "win_rev": 828567,
-     "win_sales": 1106,
-     "win_n": 7,
-     "avg_price": 720,
-     "price_min": 242,
-     "price_med": 764,
+     "total": 8,
+     "win_rev": 1082086,
+     "win_sales": 1096,
+     "win_n": 8,
+     "avg_price": 939,
+     "price_min": 714,
+     "price_med": 770,
      "price_max": 1275,
-     "our_rev": 39254,
-     "our_rank": 4,
+     "our_rank": null,
      "top5": [
       {
        "name": "Детские влажные салфетки с ксилитом от кариеса 100 шт",
@@ -1218,12 +1170,28 @@
        "url": "https://www.wildberries.ru/catalog/205348527/detail.aspx"
       },
       {
-       "name": "Влажные салфетки напальчники для зубов собак и кошек, 50 шт",
-       "brand": "Spets",
-       "rev": 302584,
-       "price": 504,
+       "name": "Детские влажные салфетки с ксилитом от кариеса 40 шт без вкуса",
+       "brand": "Dr. Bormann",
+       "rev": 208519,
+       "price": 763,
        "rating": 5,
-       "url": "https://www.wildberries.ru/catalog/890074230/detail.aspx"
+       "url": "https://www.wildberries.ru/catalog/483002987/detail.aspx"
+      },
+      {
+       "name": "Детские влажные салфетки с ксилитом от кариеса 100 шт со вкусом груши",
+       "brand": "Dr. Bormann",
+       "rev": 198416,
+       "price": 1238,
+       "rating": 5,
+       "url": "https://www.wildberries.ru/catalog/775598720/detail.aspx"
+      },
+      {
+       "name": "Детские влажные салфетки с ксилитом от кариеса 100 шт без вкуса",
+       "brand": "Dr. Bormann",
+       "rev": 188422,
+       "price": 1219,
+       "rating": 5,
+       "url": "https://www.wildberries.ru/catalog/775598719/detail.aspx"
       },
       {
        "name": "Влажные салфетки детские с ксилитом от кариеса 40 шт",
@@ -1232,37 +1200,21 @@
        "price": 775,
        "rating": 5,
        "url": "https://www.wildberries.ru/catalog/195959204/detail.aspx"
-      },
-      {
-       "name": "Детские салфетки с ксилитом от кариеса 40 шт",
-       "brand": "АС-ФАРМ",
-       "rev": 22597,
-       "price": 764,
-       "rating": 5,
-       "url": "https://www.wildberries.ru/catalog/577316412/detail.aspx"
-      },
-      {
-       "name": "Салфетки детские с ксилитом от кариеса 40 шт",
-       "brand": "АС-ФАРМ",
-       "rev": 10310,
-       "price": 764,
-       "rating": 5,
-       "url": "https://www.wildberries.ru/catalog/549118429/detail.aspx"
       }
      ],
      "narrow": true,
      "segments": [
       {
        "label": "до 500",
-       "n": 1,
+       "n": 0,
        "sales_pct": 0,
-       "rev_pct": 5
+       "rev_pct": 0
       },
       {
        "label": "500–800",
        "n": 5,
-       "sales_pct": 77,
-       "rev_pct": 58
+       "sales_pct": 47,
+       "rev_pct": 36
       },
       {
        "label": "800–1100",
@@ -1272,9 +1224,9 @@
       },
       {
        "label": "1100–1500",
-       "n": 1,
-       "sales_pct": 23,
-       "rev_pct": 37
+       "n": 3,
+       "sales_pct": 53,
+       "rev_pct": 64
       },
       {
        "label": "1500₽+",
@@ -1283,120 +1235,74 @@
        "rev_pct": 0
       }
      ],
-     "free": {
-      "parent": "Для мам и малышей",
-      "items": [
-       {
-        "name": "Бомбочка для ванны",
-        "brands": 46,
-        "rev_per": 18553,
-        "rating": 4.84,
-        "opp": true
-       },
-       {
-        "name": "Влажные салфетки",
-        "brands": 351,
-        "rev_per": 12786,
-        "rating": 4.88,
-        "opp": false
-       },
-       {
-        "name": "Зубная щетка",
-        "brands": 251,
-        "rev_per": 11487,
-        "rating": 4.91,
-        "opp": false
-       },
-       {
-        "name": "Ножницы маникюрные",
-        "brands": 30,
-        "rev_per": 11434,
-        "rating": 4.92,
-        "opp": true
-       },
-       {
-        "name": "Зубная паста",
-        "brands": 175,
-        "rev_per": 11229,
-        "rating": 4.92,
-        "opp": true
-       },
-       {
-        "name": "Соль для ванн",
-        "brands": 94,
-        "rev_per": 10147,
-        "rating": 4.98,
-        "opp": true
-       }
-      ]
-     }
+     "our_rev": 39254
     },
     "market": {
      "brands": [
       {
-       "name": "АС-ФАРМ",
-       "rev": 380453,
-       "items": 4,
-       "share": 46
+       "name": "Dr. Bormann",
+       "rev": 595357,
+       "items": 3,
+       "share": 55
       },
       {
-       "name": "Spets",
-       "rev": 302584,
-       "items": 1,
-       "share": 37
+       "name": "АС-ФАРМ",
+       "rev": 341199,
+       "items": 3,
+       "share": 32
       },
       {
        "name": "odagig",
        "rev": 141251,
        "items": 1,
-       "share": 17
+       "share": 13
       },
       {
        "name": "eilimix",
        "rev": 4279,
        "items": 1,
-       "share": 1
+       "share": 0
       }
      ],
      "sellers": [
       {
-       "name": "ИП Шпиндовский А Е",
-       "rev": 308292,
-       "share": 37
+       "name": "ИП Шайдуллин Б Р",
+       "rev": 595357,
+       "share": 55
       },
       {
-       "name": "ООО Спетс",
-       "rev": 302584,
-       "share": 37
+       "name": "ИП Шпиндовский А Е",
+       "rev": 308292,
+       "share": 28
       },
       {
        "name": "ИП Дубасова О А",
        "rev": 141251,
-       "share": 17
-      },
-      {
-       "name": "АС-ФАРМ",
-       "rev": 39254,
-       "share": 5
+       "share": 13
       },
       {
        "name": "ООО Русторг",
        "rev": 22597,
-       "share": 3
+       "share": 2
       },
       {
        "name": "ИП Гордиенко А И",
        "rev": 10310,
        "share": 1
+      },
+      {
+       "name": "ИП Николаева Т С",
+       "rev": 4279,
+       "share": 0
       }
      ],
      "rising": [
       {
-       "name": "Влажные салфетки напальчники для зубов собак и кошек, 50 шт",
-       "brand": "Spets",
-       "sales": 618,
-       "comments": 1256,
-       "url": "https://www.wildberries.ru/catalog/890074230/detail.aspx"
+       "name": "Детские влажные салфетки с ксилитом от кариеса 40 шт без вку",
+       "brand": "Dr. Bormann",
+       "sales": 280,
+       "comments": 481,
+       "url": "https://www.wildberries.ru/catalog/483002987/detail.aspx"
       },
       {
        "name": "Детские влажные салфетки с ксилитом от кариеса 100 шт",
@@ -1413,7 +1319,7 @@
        "url": "https://www.wildberries.ru/catalog/195959204/detail.aspx"
       }
      ],
-     "win_rev": 828567
+     "win_rev": 1082086
     }
    }
   },

@@ -275,9 +275,9 @@ function nicheblock(n){
   h+=`<div class="mpstat"><div class="k">Прямых конкурентов</div><div class="v">${rub(n.total)}</div></div>`;
   h+=`<div class="mpstat"><div class="k">Выручка ниши / мес</div><div class="v">${rub(n.win_rev)} <small>₽</small></div></div>`;
   if(n.avg_price) h+=`<div class="mpstat"><div class="k">Средняя цена</div><div class="v">${rub(n.avg_price)} <small>₽</small></div></div>`;
-  h+=`<div class="mpstat"><div class="k">Наш товар / мес</div><div class="v">${rub(n.our_rev)} <small>₽</small></div></div>`;
+  if(n.our_rev!=null) h+=`<div class="mpstat"><div class="k">Этот товар / мес</div><div class="v">${rub(n.our_rev)} <small>₽</small></div></div>`;
   h+=`</div>`;
-  h+=`<div class="mpnote">Ниша по типу товара: <b style="color:var(--txt)">${n.name||n.path||''}</b>${n.our_rank?` · мы <b style="color:var(--txt)">${n.our_rank}-е из ${n.total}</b> по выручке`:''}</div>`;
+  h+=`<div class="mpnote">Ниша по типу товара: <b style="color:var(--txt)">${n.name||n.path||''}</b>${n.our_rank?` · этот товар <b style="color:var(--txt)">${n.our_rank}-е из ${n.total}</b> по выручке`:(n.our_rev!=null?` · этот товар вне топа ниши (низкие продажи сейчас)`:'')}</div>`;
   if(n.top5&&n.top5.length){
     h+=`<div class="mpsub"><span>Прямые конкуренты по выручке</span></div>`;
     h+=n.top5.map(c=>`<a class="nrow" href="${c.url}" target="_blank" rel="noopener"><span class="q">${c.name}<em>${c.brand}${c.rating?` · ★${c.rating}`:''}</em></span><span class="dem">${rub(c.price)} ₽</span><span class="pz">${rub(c.rev)} ₽/мес</span></a>`).join("");
