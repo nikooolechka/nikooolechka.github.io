@@ -277,7 +277,7 @@ function nicheblock(n){
   if(n.avg_price) h+=`<div class="mpstat"><div class="k">Средняя цена</div><div class="v">${rub(n.avg_price)} <small>₽</small></div></div>`;
   if(n.our_rev!=null) h+=`<div class="mpstat"><div class="k">Этот товар / мес</div><div class="v">${rub(n.our_rev)} <small>₽</small></div></div>`;
   h+=`</div>`;
-  h+=`<div class="mpnote">Ниша по типу товара: <b style="color:var(--txt)">${n.name||n.path||''}</b>${n.our_rank?` · этот товар <b style="color:var(--txt)">${n.our_rank}-е из ${n.total}</b> по выручке`:(n.our_rev!=null?` · этот товар вне топа ниши (низкие продажи сейчас)`:'')}</div>`;
+  h+=`<div class="mpnote">Ниша по типу товара: <b style="color:var(--txt)">${n.name||n.path||''}</b>${n.our_rank?` · этот товар <b style="color:var(--txt)">${n.our_rank}-е из ${n.total}</b> по выручке`:''}</div>`;
   if(n.top5&&n.top5.length){
     h+=`<div class="mpsub"><span>Прямые конкуренты по выручке</span></div>`;
     h+=n.top5.map(c=>`<a class="nrow" href="${c.url}" target="_blank" rel="noopener"><span class="q">${c.name}<em>${c.brand}${c.rating?` · ★${c.rating}`:''}</em></span><span class="dem">${rub(c.price)} ₽</span><span class="pz">${rub(c.rev)} ₽/мес</span></a>`).join("");
@@ -301,13 +301,14 @@ function sharebar(pct,color){return `<span class="shr"><i style="width:${Math.mi
 function marketblock(mk){
   if(!mk) return '';
   let h=`<div class="mpwrap">`;
+  const cnt=i=>i!=null?` <span style="color:var(--mut);font-weight:500;font-size:11px">${rub(i)} тов</span>`:'';
   if(mk.brands&&mk.brands.length){
-    h+=`<div class="mpsub"><span>Топ-бренды ниши · доля выручки</span></div>`;
-    h+=mk.brands.map(b=>`<div class="shrow"><span class="nm2">${b.name}</span>${sharebar(b.share)}<span class="pz">${b.share}%</span></div>`).join("");
+    h+=`<div class="mpsub"><span>Топ-бренды ниши · доля выручки</span><span class="r">из топ-100</span></div>`;
+    h+=mk.brands.map(b=>`<div class="shrow"><span class="nm2">${b.name}${cnt(b.items)}</span>${sharebar(b.share)}<span class="pz">${b.share}%</span></div>`).join("");
   }
   if(mk.sellers&&mk.sellers.length){
     h+=`<div class="mpsub"><span>Топ-продавцы ниши · доля выручки</span></div>`;
-    h+=mk.sellers.map(s=>`<div class="shrow"><span class="nm2">${s.name}</span>${sharebar(s.share,'linear-gradient(90deg,var(--violet),#b794f6)')}<span class="pz">${s.share}%</span></div>`).join("");
+    h+=mk.sellers.map(s=>`<div class="shrow"><span class="nm2">${s.name}${cnt(s.items)}</span>${sharebar(s.share,'linear-gradient(90deg,var(--violet),#b794f6)')}<span class="pz">${s.share}%</span></div>`).join("");
   }
   if(mk.rising&&mk.rising.length){
     h+=`<div class="mpsub"><span>Набирают обороты · молодые карточки с высокими продажами</span></div>`;

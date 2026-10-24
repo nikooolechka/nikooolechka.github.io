@@ -634,31 +634,37 @@
       {
        "name": "odagig",
        "rev": 434599,
+       "items": 2,
        "share": 28
       },
       {
        "name": "MUSH",
        "rev": 406572,
+       "items": 3,
        "share": 26
       },
       {
        "name": "Infantem dente",
        "rev": 262828,
+       "items": 1,
        "share": 17
       },
       {
        "name": "elimix",
        "rev": 223015,
+       "items": 3,
        "share": 14
       },
       {
        "name": "ООО \"ОРГАНИК трейд\"",
        "rev": 106255,
+       "items": 3,
        "share": 7
       },
       {
        "name": "РусТорг",
        "rev": 101866,
+       "items": 2,
        "share": 6
       }
      ],
@@ -1152,12 +1158,12 @@
     "niche": {
      "name": "Детские салфетки для чистки зубов и дёсен",
      "total": 8,
-     "win_rev": 1082086,
-     "win_sales": 1096,
+     "win_rev": 2296032,
+     "win_sales": 2699,
      "win_n": 8,
-     "avg_price": 939,
-     "price_min": 714,
-     "price_med": 770,
+     "avg_price": 878,
+     "price_min": 506,
+     "price_med": 764,
      "price_max": 1275,
      "our_rank": null,
      "top5": [
@@ -1235,27 +1241,27 @@
        "rev_pct": 0
       }
      ],
-     "our_rev": 39254
+     "our_rev": 180211
     },
     "market": {
      "brands": [
       {
+       "name": "АС-ФАРМ",
+       "rev": 1555145,
+       "items": 10,
+       "share": 68
+      },
+      {
        "name": "Dr. Bormann",
        "rev": 595357,
        "items": 3,
-       "share": 55
-      },
-      {
-       "name": "АС-ФАРМ",
-       "rev": 341199,
-       "items": 3,
-       "share": 32
+       "share": 26
       },
       {
        "name": "odagig",
        "rev": 141251,
        "items": 1,
-       "share": 13
+       "share": 6
       },
       {
        "name": "eilimix",
@@ -1266,33 +1272,39 @@
      ],
      "sellers": [
       {
-       "name": "ИП Шайдуллин Б Р",
-       "rev": 595357,
-       "share": 55
+       "name": "ИП Шпиндовский А Е",
+       "rev": 1522238,
+       "items": 8,
+       "share": 66
       },
       {
-       "name": "ИП Шпиндовский А Е",
-       "rev": 308292,
-       "share": 28
+       "name": "ИП Шайдуллин Б Р",
+       "rev": 595357,
+       "items": 3,
+       "share": 26
       },
       {
        "name": "ИП Дубасова О А",
        "rev": 141251,
-       "share": 13
+       "items": 1,
+       "share": 6
       },
       {
        "name": "ООО Русторг",
        "rev": 22597,
-       "share": 2
+       "items": 1,
+       "share": 1
       },
       {
        "name": "ИП Гордиенко А И",
        "rev": 10310,
-       "share": 1
+       "items": 1,
+       "share": 0
       },
       {
        "name": "ИП Николаева Т С",
        "rev": 4279,
+       "items": 1,
        "share": 0
       }
      ],
@@ -1319,7 +1331,7 @@
        "url": "https://www.wildberries.ru/catalog/195959204/detail.aspx"
       }
      ],
-     "win_rev": 1082086
+     "win_rev": 2296032
     }
    }
   },
