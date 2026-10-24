@@ -196,7 +196,17 @@
   .shrow .pz{color:var(--txt);font-weight:800;font-size:12.5px;width:40px;text-align:right}
   .empty{color:var(--mut);text-align:center;padding:50px 0}
   .foot{color:var(--mut);font-size:12px;text-align:center;margin-top:36px;opacity:.7}
-  @media(max-width:560px){h1{font-size:25px}.thumb{width:54px;height:54px}.open-btn{padding:8px 11px;font-size:11.5px}}
+  @media(max-width:560px){
+    h1{font-size:25px}.thumb{width:54px;height:54px}
+    /* шапка карточки: заголовок на всю ширину и течёт строками, кнопка — отдельной строкой снизу */
+    .head{flex-wrap:wrap;row-gap:10px;column-gap:12px}
+    .htxt{flex:1 1 auto;min-width:0;order:2}
+    .thumb{order:1}
+    .chev{order:3;margin-left:auto;align-self:flex-start}
+    .open-btn{order:4;flex:1 1 100%;justify-content:center;padding:9px 11px;font-size:12px}
+    .htxt .nm{font-size:15px;line-height:1.3}
+    .meta{font-size:12px;gap:7px}
+  }
   @media(max-width:360px){h1{font-size:21px}}
 </style>
 </head>
@@ -258,21 +268,31 @@ function comboChart(a){
       `<span class="cl"><b>${rub(x.u)} шт</b><em>${Math.round((x.r||0)/1000)}к ₽</em>${x.m}</span></div>`;
   }).join("")+`</div>`;
 }
-// --- блок «Анализ ниши» ---
+// --- блок «Анализ ниши» (узкая — прямые конкуренты того же типа товара) ---
 function nicheblock(n){
   if(!n) return '';
   let h=`<div class="mpwrap"><div class="mpstats">`;
-  h+=`<div class="mpstat"><div class="k">Товаров в нише</div><div class="v">${rub(n.total)}</div></div>`;
-  h+=`<div class="mpstat"><div class="k">Выручка топ-${n.win_n}/мес</div><div class="v">${rub(n.win_rev)} <small>₽</small></div></div>`;
-  if(n.avg_price) h+=`<div class="mpstat"><div class="k">Средний чек ниши</div><div class="v">${rub(n.avg_price)} <small>₽</small></div></div>`;
+  h+=`<div class="mpstat"><div class="k">Прямых конкурентов</div><div class="v">${rub(n.total)}</div></div>`;
+  h+=`<div class="mpstat"><div class="k">Выручка ниши / мес</div><div class="v">${rub(n.win_rev)} <small>₽</small></div></div>`;
+  if(n.avg_price) h+=`<div class="mpstat"><div class="k">Средняя цена</div><div class="v">${rub(n.avg_price)} <small>₽</small></div></div>`;
   h+=`<div class="mpstat"><div class="k">Наш товар / мес</div><div class="v">${rub(n.our_rev)} <small>₽</small></div></div>`;
   h+=`</div>`;
-  h+=`<div class="mpnote">Ниша: <b style="color:var(--txt)">${n.path}</b></div>`;
+  h+=`<div class="mpnote">Ниша по типу товара: <b style="color:var(--txt)">${n.name||n.path||''}</b>${n.our_rank?` · мы <b style="color:var(--txt)">${n.our_rank}-е из ${n.total}</b> по выручке`:''}</div>`;
   if(n.top5&&n.top5.length){
-    h+=`<div class="mpsub"><span>Топ-5 конкурентов ниши по выручке</span></div>`;
+    h+=`<div class="mpsub"><span>Прямые конкуренты по выручке</span></div>`;
     h+=n.top5.map(c=>`<a class="nrow" href="${c.url}" target="_blank" rel="noopener"><span class="q">${c.name}<em>${c.brand}${c.rating?` · ★${c.rating}`:''}</em></span><span class="dem">${rub(c.price)} ₽</span><span class="pz">${rub(c.rev)} ₽/мес</span></a>`).join("");
-    const lead=n.top5[0];
-    if(n.our_rev&&lead.rev) h+=`<div class="mpnote" style="margin-top:10px">Наш товар — <b style="color:var(--txt)">${rub(n.our_rev)} ₽/мес</b>, лидер ниши — <b style="color:var(--txt)">${rub(lead.rev)} ₽/мес</b>.</div>`;
+  }
+  // ценовые сегменты (по цене за упаковку)
+  if(n.segments&&n.segments.some(s=>s.n>0)){
+    h+=`<div class="mpsub"><span>Ценовые сегменты ниши · доля выручки</span><span class="r">цена за упаковку</span></div>`;
+    h+=n.segments.filter(s=>s.n>0).map(s=>`<div class="shrow"><span class="nm2">${s.label} <span style="color:var(--mut);font-weight:500">(${s.n})</span></span>${sharebar(s.rev_pct)}<span class="pz">${s.rev_pct}%</span></div>`).join("");
+    h+=`<div class="mpnote" style="font-size:11.5px">⚠️ Комплектации у конкурентов разные (кол-во штук/пачек) — цена за упаковку сравнивается условно, не напрямую.</div>`;
+  }
+  // свободные подниши рядом
+  if(n.free&&n.free.items&&n.free.items.length){
+    h+=`<div class="mpsub"><span>Свободные подниши рядом · категория «${n.free.parent}»</span></div>`;
+    h+=n.free.items.map(f=>`<div class="nrow"><span class="q">${f.opp?'<span style="color:var(--gold)">★ </span>':''}${f.name}<em>${rub(f.brands)} брендов · рейтинг ${f.rating}</em></span><span class="pz">${rub(f.rev_per)} ₽/товар</span></div>`).join("");
+    h+=`<div class="mpnote" style="font-size:11.5px"><span style="color:var(--gold)">★</span> — окно: мало брендов + высокая выручка на товар (меньше конкуренции).</div>`;
   }
   h+=`</div>`; return h;
 }

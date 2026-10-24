@@ -504,155 +504,235 @@
     "buyout": null,
     "updated": "2026-10-23",
     "niche": {
-     "name": "Средства гигиены полости рта",
-     "path": "Бытовая химия и гигиена/Личная гигиена/Гигиена полости рта/Средства гигиены полости рта",
-     "total": 59837,
-     "win_rev": 29796325,
-     "win_sales": 38392,
-     "win_n": 100,
-     "avg_price": 1058,
+     "name": "Детские салфетки для чистки зубов и дёсен",
+     "total": 14,
+     "win_rev": 1536088,
+     "win_sales": 1955,
+     "win_n": 14,
+     "avg_price": 807,
+     "price_min": 196,
+     "price_med": 747,
+     "price_max": 1544,
      "our_rev": 115292,
+     "our_rank": 5,
      "top5": [
       {
-       "name": "Ополаскиватель от неприятного запаха изо рта Halita 500мл / Ополаскива",
-       "brand": "Vitis",
-       "rev": 1457098,
-       "price": 1436,
-       "rating": 4.9,
-       "url": "https://www.ozon.ru/product/1751739341/"
+       "name": "Салфетки влажные детские с ксилитом для зубов и десен, 40 шт",
+       "brand": "Odagig",
+       "rev": 384263,
+       "price": 855,
+       "rating": 5,
+       "url": "https://www.ozon.ru/product/1347160639/"
       },
       {
-       "name": "CURAPROX Подарочный набор для ухода за гигиеной полости рта для взросл",
-       "brand": "Curaprox",
-       "rev": 1228341,
-       "price": 4102,
+       "name": "Салфетки для чистки зубов детские, зубная щетка детская от 0 для новор",
+       "brand": "—",
+       "rev": 262828,
+       "price": 694,
        "rating": 4.9,
-       "url": "https://www.ozon.ru/product/765663406/"
+       "url": "https://www.ozon.ru/product/1443864311/"
       },
       {
-       "name": "Ополаскиватель для полости рта Lacalut aktiv, 300мл х 2 шт",
-       "brand": "Lacalut",
-       "rev": 841332,
-       "price": 1290,
+       "name": "Детские влажные салфетки с ксилитом от кариеса 99 шт со вкусом груши",
+       "brand": "Dr. Bormann",
+       "rev": 235537,
+       "price": 1544,
        "rating": 4.9,
-       "url": "https://www.ozon.ru/product/1410900601/"
+       "url": "https://www.ozon.ru/product/3575558928/"
       },
       {
-       "name": "Мусс для ухода за зубами и деснами Biorepair Peribioma, 200 мл",
-       "brand": "Biorepair",
-       "rev": 806380,
-       "price": 1404,
-       "rating": 4.9,
-       "url": "https://www.ozon.ru/product/835677873/"
+       "name": "Детские влажные салфетки с ксилитом от кариеса без вкуса",
+       "brand": "Dr. Bormann",
+       "rev": 166427,
+       "price": 897,
+       "rating": 5,
+       "url": "https://www.ozon.ru/product/2926694251/"
       },
       {
-       "name": "Мусс для антибактериальной защиты зубов Biorepair Plus Mouthwash, 200 ",
-       "brand": "Biorepair",
-       "rev": 724124,
-       "price": 1391,
-       "rating": 4.9,
-       "url": "https://www.ozon.ru/product/1624099540/"
+       "name": "Влажные салфетки с ксилитом для чистки и прорезывания зубов eilimix",
+       "brand": "eilimix",
+       "rev": 66234,
+       "price": 766,
+       "rating": 4.8,
+       "url": "https://www.ozon.ru/product/5928750877/"
       }
-     ]
+     ],
+     "narrow": true,
+     "segments": [
+      {
+       "label": "до 500",
+       "n": 1,
+       "sales_pct": 1,
+       "rev_pct": 0
+      },
+      {
+       "label": "500–800",
+       "n": 8,
+       "sales_pct": 52,
+       "rev_pct": 42
+      },
+      {
+       "label": "800–1100",
+       "n": 3,
+       "sales_pct": 37,
+       "rev_pct": 39
+      },
+      {
+       "label": "1100–1500",
+       "n": 0,
+       "sales_pct": 0,
+       "rev_pct": 0
+      },
+      {
+       "label": "1500₽+",
+       "n": 2,
+       "sales_pct": 10,
+       "rev_pct": 18
+      }
+     ],
+     "free": {
+      "parent": "Гигиена полости рта",
+      "items": [
+       {
+        "name": "Ирригаторы",
+        "brands": 430,
+        "rev_per": 118293,
+        "rating": 4.62,
+        "opp": false
+       },
+       {
+        "name": "Электрические зубные щетки",
+        "brands": 328,
+        "rev_per": 95585,
+        "rating": 4.66,
+        "opp": true
+       },
+       {
+        "name": "Межзубные ершики",
+        "brands": 296,
+        "rev_per": 74524,
+        "rating": 4.66,
+        "opp": true
+       },
+       {
+        "name": "Зубные пасты и порошки",
+        "brands": 1632,
+        "rev_per": 63119,
+        "rating": 4.36,
+        "opp": false
+       },
+       {
+        "name": "Средства гигиены полости рта",
+        "brands": 1051,
+        "rev_per": 58964,
+        "rating": 4.67,
+        "opp": false
+       },
+       {
+        "name": "Зубные щетки",
+        "brands": 937,
+        "rev_per": 42807,
+        "rating": 4.66,
+        "opp": false
+       }
+      ]
+     }
     },
     "market": {
      "brands": [
       {
-       "name": "Curaprox",
-       "rev": 3826150,
-       "items": 10,
-       "share": 13
+       "name": "Odagig",
+       "rev": 434599,
+       "items": 2,
+       "share": 28
       },
       {
-       "name": "Vitis",
-       "rev": 3606952,
-       "items": 8,
-       "share": 12
+       "name": "Dr. Bormann",
+       "rev": 401964,
+       "items": 2,
+       "share": 26
       },
       {
-       "name": "President",
-       "rev": 3330236,
-       "items": 14,
-       "share": 11
+       "name": "—",
+       "rev": 364694,
+       "items": 3,
+       "share": 24
       },
       {
-       "name": "miradent",
-       "rev": 2305760,
-       "items": 5,
-       "share": 8
+       "name": "eilimix",
+       "rev": 223015,
+       "items": 3,
+       "share": 15
       },
       {
-       "name": "Listerine",
-       "rev": 2061760,
-       "items": 8,
+       "name": "Lovular",
+       "rev": 106255,
+       "items": 3,
        "share": 7
       },
       {
-       "name": "Biorepair",
-       "rev": 1853285,
-       "items": 3,
-       "share": 6
+       "name": "АС-ФАРМ",
+       "rev": 5561,
+       "items": 1,
+       "share": 0
       }
      ],
      "sellers": [
       {
-       "name": "Дизион",
-       "rev": 5912712,
-       "share": 20
+       "name": "odagig",
+       "rev": 434599,
+       "share": 28
       },
       {
-       "name": "Официальный представитель Curaprox",
-       "rev": 3826150,
-       "share": 13
+       "name": "MUSH",
+       "rev": 401964,
+       "share": 26
       },
       {
-       "name": "PRESIDENT OFFICIAL",
-       "rev": 3330236,
-       "share": 11
+       "name": "Infantem dente",
+       "rev": 262828,
+       "share": 17
       },
       {
-       "name": "Др.Тайсс Натурварен Рус",
-       "rev": 1858549,
-       "share": 6
+       "name": "elimix",
+       "rev": 223015,
+       "share": 15
       },
       {
-       "name": "Смарт Бьюти",
-       "rev": 1853285,
-       "share": 6
+       "name": "ООО \"ОРГАНИК трейд\"",
+       "rev": 106255,
+       "share": 7
       },
       {
-       "name": "Бьютолоджи",
-       "rev": 1472090,
-       "share": 5
+       "name": "РусТорг",
+       "rev": 101866,
+       "share": 7
       }
      ],
      "rising": [
       {
-       "name": "Индикатор зубного налета miradent Mira-2-Ton 10мл",
-       "brand": "miradent",
-       "sales": 730,
-       "comments": 3293,
-       "price": 880,
-       "url": "https://www.ozon.ru/product/1381134601/"
+       "name": "Салфетки влажные детские с ксилитом для зубов и десен, 40 шт",
+       "brand": "Odagig",
+       "sales": 448,
+       "comments": 1982,
+       "url": "https://www.ozon.ru/product/1347160639/"
       },
       {
-       "name": "мирадент Mira-2-Ton - индикатор зубного налета в таблетках 1",
-       "brand": "miradent",
-       "sales": 673,
-       "comments": 3293,
-       "price": 614,
-       "url": "https://www.ozon.ru/product/348295273/"
+       "name": "Салфетки для чистки зубов детские, зубная щетка детская от 0",
+       "brand": "—",
+       "sales": 416,
+       "comments": 1041,
+       "url": "https://www.ozon.ru/product/1443864311/"
       },
       {
-       "name": "Детский ополаскиватель для полости рта со вкусом яблока LACA",
-       "brand": "Lacalut",
-       "sales": 640,
-       "comments": 1914,
-       "price": 463,
-       "url": "https://www.ozon.ru/product/2762329480/"
+       "name": "Детские влажные салфетки с ксилитом от кариеса без вкуса",
+       "brand": "Dr. Bormann",
+       "sales": 199,
+       "comments": 1133,
+       "url": "https://www.ozon.ru/product/2926694251/"
       }
      ],
-     "win_rev": 29796325
+     "win_rev": 1536088
     }
    }
   },
@@ -1117,155 +1197,223 @@
     "buyout": null,
     "updated": "2026-10-23",
     "niche": {
-     "name": "Влажные салфетки",
-     "path": "Красота/Для мам и малышей/Влажные салфетки",
-     "total": 13051,
-     "win_rev": 115501937,
-     "win_sales": 165642,
-     "win_n": 100,
-     "avg_price": 962,
+     "name": "Детские салфетки для чистки зубов и дёсен",
+     "total": 7,
+     "win_rev": 828567,
+     "win_sales": 1106,
+     "win_n": 7,
+     "avg_price": 720,
+     "price_min": 242,
+     "price_med": 764,
+     "price_max": 1275,
      "our_rev": 39254,
+     "our_rank": 4,
      "top5": [
       {
-       "name": "Влажные салфетки для новорожденных без запаха PURE 6упх120шт",
-       "brand": "СВЕЖАЯ НОТА",
-       "rev": 15858333,
-       "price": 738,
+       "name": "Детские влажные салфетки с ксилитом от кариеса 100 шт",
+       "brand": "АС-ФАРМ",
+       "rev": 308292,
+       "price": 1275,
        "rating": 5,
-       "url": "https://www.wildberries.ru/catalog/172075284/detail.aspx"
+       "url": "https://www.wildberries.ru/catalog/205348527/detail.aspx"
       },
       {
-       "name": "Влажные детские салфетки без запаха деликатные 6упх120шт",
-       "brand": "СВЕЖАЯ НОТА",
-       "rev": 10898013,
-       "price": 721,
+       "name": "Влажные салфетки напальчники для зубов собак и кошек, 50 шт",
+       "brand": "Spets",
+       "rev": 302584,
+       "price": 504,
        "rating": 5,
-       "url": "https://www.wildberries.ru/catalog/831490362/detail.aspx"
+       "url": "https://www.wildberries.ru/catalog/890074230/detail.aspx"
       },
       {
-       "name": "Влажные детские салфетки Алоэ и Витамин Е 6х120 с клапаном",
-       "brand": "СВЕЖАЯ НОТА",
-       "rev": 8765381,
-       "price": 738,
+       "name": "Влажные салфетки детские с ксилитом от кариеса 40 шт",
+       "brand": "odagig",
+       "rev": 141251,
+       "price": 775,
        "rating": 5,
-       "url": "https://www.wildberries.ru/catalog/12073017/detail.aspx"
+       "url": "https://www.wildberries.ru/catalog/195959204/detail.aspx"
       },
       {
-       "name": "Детские влажные салфетки 0+ ультрамягкие 576 шт с клапаном",
-       "brand": "MOMI",
-       "rev": 7593109,
-       "price": 666,
+       "name": "Детские салфетки с ксилитом от кариеса 40 шт",
+       "brand": "АС-ФАРМ",
+       "rev": 22597,
+       "price": 764,
        "rating": 5,
-       "url": "https://www.wildberries.ru/catalog/244416663/detail.aspx"
+       "url": "https://www.wildberries.ru/catalog/577316412/detail.aspx"
       },
       {
-       "name": "Влажные детские салфетки с клапаном для новорожденных 6уп х 120 720 шт",
-       "brand": "Aura",
-       "rev": 7202707,
-       "price": 667,
+       "name": "Салфетки детские с ксилитом от кариеса 40 шт",
+       "brand": "АС-ФАРМ",
+       "rev": 10310,
+       "price": 764,
        "rating": 5,
-       "url": "https://www.wildberries.ru/catalog/175367528/detail.aspx"
+       "url": "https://www.wildberries.ru/catalog/549118429/detail.aspx"
       }
-     ]
+     ],
+     "narrow": true,
+     "segments": [
+      {
+       "label": "до 500",
+       "n": 1,
+       "sales_pct": 0,
+       "rev_pct": 5
+      },
+      {
+       "label": "500–800",
+       "n": 5,
+       "sales_pct": 77,
+       "rev_pct": 58
+      },
+      {
+       "label": "800–1100",
+       "n": 0,
+       "sales_pct": 0,
+       "rev_pct": 0
+      },
+      {
+       "label": "1100–1500",
+       "n": 1,
+       "sales_pct": 23,
+       "rev_pct": 37
+      },
+      {
+       "label": "1500₽+",
+       "n": 0,
+       "sales_pct": 0,
+       "rev_pct": 0
+      }
+     ],
+     "free": {
+      "parent": "Для мам и малышей",
+      "items": [
+       {
+        "name": "Бомбочка для ванны",
+        "brands": 46,
+        "rev_per": 18553,
+        "rating": 4.84,
+        "opp": true
+       },
+       {
+        "name": "Влажные салфетки",
+        "brands": 351,
+        "rev_per": 12786,
+        "rating": 4.88,
+        "opp": false
+       },
+       {
+        "name": "Зубная щетка",
+        "brands": 251,
+        "rev_per": 11487,
+        "rating": 4.91,
+        "opp": false
+       },
+       {
+        "name": "Ножницы маникюрные",
+        "brands": 30,
+        "rev_per": 11434,
+        "rating": 4.92,
+        "opp": true
+       },
+       {
+        "name": "Зубная паста",
+        "brands": 175,
+        "rev_per": 11229,
+        "rating": 4.92,
+        "opp": true
+       },
+       {
+        "name": "Соль для ванн",
+        "brands": 94,
+        "rev_per": 10147,
+        "rating": 4.98,
+        "opp": true
+       }
+      ]
+     }
     },
     "market": {
      "brands": [
       {
-       "name": "СВЕЖАЯ НОТА",
-       "rev": 74579973,
-       "items": 17,
-       "share": 65
-      },
-      {
-       "name": "MOMI",
-       "rev": 9502300,
-       "items": 5,
-       "share": 8
-      },
-      {
-       "name": "Aura",
-       "rev": 9307212,
-       "items": 2,
-       "share": 8
-      },
-      {
-       "name": "СОЛНЦЕ И ЛУНА",
-       "rev": 5811898,
-       "items": 2,
-       "share": 5
-      },
-      {
-       "name": "FRESHLAND",
-       "rev": 4409645,
-       "items": 15,
-       "share": 4
-      },
-      {
-       "name": "WHITE WHALE",
-       "rev": 2214987,
+       "name": "АС-ФАРМ",
+       "rev": 380453,
        "items": 4,
-       "share": 2
+       "share": 46
+      },
+      {
+       "name": "Spets",
+       "rev": 302584,
+       "items": 1,
+       "share": 37
+      },
+      {
+       "name": "odagig",
+       "rev": 141251,
+       "items": 1,
+       "share": 17
+      },
+      {
+       "name": "eilimix",
+       "rev": 4279,
+       "items": 1,
+       "share": 1
       }
      ],
      "sellers": [
       {
-       "name": "ООО Зеттек",
-       "rev": 76407460,
-       "share": 66
+       "name": "ИП Шпиндовский А Е",
+       "rev": 308292,
+       "share": 37
       },
       {
-       "name": "ООО Коттон Клаб",
-       "rev": 15119110,
-       "share": 13
+       "name": "ООО Спетс",
+       "rev": 302584,
+       "share": 37
       },
       {
-       "name": "ООО НК Джакс",
-       "rev": 9502300,
-       "share": 8
+       "name": "ИП Дубасова О А",
+       "rev": 141251,
+       "share": 17
       },
       {
-       "name": "ООО Авангард",
-       "rev": 6222068,
+       "name": "АС-ФАРМ",
+       "rev": 39254,
        "share": 5
       },
       {
-       "name": "ООО Гранд А.в.",
-       "rev": 4409645,
-       "share": 4
+       "name": "ООО Русторг",
+       "rev": 22597,
+       "share": 3
       },
       {
-       "name": "ООО Амальфи",
-       "rev": 1079006,
+       "name": "ИП Гордиенко А И",
+       "rev": 10310,
        "share": 1
       }
      ],
      "rising": [
       {
-       "name": "Влажные детские салфетки без запаха деликатные 12упх120шт",
-       "brand": "СВЕЖАЯ НОТА",
-       "sales": 3829,
-       "comments": 1573,
-       "price": 1398,
-       "url": "https://www.wildberries.ru/catalog/1241847263/detail.aspx"
+       "name": "Влажные салфетки напальчники для зубов собак и кошек, 50 шт",
+       "brand": "Spets",
+       "sales": 618,
+       "comments": 1256,
+       "url": "https://www.wildberries.ru/catalog/890074230/detail.aspx"
       },
       {
-       "name": "Детские влажные салфетки 0+ Успокаивающие 288шт с клапаном",
-       "brand": "MOMI",
-       "sales": 3374,
-       "comments": 5153,
-       "price": 431,
-       "url": "https://www.wildberries.ru/catalog/800049271/detail.aspx"
+       "name": "Детские влажные салфетки с ксилитом от кариеса 100 шт",
+       "brand": "АС-ФАРМ",
+       "sales": 252,
+       "comments": 3128,
+       "url": "https://www.wildberries.ru/catalog/205348527/detail.aspx"
       },
       {
-       "name": "Влажные детские полотенца XXL ультрамягкие 0+ 4уп х 60шт",
-       "brand": "СВЕЖАЯ НОТА",
-       "sales": 2363,
-       "comments": 7868,
-       "price": 651,
-       "url": "https://www.wildberries.ru/catalog/831925675/detail.aspx"
+       "name": "Влажные салфетки детские с ксилитом от кариеса 40 шт",
+       "brand": "odagig",
+       "sales": 185,
+       "comments": 2672,
+       "url": "https://www.wildberries.ru/catalog/195959204/detail.aspx"
       }
      ],
-     "win_rev": 115501937
+     "win_rev": 828567
     }
    }
   },
