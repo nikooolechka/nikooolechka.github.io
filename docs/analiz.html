@@ -274,7 +274,7 @@ function comboChart(a){
 // --- блок «Анализ ниши» (узкая — прямые конкуренты того же типа товара) ---
 function nicheblock(n){
   if(!n) return '';
-  let h=`<div class="mpwrap"><div class="mpstats">`;
+  let h=`<div class="mpwrap">`+WARN+`<div class="mpstats">`;
   h+=`<div class="mpstat"><div class="k">Прямых конкурентов</div><div class="v">${rub(n.total)}</div></div>`;
   h+=`<div class="mpstat"><div class="k">Выручка ниши / мес</div><div class="v">${rub(n.win_rev)} <small>₽</small></div></div>`;
   if(n.avg_price) h+=`<div class="mpstat"><div class="k">Средняя цена</div><div class="v">${rub(n.avg_price)} <small>₽</small></div></div>`;
@@ -297,14 +297,13 @@ function nicheblock(n){
     h+=n.free.items.map(f=>`<div class="nrow"><span class="q">${f.opp?'<span style="color:var(--gold)">★ </span>':''}${f.name}<em>${rub(f.brands)} брендов · рейтинг ${f.rating}</em></span><span class="pz">${rub(f.rev_per)} ₽/товар</span></div>`).join("");
     h+=`<div class="mpnote" style="font-size:11.5px"><span style="color:var(--gold)">★</span> — окно: мало брендов + высокая выручка на товар (меньше конкуренции).</div>`;
   }
-  h+=WARN;
   h+=`</div>`; return h;
 }
 function sharebar(pct,color){return `<span class="shr"><i style="width:${Math.min(100,pct)}%;background:${color||'linear-gradient(90deg,var(--cyan),var(--cyan2))'}"></i></span>`;}
 // --- блок «Топ бренды и продавцы» + восходящий тренд ---
 function marketblock(mk){
   if(!mk) return '';
-  let h=`<div class="mpwrap">`;
+  let h=`<div class="mpwrap">`+WARN;
   const cnt=i=>i!=null?` <span style="color:var(--mut);font-weight:500;font-size:11px">${rub(i)} тов</span>`:'';
   if(mk.brands&&mk.brands.length){
     h+=`<div class="mpsub"><span>Топ-бренды ниши · доля выручки</span><span class="r">из топ-100</span></div>`;
@@ -318,12 +317,11 @@ function marketblock(mk){
     h+=`<div class="mpsub"><span>Набирают обороты · молодые карточки с высокими продажами</span></div>`;
     h+=mk.rising.map(r=>`<a class="nrow" href="${r.url}" target="_blank" rel="noopener"><span class="q">${r.name}<em>${r.brand} · ${rub(r.comments)} отз</em></span><span class="pz">${rub(r.sales)} шт/мес</span></a>`).join("");
   }
-  h+=WARN;
   h+=`</div>`; return h;
 }
 function mpblock(m){
   if(!m) return '';
-  let h=`<div class="mpwrap">`;
+  let h=`<div class="mpwrap">`+WARN;
   // верхние показатели
   h+=`<div class="mpstats">`;
   h+=`<div class="mpstat"><div class="k">Продаж за 30 дней</div><div class="v">${rub(m.sales30_u)} <small>шт</small></div></div>`;
@@ -373,7 +371,6 @@ function mpblock(m){
     h+=`<div class="mpsub"><span>Топ запросов, по которым находят товар</span></div>`;
     h+=m.keywords.map(k=>`<div class="kwrow"><span class="q">${k.q}</span><span class="dem">${rub(k.total)} запр/мес</span><span class="pz">поз. ~${k.pos}</span></div>`).join("");
   }
-  h+=WARN;
   h+=`</div>`;
   return h;
 }
