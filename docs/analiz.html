@@ -306,13 +306,18 @@ function marketblock(mk){
   if(!mk) return '';
   let h=`<div class="mpwrap">`+WARN;
   const cnt=i=>i!=null?` <span style="color:var(--mut);font-weight:500;font-size:11px">${rub(i)} тов</span>`:'';
-  if(mk.brands&&mk.brands.length){
-    h+=`<div class="mpsub"><span>Топ-бренды ниши · доля выручки</span><span class="r">из топ-100</span></div>`;
-    h+=mk.brands.map(b=>`<div class="shrow"><span class="nm2">${b.name}${cnt(b.items)}</span>${sharebar(b.share)}<span class="pz">${b.share}%</span></div>`).join("");
-  }
-  if(mk.sellers&&mk.sellers.length){
-    h+=`<div class="mpsub"><span>Топ-продавцы ниши · доля выручки</span></div>`;
-    h+=mk.sellers.map(s=>`<div class="shrow"><span class="nm2">${s.name}${cnt(s.items)}</span>${sharebar(s.share,'linear-gradient(90deg,var(--violet),#b794f6)')}<span class="pz">${s.share}%</span></div>`).join("");
+  // бренды (слева) и продавцы (справа) — в одну горизонтальную строку, чтобы не занимать место
+  if((mk.brands&&mk.brands.length)||(mk.sellers&&mk.sellers.length)){
+    h+=`<div class="mprow">`;
+    if(mk.brands&&mk.brands.length){
+      h+=`<div class="mphalf"><div class="mpsub"><span>Топ-бренды · доля выручки</span><span class="r">из топ-100</span></div>`+
+         mk.brands.map(b=>`<div class="shrow"><span class="nm2">${b.name}${cnt(b.items)}</span>${sharebar(b.share)}<span class="pz">${b.share}%</span></div>`).join("")+`</div>`;
+    }
+    if(mk.sellers&&mk.sellers.length){
+      h+=`<div class="mphalf"><div class="mpsub"><span>Топ-продавцы · доля выручки</span></div>`+
+         mk.sellers.map(s=>`<div class="shrow"><span class="nm2">${s.name}${cnt(s.items)}</span>${sharebar(s.share,'linear-gradient(90deg,var(--violet),#b794f6)')}<span class="pz">${s.share}%</span></div>`).join("")+`</div>`;
+    }
+    h+=`</div>`;
   }
   if(mk.rising&&mk.rising.length){
     h+=`<div class="mpsub"><span>Набирают обороты · молодые карточки с высокими продажами</span></div>`;
