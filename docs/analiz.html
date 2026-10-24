@@ -172,6 +172,8 @@
   .chart .col .vlabel{font-size:9px;color:var(--txt);font-weight:700;margin-bottom:3px;opacity:.9}
   .axis{display:flex;justify-content:space-between;font-size:10px;color:var(--mut);opacity:.7;margin-top:5px}
   .mpnote{font-size:12.5px;color:var(--mut);margin-top:7px}
+  .mpwarn{font-size:11.5px;color:#ffb3bd;background:linear-gradient(100deg,rgba(255,107,125,.16),transparent);
+    border:1px solid rgba(255,107,125,.35);border-radius:10px;padding:9px 12px;margin-top:14px;font-weight:600;line-height:1.4}
   .oosbox{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#ffd9de;
     background:linear-gradient(100deg,rgba(255,107,125,.14),transparent);border:1px solid rgba(255,107,125,.28);
     border-radius:12px;padding:9px 14px}
@@ -240,6 +242,7 @@ const gaps=arr=>(arr||[]).map(g=>`<div class="gap"><div class="c">${g.claim}</di
 const chips=arr=>(arr&&arr.length)?`<div class="chips">`+arr.map(x=>`<span class="chip">${x}</span>`).join("")+`</div>`:'<div style="color:var(--mut);font-size:13px">Других вариантов под этой карточкой не выявлено.</div>';
 const rub=n=>(n||0).toLocaleString('ru-RU');
 const dmy=d=>d.slice(3)+'.'+d.slice(0,2);   // "MM-DD" -> "DD.MM"
+const WARN='<div class="mpwarn">⚠️ MPStats может некорректно считывать продажи в шт. и ₽ (особенно по склейкам) — доверять этому источнику на 100% нельзя.</div>';
 function barChart(arr,valKey,cls,labelFn,titleFn){
   const max=Math.max(1,...arr.map(x=>x[valKey]||0));
   return `<div class="chart ${cls||''}">`+arr.map(x=>{
@@ -294,6 +297,7 @@ function nicheblock(n){
     h+=n.free.items.map(f=>`<div class="nrow"><span class="q">${f.opp?'<span style="color:var(--gold)">★ </span>':''}${f.name}<em>${rub(f.brands)} брендов · рейтинг ${f.rating}</em></span><span class="pz">${rub(f.rev_per)} ₽/товар</span></div>`).join("");
     h+=`<div class="mpnote" style="font-size:11.5px"><span style="color:var(--gold)">★</span> — окно: мало брендов + высокая выручка на товар (меньше конкуренции).</div>`;
   }
+  h+=WARN;
   h+=`</div>`; return h;
 }
 function sharebar(pct,color){return `<span class="shr"><i style="width:${Math.min(100,pct)}%;background:${color||'linear-gradient(90deg,var(--cyan),var(--cyan2))'}"></i></span>`;}
@@ -314,6 +318,7 @@ function marketblock(mk){
     h+=`<div class="mpsub"><span>Набирают обороты · молодые карточки с высокими продажами</span></div>`;
     h+=mk.rising.map(r=>`<a class="nrow" href="${r.url}" target="_blank" rel="noopener"><span class="q">${r.name}<em>${r.brand} · ${rub(r.comments)} отз</em></span><span class="pz">${rub(r.sales)} шт/мес</span></a>`).join("");
   }
+  h+=WARN;
   h+=`</div>`; return h;
 }
 function mpblock(m){
@@ -368,6 +373,7 @@ function mpblock(m){
     h+=`<div class="mpsub"><span>Топ запросов, по которым находят товар</span></div>`;
     h+=m.keywords.map(k=>`<div class="kwrow"><span class="q">${k.q}</span><span class="dem">${rub(k.total)} запр/мес</span><span class="pz">поз. ~${k.pos}</span></div>`).join("");
   }
+  h+=WARN;
   h+=`</div>`;
   return h;
 }
