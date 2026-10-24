@@ -371,6 +371,7 @@ function mpblock(m){
     h+=`<div class="mpsub"><span>Топ запросов, по которым находят товар</span></div>`;
     h+=m.keywords.map(k=>`<div class="kwrow"><span class="q">${k.q}</span><span class="dem">${rub(k.total)} запр/мес</span><span class="pz">поз. ~${k.pos}</span></div>`).join("");
   }
+  if(m.no_niche_reason) h+=`<div class="mpnote" style="font-size:12px;margin-top:12px">ℹ️ ${m.no_niche_reason}</div>`;
   h+=`</div>`;
   return h;
 }
