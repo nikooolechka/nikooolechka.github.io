@@ -113,6 +113,53 @@
   .fchip.stm.active{background:linear-gradient(100deg,var(--violet),#b794f6);box-shadow:0 0 22px -4px var(--violet)}
   .fchip.mpbtn.active{background:linear-gradient(100deg,var(--green),#2ee6c8);box-shadow:0 0 22px -4px var(--green)}
   .item.hide{display:none}
+  /* ---- вложенные аккордеоны внутри карточки ---- */
+  .acc{margin-top:14px;border:1px solid var(--line);border-radius:14px;background:var(--glass2);overflow:hidden;transition:border-color .3s}
+  .acc-head{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;user-select:none}
+  .acc-ic{font-size:16px;flex:0 0 auto}
+  .acc-t{font-weight:800;font-size:14.5px;color:var(--txt);flex:0 0 auto;letter-spacing:-.2px}
+  .acc-meta{flex:1;color:var(--mut);font-size:12px;min-width:0}
+  .acc-chev{color:var(--mut);font-size:16px;transition:transform .35s;flex:0 0 auto}
+  .acc.open{border-color:rgba(46,230,200,.32)}
+  .acc.open .acc-chev{transform:rotate(180deg);color:var(--cyan)}
+  .acc-body{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.2,.7,.2,1)}
+  .acc-in{padding:0 16px 14px}
+  .mpwrap{padding-top:4px}
+  /* ---- MPStats: продажи и рынок ---- */
+  .mp{border:1px solid rgba(25,182,255,.28);border-radius:18px;padding:8px 16px 18px;margin-top:22px;
+    background:linear-gradient(160deg,rgba(25,182,255,.11),rgba(139,92,246,.05) 55%,transparent)}
+  .mp h3{color:var(--cyan2)}
+  .mp h3 .src{font-size:10px;font-weight:700;letter-spacing:.4px;color:var(--mut);opacity:.8;text-transform:none}
+  .mpstats{display:flex;flex-wrap:wrap;gap:10px;margin:4px 0 2px}
+  .mpstat{flex:1 1 130px;background:var(--glass2);border:1px solid var(--line);border-radius:13px;padding:10px 13px}
+  .mpstat .k{font-size:10.5px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;font-weight:700;margin-bottom:3px}
+  .mpstat .v{font-size:19px;font-weight:850;color:var(--txt);line-height:1.1}
+  .mpstat .v small{font-size:12px;color:var(--mut);font-weight:600}
+  .mpsub{font-size:11.5px;font-weight:800;letter-spacing:.3px;color:var(--mut);text-transform:uppercase;
+    margin:17px 0 9px;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+  .mpsub .r{color:var(--cyan);font-weight:700;text-transform:none;letter-spacing:0}
+  .chart{display:flex;align-items:flex-end;gap:3px;height:94px}
+  .chart .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;min-width:0;height:100%}
+  .chart .col i{width:100%;max-width:26px;border-radius:4px 4px 2px 2px;min-height:2px;
+    background:linear-gradient(180deg,var(--cyan),var(--cyan2));box-shadow:0 0 12px -4px var(--cyan2)}
+  .chart.month .col i{background:linear-gradient(180deg,var(--green),var(--cyan));box-shadow:0 0 12px -4px var(--green)}
+  .chart.rev .col i{background:linear-gradient(180deg,var(--violet),#b794f6);box-shadow:0 0 12px -4px var(--violet)}
+  .chart .col .cl{font-size:9.5px;color:var(--mut);font-weight:700;margin-top:5px;white-space:nowrap;text-align:center;line-height:1.25}
+  .chart .col .cl b{display:block;color:var(--txt);font-size:11px}
+  .chart .col .cl em{display:block;font-style:normal;color:var(--mut);font-size:9px;opacity:.85}
+  .chart .col .vlabel{font-size:9px;color:var(--txt);font-weight:700;margin-bottom:3px;opacity:.9}
+  .axis{display:flex;justify-content:space-between;font-size:10px;color:var(--mut);opacity:.7;margin-top:5px}
+  .mpnote{font-size:12.5px;color:var(--mut);margin-top:7px}
+  .oosbox{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:#ffd9de;
+    background:linear-gradient(100deg,rgba(255,107,125,.14),transparent);border:1px solid rgba(255,107,125,.28);
+    border-radius:12px;padding:9px 14px}
+  .kwrow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+  .kwrow:last-child{border-bottom:none}
+  .kwrow .q{flex:1;color:var(--txt);font-weight:600}
+  .kwrow .dem{color:var(--mut);font-size:12px;white-space:nowrap}
+  .kwrow .pz{color:var(--cyan);font-weight:800;white-space:nowrap;font-size:13px}
+  .postat{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--txt);margin-bottom:9px}
+  .postat .up{color:var(--green)}.postat .down{color:var(--red)}
   .empty{color:var(--mut);text-align:center;padding:50px 0}
   .foot{color:var(--mut);font-size:12px;text-align:center;margin-top:36px;opacity:.7}
   @media(max-width:560px){h1{font-size:25px}.thumb{width:54px;height:54px}.open-btn{padding:8px 11px;font-size:11.5px}}
@@ -147,6 +194,67 @@ const ul=(arr,cls)=>`<ul class="${cls||''}">`+(arr||[]).map(x=>`<li>${x}</li>`).
 const cplx=arr=>`<ul class="cplx">`+(arr||[]).map(c=>`<li>${c.t}${c.n?`<span class="note">${c.n}</span>`:''}</li>`).join("")+`</ul>`;
 const gaps=arr=>(arr||[]).map(g=>`<div class="gap"><div class="c">${g.claim}</div><div class="r">${g.reality}</div></div>`).join("");
 const chips=arr=>(arr&&arr.length)?`<div class="chips">`+arr.map(x=>`<span class="chip">${x}</span>`).join("")+`</div>`:'<div style="color:var(--mut);font-size:13px">Других вариантов под этой карточкой не выявлено.</div>';
+const rub=n=>(n||0).toLocaleString('ru-RU');
+function barChart(arr,valKey,cls,labelFn,titleFn){
+  const max=Math.max(1,...arr.map(x=>x[valKey]||0));
+  return `<div class="chart ${cls||''}">`+arr.map(x=>{
+    const v=x[valKey]||0, h=Math.round(v/max*100);
+    return `<div class="col" title="${titleFn?titleFn(x):''}"><i style="height:${h}%"></i>${labelFn?`<span class="cl">${labelFn(x)}</span>`:''}</div>`;
+  }).join("")+`</div>`;
+}
+function mpblock(m){
+  if(!m) return '';
+  let h=`<div class="mpwrap">`;
+  // верхние показатели
+  h+=`<div class="mpstats">`;
+  h+=`<div class="mpstat"><div class="k">Продаж за 30 дней</div><div class="v">${rub(m.sales30_u)} <small>шт</small></div></div>`;
+  h+=`<div class="mpstat"><div class="k">Выручка за 30 дней</div><div class="v">${rub(m.sales30_r)} <small>₽</small></div></div>`;
+  if(m.balance!=null) h+=`<div class="mpstat"><div class="k">В наличии</div><div class="v">${rub(m.balance)} <small>шт</small></div></div>`;
+  if(m.first_date) h+=`<div class="mpstat"><div class="k">На площадке с</div><div class="v" style="font-size:15px">${m.first_date}</div></div>`;
+  if(m.buyout!=null) h+=`<div class="mpstat"><div class="k">% выкупа</div><div class="v">${m.buyout}%</div></div>`;
+  h+=`</div>`;
+  // продажи по дням
+  if(m.daily&&m.daily.length){
+    const a=m.daily;
+    h+=`<div class="mpsub"><span>Продажи по дням · 30 дней</span><span class="r">итого ${rub(m.sales30_u)} шт</span></div>`;
+    h+=barChart(a,'u','',null,x=>`${x.d}: ${x.u} шт · ${rub(x.r)} ₽`);
+    h+=`<div class="axis"><span>${a[0].d}</span><span>${a[a.length-1].d}</span></div>`;
+  }
+  // помесячно: продажи
+  if(m.monthly&&m.monthly.length){
+    h+=`<div class="mpsub"><span>Продажи по месяцам · полгода</span></div>`;
+    h+=barChart(m.monthly,'u','month',x=>`<b>${rub(x.u)}</b><em>${x.m}</em>`,x=>`${x.m}: ${rub(x.u)} шт · ${rub(x.r)} ₽`);
+    h+=`<div class="mpsub"><span>Выручка по месяцам · полгода</span></div>`;
+    h+=barChart(m.monthly,'r','rev',x=>`<b>${Math.round((x.r||0)/1000)}к</b><em>${x.m}</em>`,x=>`${x.m}: ${rub(x.r)} ₽`);
+  }
+  // нет в наличии
+  if(m.oos&&m.oos.length){
+    h+=`<div class="mpsub"><span>Периоды «нет в наличии» · полгода</span></div>`;
+    h+=`<div class="oosbox">📦 ${m.oos.join(' · ')}</div>`;
+  }
+  // рост отзывов
+  if(m.reviews_growth&&m.reviews_growth.length){
+    const r=m.reviews_growth, net=(r[r.length-1].c||0)-(r[0].c||0);
+    h+=`<div class="mpsub"><span>Рост числа отзывов · полгода</span><span class="r">+${rub(net)} за полгода</span></div>`;
+    h+=barChart(r,'c','month',x=>`<b>${rub(x.c)}</b><em>${x.m}${x.delta!=null?' +'+x.delta:''}</em>`,x=>`${x.m}: ${rub(x.c)} отзывов${x.delta!=null?' (+'+x.delta+')':''}`);
+  }
+  // позиция в категории
+  if(m.position&&m.position.length){
+    const p=m.position, first=p[0].p, last=p[p.length-1].p;
+    const better=last<first;  // меньше = выше в категории
+    const inv=p.map(x=>({p:x.p,v:Math.max(1,(Math.max(...p.map(y=>y.p))-x.p+1))}));
+    h+=`<div class="mpsub"><span>Позиция в категории · 30 дней</span></div>`;
+    h+=`<div class="postat">${first} → ${last} место <span class="${better?'up':'down'}">${better?'↑ растёт':'↓ падает'}</span></div>`;
+    h+=barChart(inv,'v','',null,null);
+  }
+  // ключи
+  if(m.keywords&&m.keywords.length){
+    h+=`<div class="mpsub"><span>Топ запросов, по которым находят товар</span></div>`;
+    h+=m.keywords.map(k=>`<div class="kwrow"><span class="q">${k.q}</span><span class="dem">${rub(k.total)} запр/мес</span><span class="pz">поз. ~${k.pos}</span></div>`).join("");
+  }
+  h+=`</div>`;
+  return h;
+}
 function card(p,i){
   const price = p.price!=null ? `<span class="price">${p.price.toLocaleString('ru-RU')} ₽${p.price_old?`<span class="old">${p.price_old.toLocaleString('ru-RU')} ₽</span>`:''}</span>` : '';
   return `<div class="item" data-platform="${p.platform||''}" data-category="${(p.category||'').replace(/"/g,'&quot;')}" data-stm="${p.is_stm?'1':'0'}" style="animation-delay:${i*90}ms">
@@ -163,29 +271,51 @@ function card(p,i){
     <div class="body"><div class="inner"><div class="sep"></div>
       <div class="sec"><h3><span class="bar"></span>Кто покупает и зачем</h3><div class="ca">${p.ca}</div></div>
       <div class="sec"><h3><span class="bar"></span>Что обещает продавец <span class="tag claim">из инфографики и описания</span></h3>${ul(p.seller_claims,'claimlist')}</div>
-      <div class="sec"><h3><span class="bar"></span>Что говорят покупатели <span class="tag rev">по ${p.reviews_total.toLocaleString('ru-RU')} отзывам</span></h3>
-        ${p.stars ? (p.stars_collected && p.stars_collected < p.reviews_total ? `<div class="subh" style="margin-top:4px">Разбивка по ${p.stars_collected} собранным отзывам из ${p.reviews_total.toLocaleString('ru-RU')}</div>` : '') + stars(p.stars) : ''}
-        <div style="color:var(--mut);font-size:12px;margin-top:8px">${p.stars_note||''}</div>
-        <div class="subh" style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:nowrap">
-          <span>За что хвалят</span>
-          ${p.processed_count?`<span class="procbadge">${p.processed_count.toLocaleString('ru-RU')} отз.${p.processed_period?' · '+p.processed_period:''}</span>`:''}
-        </div>${ul(p.praise)}
-      </div>
-      <div class="sec"><h3><span class="bar"></span>На что жалуются <span class="tag rev">по отзывам</span></h3>
-        ${p.neg_total ? `<div class="negbadge"><b>${p.neg_total.toLocaleString('ru-RU')}</b> отзывов на 1–3★ · это <b>${p.neg_share}</b> от всех ${p.reviews_total.toLocaleString('ru-RU')}</div>` : ''}
-        ${cplx(p.complaints)}
-      </div>
-      <div class="sec"><h3><span class="bar"></span>Слабые места: обещание ↔ реальность</h3>${gaps(p.gaps)}</div>
-      <div class="sec"><h3><span class="bar"></span>Другие товары в этой склейке</h3>${chips(p.skleyka)}</div>
-      <div class="ideal"><h3><span class="bar"></span>🎯 Каким стоило бы сделать товар</h3>${ul(p.ideal)}</div>
+
+      <div class="acc"><div class="acc-head" onclick="toggleAcc(this,event)"><span class="acc-ic">📝</span><span class="acc-t">Анализ отзывов</span><span class="acc-meta">по ${p.reviews_total.toLocaleString('ru-RU')} отзывам</span><span class="acc-chev">▾</span></div>
+      <div class="acc-body"><div class="acc-in">
+        <div class="sec" style="margin-top:6px"><h3><span class="bar"></span>Что говорят покупатели</h3>
+          ${p.stars ? (p.stars_collected && p.stars_collected < p.reviews_total ? `<div class="subh" style="margin-top:4px">Разбивка по ${p.stars_collected} собранным отзывам из ${p.reviews_total.toLocaleString('ru-RU')}</div>` : '') + stars(p.stars) : ''}
+          <div style="color:var(--mut);font-size:12px;margin-top:8px">${p.stars_note||''}</div>
+          <div class="subh" style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:nowrap">
+            <span>За что хвалят</span>
+            ${p.processed_count?`<span class="procbadge">${p.processed_count.toLocaleString('ru-RU')} отз.${p.processed_period?' · '+p.processed_period:''}</span>`:''}
+          </div>${ul(p.praise)}
+        </div>
+        <div class="sec"><h3><span class="bar"></span>На что жалуются <span class="tag rev">по отзывам</span></h3>
+          ${p.neg_total ? `<div class="negbadge"><b>${p.neg_total.toLocaleString('ru-RU')}</b> отзывов на 1–3★ · это <b>${p.neg_share}</b> от всех ${p.reviews_total.toLocaleString('ru-RU')}</div>` : ''}
+          ${cplx(p.complaints)}
+        </div>
+        <div class="sec"><h3><span class="bar"></span>Слабые места: обещание ↔ реальность</h3>${gaps(p.gaps)}</div>
+        <div class="sec"><h3><span class="bar"></span>Другие товары в этой склейке</h3>${chips(p.skleyka)}</div>
+        <div class="ideal"><h3><span class="bar"></span>🎯 Каким стоило бы сделать товар</h3>${ul(p.ideal)}</div>
+      </div></div></div>
+
+      ${p.mpstats?`<div class="acc"><div class="acc-head" onclick="toggleAcc(this,event)"><span class="acc-ic">📊</span><span class="acc-t">Аналитика МП Статс</span><span class="acc-meta">продажи · выручка · позиция</span><span class="acc-chev">▾</span></div>
+      <div class="acc-body"><div class="acc-in">${mpblock(p.mpstats)}</div></div></div>`:''}
     </div></div>
   </div>`;
 }
 function toggle(item,ev){
   if(ev&&ev.target.closest('.open-btn'))return;
+  if(ev&&ev.target.closest('.acc'))return;   // клики по вложенным аккордеонам — отдельно
   const body=item.querySelector('.body'), open=item.classList.toggle('open');
-  if(open){ body.style.maxHeight=body.scrollHeight+'px'; item.querySelectorAll('.track i').forEach(i=>i.style.width=i.dataset.w+'%'); }
-  else body.style.maxHeight='0';
+  if(open){
+    body.style.maxHeight=body.scrollHeight+'px';
+    item.querySelectorAll('.track i').forEach(i=>i.style.width=i.dataset.w+'%');
+    body.addEventListener('transitionend',function te(){
+      if(item.classList.contains('open')) body.style.maxHeight='none';  // чтобы вложенные аккордеоны могли расти
+      body.removeEventListener('transitionend',te);
+    });
+  } else {
+    body.style.maxHeight=body.scrollHeight+'px'; body.offsetHeight; body.style.maxHeight='0';
+  }
+}
+function toggleAcc(head,ev){
+  if(ev)ev.stopPropagation();
+  const acc=head.parentNode, b=acc.querySelector('.acc-body'), open=acc.classList.toggle('open');
+  if(open){ b.style.maxHeight=b.scrollHeight+'px'; acc.querySelectorAll('.track i').forEach(i=>i.style.width=i.dataset.w+'%'); }
+  else b.style.maxHeight='0';
 }
 const MP_ORDER=["WB","OZ","YM","DM"], MP_LABEL={WB:"ВБ",OZ:"Озон",YM:"ЯМ",DM:"ДМ"};
 let activeCats=new Set(), activeMarkets=new Set();  // пусто = фильтр не применяется (показываем всё)
