@@ -242,7 +242,7 @@ const gaps=arr=>(arr||[]).map(g=>`<div class="gap"><div class="c">${g.claim}</di
 const chips=arr=>(arr&&arr.length)?`<div class="chips">`+arr.map(x=>`<span class="chip">${x}</span>`).join("")+`</div>`:'<div style="color:var(--mut);font-size:13px">Других вариантов под этой карточкой не выявлено.</div>';
 const rub=n=>(n||0).toLocaleString('ru-RU');
 const dmy=d=>d.slice(3)+'.'+d.slice(0,2);   // "MM-DD" -> "DD.MM"
-const WARN='<div class="mpwarn">⚠️ MPStats может некорректно считывать продажи в шт. и ₽ (особенно по склейкам) — доверять этому источнику на 100% нельзя.</div>';
+const WARN='<div class="mpwarn">⚠️ MPStats может некорректно считывать продажи в шт. и ₽ (особенно по склейкам) — доверять этому источнику на 100% нельзя.<br>С 10.08.2026 Ozon ограничил показ остатков: точный остаток виден, только если товара меньше 700 шт; детализация по складам недоступна.</div>';
 function barChart(arr,valKey,cls,labelFn,titleFn){
   const max=Math.max(1,...arr.map(x=>x[valKey]||0));
   return `<div class="chart ${cls||''}">`+arr.map(x=>{

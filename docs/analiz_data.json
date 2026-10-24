@@ -4603,7 +4603,230 @@
     ],
     "buyout": null,
     "updated": "2026-10-24",
-    "no_niche_reason": "MPStats не категоризирует этот профессиональный товар — рыночной ниши и конкурентов по нему в MPStats нет."
+    "niche": {
+     "name": "Контактные гели для аппаратной косметологии",
+     "total": 100,
+     "win_rev": 8659498,
+     "win_sales": 6993,
+     "win_n": 100,
+     "avg_price": 1661,
+     "price_min": 498,
+     "price_med": 1160,
+     "price_max": 10534,
+     "our_rev": null,
+     "our_rank": null,
+     "top5": [
+      {
+       "name": "Гель для ультразвуковой чистки лица, дезинкрустации, УЗ пилинга, холод",
+       "brand": "MESOMATRIX",
+       "rev": 1897916,
+       "price": 2583,
+       "rating": 4.9,
+       "url": "https://www.ozon.ru/product/428064634/"
+      },
+      {
+       "name": "Антивозрастной омолаживающий гель с пептидами для аппаратной косметоло",
+       "brand": "MESOMATRIX",
+       "rev": 835155,
+       "price": 2874,
+       "rating": 4.9,
+       "url": "https://www.ozon.ru/product/1713060894/"
+      },
+      {
+       "name": "Токопроводящий гель для микротоков, миостимуляции, RF/РФ-лифтинга, EMS",
+       "brand": "MESOMATRIX",
+       "rev": 710572,
+       "price": 755,
+       "rating": 4.9,
+       "url": "https://www.ozon.ru/product/428156457/"
+      },
+      {
+       "name": "Гель для микротоков, RF лифтинга, фонофореза, набор 3х150 мл Mesomatri",
+       "brand": "MESOMATRIX",
+       "rev": 489840,
+       "price": 4146,
+       "rating": 4.9,
+       "url": "https://www.ozon.ru/product/1119792587/"
+      },
+      {
+       "name": "Doctor Cosmetics Miolift Active Контактный гель для микротоков, RF лиф",
+       "brand": "Doctor Cosmetics",
+       "rev": 424700,
+       "price": 657,
+       "rating": 4.9,
+       "url": "https://www.ozon.ru/product/181457273/"
+      }
+     ],
+     "narrow": true,
+     "segments": [
+      {
+       "label": "до 500",
+       "n": 1,
+       "sales_pct": 0,
+       "rev_pct": 0
+      },
+      {
+       "label": "500–800",
+       "n": 21,
+       "sales_pct": 45,
+       "rev_pct": 24
+      },
+      {
+       "label": "800–1100",
+       "n": 27,
+       "sales_pct": 22,
+       "rev_pct": 16
+      },
+      {
+       "label": "1100–1500",
+       "n": 14,
+       "sales_pct": 5,
+       "rev_pct": 5
+      },
+      {
+       "label": "1500₽+",
+       "n": 37,
+       "sales_pct": 28,
+       "rev_pct": 55
+      }
+     ],
+     "free": {
+      "parent": "Аппаратная косметология и массаж",
+      "items": [
+       {
+        "name": "Косметологические аппараты",
+        "brands": 1469,
+        "rev_per": 114891,
+        "rating": 4.68,
+        "opp": false
+       },
+       {
+        "name": "Контактные гели",
+        "brands": 220,
+        "rev_per": 85628,
+        "rating": 4.79,
+        "opp": true
+       },
+       {
+        "name": "Эпиляторы",
+        "brands": 603,
+        "rev_per": 76498,
+        "rating": 4.64,
+        "opp": false
+       },
+       {
+        "name": "Массажеры",
+        "brands": 2129,
+        "rev_per": 59110,
+        "rating": 4.7,
+        "opp": false
+       }
+      ]
+     }
+    },
+    "market": {
+     "brands": [
+      {
+       "name": "MESOMATRIX",
+       "rev": 5249760,
+       "items": 19,
+       "share": 61
+      },
+      {
+       "name": "Doctor Cosmetics",
+       "rev": 1065292,
+       "items": 7,
+       "share": 12
+      },
+      {
+       "name": "LinaProf",
+       "rev": 1009659,
+       "items": 17,
+       "share": 12
+      },
+      {
+       "name": "LUXLIFTING",
+       "rev": 347037,
+       "items": 4,
+       "share": 4
+      },
+      {
+       "name": "Readyskin Care",
+       "rev": 233793,
+       "items": 2,
+       "share": 3
+      },
+      {
+       "name": "somelove",
+       "rev": 215531,
+       "items": 2,
+       "share": 2
+      }
+     ],
+     "sellers": [
+      {
+       "name": "MESOMATRIX (АЮНА) профессиональная косметика",
+       "rev": 5247891,
+       "items": 16,
+       "share": 61
+      },
+      {
+       "name": "Doctor Comfort & Doctor Cosmetics",
+       "rev": 1065292,
+       "items": 7,
+       "share": 12
+      },
+      {
+       "name": "LinaProf",
+       "rev": 1009659,
+       "items": 17,
+       "share": 12
+      },
+      {
+       "name": "LUXLIFTING",
+       "rev": 347037,
+       "items": 4,
+       "share": 4
+      },
+      {
+       "name": "Р-Дистрибуция",
+       "rev": 233793,
+       "items": 2,
+       "share": 3
+      },
+      {
+       "name": "somelove",
+       "rev": 215531,
+       "items": 2,
+       "share": 2
+      }
+     ],
+     "rising": [
+      {
+       "name": "Гель для узи, лазерной эпиляции, средней вязкости 5л, для ва",
+       "brand": "LinaProf",
+       "sales": 262,
+       "comments": 1533,
+       "url": "https://www.ozon.ru/product/1830587862/"
+      },
+      {
+       "name": "УЗ-гель Harbez 5в1 для ультразвуковой чистки лица проводнико",
+       "brand": "HARBEZ",
+       "sales": 198,
+       "comments": 4142,
+       "url": "https://www.ozon.ru/product/920477485/"
+      },
+      {
+       "name": "LUXLIFTING Гель для микротоков и УЗ чистки лица 250г с колла",
+       "brand": "LUXLIFTING",
+       "sales": 161,
+       "comments": 1262,
+       "url": "https://www.ozon.ru/product/1680008640/"
+      }
+     ],
+     "win_rev": 8659498
+    },
+    "niche_platform_note": "Ниша и конкуренты — по рынку контактных гелей на Ozon (на WB MPStats этот товар не категоризирует)."
    }
   },
   {
