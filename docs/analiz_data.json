@@ -113,7 +113,7 @@
    ],
    "mpstats": {
     "first_date": "15.03.2025",
-    "balance": 20,
+    "balance": 0,
     "sales30_u": 0,
     "sales30_r": 0,
     "daily": [
@@ -728,7 +728,9 @@
       }
      ],
      "win_rev": 4388578
-    }
+    },
+    "balance_oos": true,
+    "nodata": false
    }
   },
   {
@@ -872,7 +874,7 @@
    ],
    "mpstats": {
     "first_date": "05.04.2026",
-    "balance": 700,
+    "balance": 0,
     "sales30_u": 0,
     "sales30_r": 0,
     "daily": [
@@ -1341,7 +1343,9 @@
       }
      ],
      "win_rev": 1530527
-    }
+    },
+    "balance_oos": true,
+    "nodata": false
    }
   },
   {
@@ -1423,7 +1427,7 @@
    ],
    "mpstats": {
     "first_date": "14.11.2025",
-    "balance": 700,
+    "balance": 0,
     "sales30_u": 0,
     "sales30_r": 0,
     "daily": [
@@ -1892,7 +1896,9 @@
       }
      ],
      "win_rev": 1530527
-    }
+    },
+    "balance_oos": true,
+    "nodata": false
    }
   },
   {
@@ -2452,7 +2458,9 @@
       }
      ],
      "win_rev": 1530527
-    }
+    },
+    "balance_oos": false,
+    "nodata": false
    }
   },
   {
@@ -2713,8 +2721,8 @@
     "monthly": [
      {
       "m": "апр",
-      "u": 99,
-      "r": 63124
+      "u": 92,
+      "r": 58539
      },
      {
       "m": "май",
@@ -2793,7 +2801,7 @@
     "position": null,
     "keywords": null,
     "buyout": null,
-    "updated": "2026-10-23",
+    "updated": "2026-10-24",
     "niche": {
      "name": "Детские салфетки для чистки зубов и дёсен",
      "total": 17,
@@ -2983,7 +2991,9 @@
       }
      ],
      "win_rev": 1571577
-    }
+    },
+    "balance_oos": false,
+    "nodata": false
    }
   },
   {
@@ -3228,8 +3238,8 @@
     "monthly": [
      {
       "m": "апр",
-      "u": 114,
-      "r": 123110
+      "u": 96,
+      "r": 103868
      },
      {
       "m": "май",
@@ -3304,9 +3314,9 @@
      "18.08 по 09.10"
     ],
     "position": {
-     "category": "Красота / Для мам и малышей / Влажные салфетки",
-     "from": "24.09",
-     "to": "23.10",
+     "category": "Детям/Товары для малыша/Влажные салфетки",
+     "from": "09.24",
+     "to": "10.23",
      "points": [
       {
        "d": "09-24",
@@ -3445,7 +3455,7 @@
      }
     ],
     "buyout": null,
-    "updated": "2026-10-23",
+    "updated": "2026-10-24",
     "niche": {
      "name": "Детские салфетки для чистки зубов и дёсен",
      "total": 8,
@@ -3623,7 +3633,9 @@
       }
      ],
      "win_rev": 2296032
-    }
+    },
+    "balance_oos": false,
+    "nodata": false
    }
   },
   {
@@ -4348,7 +4360,9 @@
       }
      ],
      "win_rev": 1878427
-    }
+    },
+    "balance_oos": false,
+    "nodata": false
    }
   },
   {
@@ -4417,7 +4431,7 @@
    "is_stm": false,
    "mpstats": {
     "first_date": "03.11.2025",
-    "balance": 140,
+    "balance": 0,
     "sales30_u": 0,
     "sales30_r": 0,
     "daily": [
@@ -4886,7 +4900,9 @@
       }
      ],
      "win_rev": 1530527
-    }
+    },
+    "balance_oos": true,
+    "nodata": false
    }
   },
   {
@@ -5556,7 +5572,9 @@
       }
      ],
      "win_rev": 8652590
-    }
+    },
+    "balance_oos": false,
+    "nodata": false
    }
   },
   {
@@ -6273,7 +6291,9 @@
       }
      ],
      "win_rev": 4282636
-    }
+    },
+    "balance_oos": false,
+    "nodata": false
    }
   },
   {
@@ -6939,7 +6959,9 @@
       }
      ],
      "win_rev": 1207682
-    }
+    },
+    "balance_oos": false,
+    "nodata": false
    }
   },
   {
@@ -7541,7 +7563,9 @@
       }
      ],
      "win_rev": 734126
-    }
+    },
+    "balance_oos": false,
+    "nodata": false
    }
   },
   {
@@ -7639,7 +7663,7 @@
    "is_stm": false,
    "mpstats": {
     "first_date": "26.02.2025",
-    "balance": 334,
+    "balance": 0,
     "sales30_u": 0,
     "sales30_r": 0,
     "daily": [
@@ -8109,7 +8133,9 @@
       }
      ],
      "win_rev": 1530527
-    }
+    },
+    "balance_oos": true,
+    "nodata": false
    }
   },
   {
@@ -8803,7 +8829,9 @@
       }
      ],
      "win_rev": 2342570
-    }
+    },
+    "balance_oos": false,
+    "nodata": false
    }
   }
  ]

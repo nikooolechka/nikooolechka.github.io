@@ -52,6 +52,8 @@
   .rate{display:inline-flex;align-items:center;gap:4px;font-weight:800;color:var(--gold);text-shadow:0 0 14px rgba(255,210,63,.5)}
   .price{font-weight:800;color:var(--txt)}
   .price .old{color:var(--mut);font-weight:500;text-decoration:line-through;margin-left:6px;font-size:12px}
+  .instk{font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px;color:#04121a;background:var(--green)}
+  .oosb{font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px;color:#fff;background:var(--red)}
   .adate{font-size:11px;color:var(--mut);opacity:.8}
   .open-btn{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;color:#04121a;text-decoration:none;
     font-size:12.5px;font-weight:800;padding:9px 14px;border-radius:11px;white-space:nowrap;
@@ -329,20 +331,21 @@ function mpblock(m){
   if(!m) return '';
   let h=`<div class="mpwrap">`+WARN;
   // верхние показатели
+  const ND='<small style="color:var(--mut)">нет данных</small>';
   h+=`<div class="mpstats">`;
-  h+=`<div class="mpstat"><div class="k">Продаж за 30 дней</div><div class="v">${rub(m.sales30_u)} <small>шт</small></div></div>`;
-  h+=`<div class="mpstat"><div class="k">Выручка за 30 дней</div><div class="v">${rub(m.sales30_r)} <small>₽</small></div></div>`;
-  if(m.balance!=null) h+=`<div class="mpstat"><div class="k">В наличии сегодня</div><div class="v">${rub(m.balance)} <small>шт</small></div></div>`;
+  h+=`<div class="mpstat"><div class="k">Продаж за 30 дней</div><div class="v" style="${m.nodata?'font-size:15px':''}">${m.nodata?ND:rub(m.sales30_u)+' <small>шт</small>'}</div></div>`;
+  h+=`<div class="mpstat"><div class="k">Выручка за 30 дней</div><div class="v" style="${m.nodata?'font-size:15px':''}">${m.nodata?ND:rub(m.sales30_r)+' <small>₽</small>'}</div></div>`;
   if(m.first_date) h+=`<div class="mpstat"><div class="k">На площадке с</div><div class="v" style="font-size:15px">${m.first_date}</div></div>`;
   if(m.buyout!=null) h+=`<div class="mpstat"><div class="k">% выкупа</div><div class="v">${m.buyout}%</div></div>`;
   h+=`</div>`;
-  // продажи по дням
-  if(m.daily&&m.daily.length){
+  if(m.nodata) h+=`<div class="mpnote" style="font-size:12px;margin-top:10px">ℹ️ MPStats не отслеживает продажи этого товара (склейка/недоучёт) — графики продаж не строим, данные ниже по рынку/отзывам достоверны.</div>`;
+  // продажи по дням (только если MPStats видит продажи)
+  if(!m.nodata && m.daily&&m.daily.length){
     h+=`<div class="mpsub"><span>Продажи по дням, шт · ${m.daily_from}–${m.daily_to}</span><span class="r">итого ${rub(m.sales30_u)} шт</span></div>`;
     h+=dailyChart(m.daily);
   }
   // продажи+выручка (слева) и рост отзывов (справа) — в одну строку
-  const hasMonthly=m.monthly&&m.monthly.length, hasRev=m.reviews_growth&&m.reviews_growth.length;
+  const hasMonthly=!m.nodata && m.monthly&&m.monthly.length, hasRev=m.reviews_growth&&m.reviews_growth.length;
   if(hasMonthly||hasRev){
     h+=`<div class="mprow">`;
     if(hasMonthly){
@@ -357,8 +360,8 @@ function mpblock(m){
     }
     h+=`</div>`;
   }
-  // нет в наличии
-  if(m.oos&&m.oos.length){
+  // нет в наличии (не показываем для nodata — там остаток 0 весь период из-за недоучёта)
+  if(!m.nodata && m.oos&&m.oos.length){
     h+=`<div class="mpsub"><span>Периоды «нет в наличии» за полгода</span></div>`;
     h+=`<div class="oosbox">📦 ${m.oos.map(x=>'с '+x).join('   ·   ')}</div>`;
   }
@@ -389,7 +392,7 @@ function card(p,i){
       <div class="htxt">
         <p class="nm">${p.name}</p>
         <div class="meta"><span class="pill">${p.platform}</span><span class="rate">★ ${p.rating}</span>
-          <span>${p.reviews_total.toLocaleString('ru-RU')} отзывов</span>${price}${p.analyzed?`<span class="adate">анализ ${p.analyzed}</span>`:''}${p.requested_by?`<span class="adate">· запросил ${p.requested_by}</span>`:''}</div>
+          <span>${p.reviews_total.toLocaleString('ru-RU')} отзывов</span>${price}${p.in_stock===true?'<span class="instk">✓ в наличии</span>':(p.in_stock===false?'<span class="oosb">нет в наличии</span>':'')}${p.analyzed?`<span class="adate">анализ ${p.analyzed}</span>`:''}${p.requested_by?`<span class="adate">· запросил ${p.requested_by}</span>`:''}</div>
       </div>
       <a class="open-btn" href="${p.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Открыть карточку ↗</a>
       <span class="chev">▾</span>
