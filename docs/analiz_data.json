@@ -502,7 +502,158 @@
     "position": null,
     "keywords": null,
     "buyout": null,
-    "updated": "2026-10-23"
+    "updated": "2026-10-23",
+    "niche": {
+     "name": "Средства гигиены полости рта",
+     "path": "Бытовая химия и гигиена/Личная гигиена/Гигиена полости рта/Средства гигиены полости рта",
+     "total": 59837,
+     "win_rev": 29796325,
+     "win_sales": 38392,
+     "win_n": 100,
+     "avg_price": 1058,
+     "our_rev": 115292,
+     "top5": [
+      {
+       "name": "Ополаскиватель от неприятного запаха изо рта Halita 500мл / Ополаскива",
+       "brand": "Vitis",
+       "rev": 1457098,
+       "price": 1436,
+       "rating": 4.9,
+       "url": "https://www.ozon.ru/product/1751739341/"
+      },
+      {
+       "name": "CURAPROX Подарочный набор для ухода за гигиеной полости рта для взросл",
+       "brand": "Curaprox",
+       "rev": 1228341,
+       "price": 4102,
+       "rating": 4.9,
+       "url": "https://www.ozon.ru/product/765663406/"
+      },
+      {
+       "name": "Ополаскиватель для полости рта Lacalut aktiv, 300мл х 2 шт",
+       "brand": "Lacalut",
+       "rev": 841332,
+       "price": 1290,
+       "rating": 4.9,
+       "url": "https://www.ozon.ru/product/1410900601/"
+      },
+      {
+       "name": "Мусс для ухода за зубами и деснами Biorepair Peribioma, 200 мл",
+       "brand": "Biorepair",
+       "rev": 806380,
+       "price": 1404,
+       "rating": 4.9,
+       "url": "https://www.ozon.ru/product/835677873/"
+      },
+      {
+       "name": "Мусс для антибактериальной защиты зубов Biorepair Plus Mouthwash, 200 ",
+       "brand": "Biorepair",
+       "rev": 724124,
+       "price": 1391,
+       "rating": 4.9,
+       "url": "https://www.ozon.ru/product/1624099540/"
+      }
+     ]
+    },
+    "market": {
+     "brands": [
+      {
+       "name": "Curaprox",
+       "rev": 3826150,
+       "items": 10,
+       "share": 13
+      },
+      {
+       "name": "Vitis",
+       "rev": 3606952,
+       "items": 8,
+       "share": 12
+      },
+      {
+       "name": "President",
+       "rev": 3330236,
+       "items": 14,
+       "share": 11
+      },
+      {
+       "name": "miradent",
+       "rev": 2305760,
+       "items": 5,
+       "share": 8
+      },
+      {
+       "name": "Listerine",
+       "rev": 2061760,
+       "items": 8,
+       "share": 7
+      },
+      {
+       "name": "Biorepair",
+       "rev": 1853285,
+       "items": 3,
+       "share": 6
+      }
+     ],
+     "sellers": [
+      {
+       "name": "Дизион",
+       "rev": 5912712,
+       "share": 20
+      },
+      {
+       "name": "Официальный представитель Curaprox",
+       "rev": 3826150,
+       "share": 13
+      },
+      {
+       "name": "PRESIDENT OFFICIAL",
+       "rev": 3330236,
+       "share": 11
+      },
+      {
+       "name": "Др.Тайсс Натурварен Рус",
+       "rev": 1858549,
+       "share": 6
+      },
+      {
+       "name": "Смарт Бьюти",
+       "rev": 1853285,
+       "share": 6
+      },
+      {
+       "name": "Бьютолоджи",
+       "rev": 1472090,
+       "share": 5
+      }
+     ],
+     "rising": [
+      {
+       "name": "Индикатор зубного налета miradent Mira-2-Ton 10мл",
+       "brand": "miradent",
+       "sales": 730,
+       "comments": 3293,
+       "price": 880,
+       "url": "https://www.ozon.ru/product/1381134601/"
+      },
+      {
+       "name": "мирадент Mira-2-Ton - индикатор зубного налета в таблетках 1",
+       "brand": "miradent",
+       "sales": 673,
+       "comments": 3293,
+       "price": 614,
+       "url": "https://www.ozon.ru/product/348295273/"
+      },
+      {
+       "name": "Детский ополаскиватель для полости рта со вкусом яблока LACA",
+       "brand": "Lacalut",
+       "sales": 640,
+       "comments": 1914,
+       "price": 463,
+       "url": "https://www.ozon.ru/product/2762329480/"
+      }
+     ],
+     "win_rev": 29796325
+    }
    }
   },
   {
@@ -964,7 +1115,158 @@
      }
     ],
     "buyout": null,
-    "updated": "2026-10-23"
+    "updated": "2026-10-23",
+    "niche": {
+     "name": "Влажные салфетки",
+     "path": "Красота/Для мам и малышей/Влажные салфетки",
+     "total": 13051,
+     "win_rev": 115501937,
+     "win_sales": 165642,
+     "win_n": 100,
+     "avg_price": 962,
+     "our_rev": 39254,
+     "top5": [
+      {
+       "name": "Влажные салфетки для новорожденных без запаха PURE 6упх120шт",
+       "brand": "СВЕЖАЯ НОТА",
+       "rev": 15858333,
+       "price": 738,
+       "rating": 5,
+       "url": "https://www.wildberries.ru/catalog/172075284/detail.aspx"
+      },
+      {
+       "name": "Влажные детские салфетки без запаха деликатные 6упх120шт",
+       "brand": "СВЕЖАЯ НОТА",
+       "rev": 10898013,
+       "price": 721,
+       "rating": 5,
+       "url": "https://www.wildberries.ru/catalog/831490362/detail.aspx"
+      },
+      {
+       "name": "Влажные детские салфетки Алоэ и Витамин Е 6х120 с клапаном",
+       "brand": "СВЕЖАЯ НОТА",
+       "rev": 8765381,
+       "price": 738,
+       "rating": 5,
+       "url": "https://www.wildberries.ru/catalog/12073017/detail.aspx"
+      },
+      {
+       "name": "Детские влажные салфетки 0+ ультрамягкие 576 шт с клапаном",
+       "brand": "MOMI",
+       "rev": 7593109,
+       "price": 666,
+       "rating": 5,
+       "url": "https://www.wildberries.ru/catalog/244416663/detail.aspx"
+      },
+      {
+       "name": "Влажные детские салфетки с клапаном для новорожденных 6уп х 120 720 шт",
+       "brand": "Aura",
+       "rev": 7202707,
+       "price": 667,
+       "rating": 5,
+       "url": "https://www.wildberries.ru/catalog/175367528/detail.aspx"
+      }
+     ]
+    },
+    "market": {
+     "brands": [
+      {
+       "name": "СВЕЖАЯ НОТА",
+       "rev": 74579973,
+       "items": 17,
+       "share": 65
+      },
+      {
+       "name": "MOMI",
+       "rev": 9502300,
+       "items": 5,
+       "share": 8
+      },
+      {
+       "name": "Aura",
+       "rev": 9307212,
+       "items": 2,
+       "share": 8
+      },
+      {
+       "name": "СОЛНЦЕ И ЛУНА",
+       "rev": 5811898,
+       "items": 2,
+       "share": 5
+      },
+      {
+       "name": "FRESHLAND",
+       "rev": 4409645,
+       "items": 15,
+       "share": 4
+      },
+      {
+       "name": "WHITE WHALE",
+       "rev": 2214987,
+       "items": 4,
+       "share": 2
+      }
+     ],
+     "sellers": [
+      {
+       "name": "ООО Зеттек",
+       "rev": 76407460,
+       "share": 66
+      },
+      {
+       "name": "ООО Коттон Клаб",
+       "rev": 15119110,
+       "share": 13
+      },
+      {
+       "name": "ООО НК Джакс",
+       "rev": 9502300,
+       "share": 8
+      },
+      {
+       "name": "ООО Авангард",
+       "rev": 6222068,
+       "share": 5
+      },
+      {
+       "name": "ООО Гранд А.в.",
+       "rev": 4409645,
+       "share": 4
+      },
+      {
+       "name": "ООО Амальфи",
+       "rev": 1079006,
+       "share": 1
+      }
+     ],
+     "rising": [
+      {
+       "name": "Влажные детские салфетки без запаха деликатные 12упх120шт",
+       "brand": "СВЕЖАЯ НОТА",
+       "sales": 3829,
+       "comments": 1573,
+       "price": 1398,
+       "url": "https://www.wildberries.ru/catalog/1241847263/detail.aspx"
+      },
+      {
+       "name": "Детские влажные салфетки 0+ Успокаивающие 288шт с клапаном",
+       "brand": "MOMI",
+       "sales": 3374,
+       "comments": 5153,
+       "price": 431,
+       "url": "https://www.wildberries.ru/catalog/800049271/detail.aspx"
+      },
+      {
+       "name": "Влажные детские полотенца XXL ультрамягкие 0+ 4уп х 60шт",
+       "brand": "СВЕЖАЯ НОТА",
+       "sales": 2363,
+       "comments": 7868,
+       "price": 651,
+       "url": "https://www.wildberries.ru/catalog/831925675/detail.aspx"
+      }
+     ],
+     "win_rev": 115501937
+    }
    }
   },
   {
