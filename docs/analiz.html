@@ -314,7 +314,7 @@ function wsblock(w){
   if(bars) h+=`<div class="wschart">${bars}</div>`;
   if(w.adjacent&&w.adjacent.length){
     h+=`<div class="sec" style="margin-top:12px"><h3><span class="bar"></span>Смежные запросы — ищут похожее</h3><ul>`+
-      w.adjacent.map(a=>`<li>${esc(a.phrase)}<span class="note">${rub(a.avg)} запросов/мес</span></li>`).join('')+`</ul></div>`;
+      w.adjacent.map(a=>`<li>${esc(a.phrase)}<span class="note" style="display:block;color:var(--mut);font-size:12.5px;margin-top:2px">${rub(a.avg)} запросов/мес</span></li>`).join('')+`</ul></div>`;
   }
   return h;
 }
