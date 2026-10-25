@@ -212,6 +212,16 @@
     .htxt .meta{font-size:12px;gap:6px;margin-bottom:0}
   }
   @media(max-width:360px){h1{font-size:21px}}
+  .wshead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:4px 0 10px}
+  .wsph{font-size:15px;font-weight:800;color:#fff}
+  .wsavg{font-size:12.5px;color:var(--mut)}
+  .wstrend{font-size:12px;font-weight:800;padding:2px 8px;border-radius:999px}
+  .wstrend.up{color:#04121a;background:var(--green)}
+  .wstrend.dn{color:#fff;background:var(--red)}
+  .wschart{display:flex;align-items:flex-end;gap:5px;height:120px;padding:6px 2px 0;border-bottom:1px solid var(--line)}
+  .wsbar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
+  .wsbar i{display:block;width:70%;min-height:2px;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--cyan),rgba(46,230,200,.25))}
+  .wsbar span{font-size:9.5px;color:var(--mut)}
 </style>
 </head>
 <body>
@@ -287,6 +297,26 @@ function qablock(q){
        q.card_gaps.map(g=>`<li>${esc(g)}</li>`).join('')+`</ul></div>`;
   }
   return h||'';
+}
+// --- блок «Анализ тренда Вордстат» (спрос по типу товара за год + смежные) ---
+function wsblock(w){
+  if(!w) return '';
+  const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const rub=n=>(n||0).toLocaleString('ru-RU');
+  const mm=w.monthly||[]; const mx=Math.max(1,...mm.map(x=>x.c));
+  const MN=['','янв','фев','мар','апр','май','июн','июл','авг','сен','окт','ноя','дек'];
+  const bars=mm.map(x=>{const h=Math.round((x.c/mx)*100);const mo=parseInt((x.m||'').slice(5,7))||0;
+    return `<div class="wsbar" title="${x.m}: ${rub(x.c)}"><i style="height:${h}%"></i><span>${MN[mo]}</span></div>`;}).join('');
+  let trend='';
+  if(w.trend_pct!==null&&w.trend_pct!==undefined){const up=w.trend_pct>=0;
+    trend=`<span class="wstrend ${up?'up':'dn'}">${up?'▲':'▼'} ${Math.abs(w.trend_pct)}% за год</span>`;}
+  let h=`<div class="wshead"><span class="wsph">«${esc(w.phrase)}»</span><span class="wsavg">${rub(w.avg)} запросов/мес${w.region?' · '+esc(w.region):''}</span>${trend}</div>`;
+  if(bars) h+=`<div class="wschart">${bars}</div>`;
+  if(w.adjacent&&w.adjacent.length){
+    h+=`<div class="sec" style="margin-top:12px"><h3><span class="bar"></span>Смежные запросы — ищут похожее</h3><ul>`+
+      w.adjacent.map(a=>`<li>${esc(a.phrase)}<span class="note">${rub(a.avg)} запросов/мес</span></li>`).join('')+`</ul></div>`;
+  }
+  return h;
 }
 // --- блок «Анализ ниши» (узкая — прямые конкуренты того же типа товара) ---
 function nicheblock(n){
@@ -446,6 +476,9 @@ function card(p,i){
 
       ${p.mpstats&&p.mpstats.market?`<div class="acc"><div class="acc-head" onclick="toggleAcc(this,event)"><span class="acc-ic">🏆</span><span class="acc-t">Топ бренды и продавцы</span><span class="acc-meta">доли рынка</span><span class="acc-chev">▾</span></div>
       <div class="acc-body"><div class="acc-in">${marketblock(p.mpstats.market)}</div></div></div>`:''}
+
+      ${p.wordstat?`<div class="acc"><div class="acc-head" onclick="toggleAcc(this,event)"><span class="acc-ic">📉</span><span class="acc-t">Анализ тренда Вордстат</span><span class="acc-meta">спрос по типу товара · год</span><span class="acc-chev">▾</span></div>
+      <div class="acc-body"><div class="acc-in">${wsblock(p.wordstat)}</div></div></div>`:''}
     </div></div>
   </div>`;
 }
