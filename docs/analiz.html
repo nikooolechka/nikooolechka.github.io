@@ -222,6 +222,21 @@
   .wsbar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
   .wsbar i{display:block;width:70%;min-height:2px;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--cyan),rgba(46,230,200,.25))}
   .wsbar span{font-size:9.5px;color:var(--mut)}
+  .rightf{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+  .nickdd{position:relative}
+  .nickbtn{font-size:12.5px;font-weight:700;color:var(--mut);padding:7px 14px;border-radius:999px;
+    border:1px solid rgba(255,255,255,.14);background:var(--glass);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
+  .nickbtn:hover{color:var(--txt);border-color:rgba(255,255,255,.22)}
+  .nickbtn.active{color:#04121a;border-color:transparent;background:linear-gradient(100deg,#ffd23f,#ffb03a);box-shadow:0 0 22px -4px #ffd23f}
+  .nickbtn .chev{font-size:10px;opacity:.7}
+  .nickmenu{position:absolute;top:calc(100% + 6px);right:0;z-index:9999;min-width:210px;max-height:340px;overflow-y:auto;
+    background:#0d1b26;border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:6px;
+    box-shadow:0 18px 50px -10px rgba(0,0,0,.85);display:none}
+  .nickmenu.open{display:block}
+  .nickitem{font-size:13px;color:var(--txt);padding:8px 12px;border-radius:8px;cursor:pointer;white-space:nowrap;display:flex;justify-content:space-between;gap:12px}
+  .nickitem:hover{background:rgba(255,255,255,.08)}
+  .nickitem.sel{color:#04121a;background:linear-gradient(100deg,#ffd23f,#ffb03a);font-weight:700}
+  .nickitem .c{opacity:.6;font-weight:600}
 </style>
 </head>
 <body>
@@ -234,7 +249,10 @@
   </header>
   <div class="filters" id="filters" style="display:none">
     <div class="fgroup" id="catgroup"></div>
-    <div class="fgroup mp" id="mpgroup"></div>
+    <div class="rightf">
+      <div class="fgroup mp" id="mpgroup"></div>
+      <div class="nickdd" id="nickdd"></div>
+    </div>
   </div>
   <div id="list"><div class="empty">Загрузка…</div></div>
   <div class="foot" id="foot"></div>
@@ -431,7 +449,7 @@ function mpblock(m){
 }
 function card(p,i){
   const price = p.price!=null ? `<span class="price">${p.price.toLocaleString('ru-RU')} ₽${p.price_old?`<span class="old">${p.price_old.toLocaleString('ru-RU')} ₽</span>`:''}</span>` : '';
-  return `<div class="item" data-platform="${p.platform||''}" data-category="${(p.category||'').replace(/"/g,'&quot;')}" data-stm="${p.is_stm?'1':'0'}" style="animation-delay:${i*90}ms">
+  return `<div class="item" data-platform="${p.platform||''}" data-category="${(p.category||'').replace(/"/g,'&quot;')}" data-stm="${p.is_stm?'1':'0'}" data-reqby="${(p.requested_by||'').replace(/"/g,'&quot;')}" style="animation-delay:${i*90}ms">
     <div class="head">
       <img class="thumb" src="${p.photo}" referrerpolicy="no-referrer" onerror="this.style.visibility='hidden'">
       <div class="htxt">
@@ -504,13 +522,14 @@ function toggleAcc(head,ev){
   else b.style.maxHeight='0';
 }
 const MP_ORDER=["WB","OZ","YM","DM"], MP_LABEL={WB:"ВБ",OZ:"Озон",YM:"ЯМ",DM:"ДМ"};
-let activeCats=new Set(), activeMarkets=new Set();  // пусто = фильтр не применяется (показываем всё)
+let activeCats=new Set(), activeMarkets=new Set(), activeNick="";  // пусто = фильтр не применяется (показываем всё)
 function applyFilters(){
   document.querySelectorAll('#list .item').forEach(it=>{
     const okCat = activeCats.size===0 ? true : [...activeCats].every(c=>
       c==="__stm__" ? it.dataset.stm==="1" : it.dataset.category===c);
     const okMp = activeMarkets.size===0 ? true : activeMarkets.has(it.dataset.platform);
-    it.classList.toggle('hide', !(okCat&&okMp));
+    const okNick = activeNick==="" ? true : (it.dataset.reqby||"")===activeNick;
+    it.classList.toggle('hide', !(okCat&&okMp&&okNick));
   });
   const vis=document.querySelectorAll('#list .item:not(.hide)').length;
   const list=document.getElementById('list');
@@ -552,7 +571,33 @@ function renderFilters(products){
     ch.classList.toggle('active',activeMarkets.has(key));
     applyFilters();
   }));
+  renderNickFilter(products);
 }
+// Фильтр по нику заказчика (TG) — выпадающий список, автопополняется ником из данных.
+function renderNickFilter(products){
+  const dd=document.getElementById('nickdd'); if(!dd) return;
+  const counts={};
+  products.forEach(p=>{const n=(p.requested_by||'').trim(); if(n) counts[n]=(counts[n]||0)+1;});
+  const nicks=Object.keys(counts).sort((a,b)=>a.localeCompare(b,'ru'));
+  if(!nicks.length){ dd.innerHTML=''; return; }           // никто ещё не запрашивал — кнопки нет
+  if(activeNick && !counts[activeNick]) activeNick="";      // выбранный ник пропал из данных
+  const label = activeNick ? activeNick : 'все';
+  const esc=s=>(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let items=`<div class="nickitem ${activeNick===''?'sel':''}" data-nick="">Все заказчики <span class="c">${products.length}</span></div>`;
+  nicks.forEach(n=>{items+=`<div class="nickitem ${activeNick===n?'sel':''}" data-nick="${esc(n)}">${esc(n)} <span class="c">${counts[n]}</span></div>`;});
+  dd.innerHTML=`<button class="nickbtn ${activeNick?'active':''}" id="nickbtn">👤 Заказчик: ${esc(label)} <span class="chev">▾</span></button>
+    <div class="nickmenu" id="nickmenu">${items}</div>`;
+  const btn=dd.querySelector('#nickbtn'), menu=dd.querySelector('#nickmenu');
+  btn.addEventListener('click',e=>{e.stopPropagation(); menu.classList.toggle('open');});
+  menu.querySelectorAll('.nickitem').forEach(it=>it.addEventListener('click',()=>{
+    activeNick=it.dataset.nick; menu.classList.remove('open'); renderNickFilter(products); applyFilters();
+  }));
+}
+// клик вне меню — закрыть
+document.addEventListener('click',e=>{
+  const m=document.getElementById('nickmenu');
+  if(m && m.classList.contains('open') && !e.target.closest('#nickdd')) m.classList.remove('open');
+});
 fetch('analiz_data.json?v='+Date.now()).then(r=>r.json()).then(d=>{
   const el=document.getElementById('list');
   if(!d.products||!d.products.length){el.innerHTML='<div class="empty">Пока нет изученных товаров.</div>';return;}
