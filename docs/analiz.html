@@ -103,7 +103,7 @@
   .ideal li::before{background:var(--green);box-shadow:0 0 12px var(--green)}
   .filters{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap;margin-bottom:26px}
   .fgroup{display:flex;flex-wrap:wrap;gap:8px}
-  .fgroup.mp{flex:0 0 auto;flex-wrap:nowrap}
+  .fgroup.mpf{flex:0 0 auto;flex-wrap:wrap}
   .fchip{font-size:12.5px;font-weight:700;color:var(--mut);padding:7px 14px;border-radius:999px;
     border:1px solid var(--line);background:var(--glass);cursor:pointer;user-select:none;white-space:nowrap;
     transition:transform .2s,box-shadow .3s,color .3s,background .3s,border-color .3s}
@@ -222,7 +222,7 @@
   .wsbar{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:4px}
   .wsbar i{display:block;width:70%;min-height:2px;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--cyan),rgba(46,230,200,.25))}
   .wsbar span{font-size:9.5px;color:var(--mut)}
-  .rightf{display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap}
+  .rightf{display:flex;gap:10px;align-items:center;flex-wrap:nowrap}
   .nickdd{position:relative}
   .nickbtn{font-size:12.5px;font-weight:700;color:var(--mut);padding:7px 14px;border-radius:999px;
     border:1px solid rgba(255,255,255,.14);background:var(--glass);cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
@@ -250,7 +250,7 @@
   <div class="filters" id="filters" style="display:none">
     <div class="fgroup" id="catgroup"></div>
     <div class="rightf">
-      <div class="fgroup mp" id="mpgroup"></div>
+      <div class="fgroup mpf" id="mpgroup"></div>
       <div class="nickdd" id="nickdd"></div>
     </div>
   </div>
