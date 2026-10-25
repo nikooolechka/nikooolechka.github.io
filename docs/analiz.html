@@ -444,7 +444,7 @@ function card(p,i){
       ${p.mpstats&&p.mpstats.niche?`<div class="acc"><div class="acc-head" onclick="toggleAcc(this,event)"><span class="acc-ic">📈</span><span class="acc-t">Анализ ниши МП Статс</span><span class="acc-meta">размер ниши · конкуренты · где мы</span><span class="acc-chev">▾</span></div>
       <div class="acc-body"><div class="acc-in">${nicheblock(p.mpstats.niche)}</div></div></div>`:''}
 
-      ${p.mpstats&&p.mpstats.market?`<div class="acc"><div class="acc-head" onclick="toggleAcc(this,event)"><span class="acc-ic">🏆</span><span class="acc-t">Топ бренды и продавцы</span><span class="acc-meta">доли рынка · восходящий тренд</span><span class="acc-chev">▾</span></div>
+      ${p.mpstats&&p.mpstats.market?`<div class="acc"><div class="acc-head" onclick="toggleAcc(this,event)"><span class="acc-ic">🏆</span><span class="acc-t">Топ бренды и продавцы</span><span class="acc-meta">доли рынка</span><span class="acc-chev">▾</span></div>
       <div class="acc-body"><div class="acc-in">${marketblock(p.mpstats.market)}</div></div></div>`:''}
     </div></div>
   </div>`;
