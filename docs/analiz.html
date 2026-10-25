@@ -278,7 +278,6 @@ function qablock(q){
   if(!q) return '';
   const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
   let h='';
-  if(q.summary) h+=`<div style="color:var(--mut);font-size:13px;margin:6px 0 2px">${esc(q.summary)}</div>`;
   if(q.topics&&q.topics.length){
     h+=`<div class="sec" style="margin-top:8px"><h3><span class="bar"></span>О чём спрашивают</h3><ul>`+
        q.topics.map(t=>`<li><b>${esc(t.t)}</b>${t.desc?' — '+esc(t.desc):''}</li>`).join('')+`</ul></div>`;
