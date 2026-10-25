@@ -273,6 +273,22 @@ function comboChart(a){
       `<span class="cl"><b>${rub(x.u)} шт</b><em>${Math.round((x.r||0)/1000)}к ₽</em>${x.m}</span></div>`;
   }).join("")+`</div>`;
 }
+// --- блок «Анализ вопросов» (что спрашивают до покупки = пробелы карточки) ---
+function qablock(q){
+  if(!q) return '';
+  const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  let h='';
+  if(q.summary) h+=`<div style="color:var(--mut);font-size:13px;margin:6px 0 2px">${esc(q.summary)}</div>`;
+  if(q.topics&&q.topics.length){
+    h+=`<div class="sec" style="margin-top:8px"><h3><span class="bar"></span>О чём спрашивают</h3><ul>`+
+       q.topics.map(t=>`<li><b>${esc(t.t)}</b>${t.desc?' — '+esc(t.desc):''}</li>`).join('')+`</ul></div>`;
+  }
+  if(q.card_gaps&&q.card_gaps.length){
+    h+=`<div class="sec"><h3><span class="bar"></span>Что добавить в карточку</h3><ul>`+
+       q.card_gaps.map(g=>`<li>${esc(g)}</li>`).join('')+`</ul></div>`;
+  }
+  return h||'';
+}
 // --- блок «Анализ ниши» (узкая — прямые конкуренты того же типа товара) ---
 function nicheblock(n){
   if(!n) return '';
@@ -419,6 +435,9 @@ function card(p,i){
         <div class="sec"><h3><span class="bar"></span>Другие товары в этой склейке</h3>${chips(p.skleyka)}</div>
         <div class="ideal"><h3><span class="bar"></span>🎯 Каким стоило бы сделать товар</h3>${ul(p.ideal)}</div>
       </div></div></div>
+
+      ${p.questions_analysis?`<div class="acc"><div class="acc-head" onclick="toggleAcc(this,event)"><span class="acc-ic">❓</span><span class="acc-t">Анализ вопросов</span><span class="acc-meta">${p.questions_total?p.questions_total.toLocaleString('ru-RU')+' вопросов · ':''}что спрашивают до покупки</span><span class="acc-chev">▾</span></div>
+      <div class="acc-body"><div class="acc-in">${qablock(p.questions_analysis)}</div></div></div>`:''}
 
       ${p.mpstats?`<div class="acc"><div class="acc-head" onclick="toggleAcc(this,event)"><span class="acc-ic">📊</span><span class="acc-t">Аналитика МП Статс</span><span class="acc-meta">продажи · выручка · позиция</span><span class="acc-chev">▾</span></div>
       <div class="acc-body"><div class="acc-in">${mpblock(p.mpstats)}</div></div></div>`:''}
