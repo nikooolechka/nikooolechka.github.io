@@ -392,7 +392,7 @@ function card(p,i){
       <div class="htxt">
         <p class="nm">${p.name}</p>
         <div class="meta"><span class="pill">${p.platform}</span><span class="rate">★ ${p.rating}</span>
-          <span>${p.reviews_total.toLocaleString('ru-RU')} отзывов</span>${price}${p.in_stock===true?'<span class="instk">✓ в наличии</span>':(p.in_stock===false?'<span class="oosb">нет в наличии</span>':'')}${p.analyzed?`<span class="adate">анализ ${p.analyzed}</span>`:''}${p.requested_by?`<span class="adate">· запросил ${p.requested_by}</span>`:''}</div>
+          <span>${p.reviews_total.toLocaleString('ru-RU')} отзывов</span>${price}${p.in_stock===false?'<span class="oosb">нет в наличии</span>':''}${p.analyzed?`<span class="adate">анализ ${p.analyzed}</span>`:''}${p.requested_by?`<span class="adate">· запросил ${p.requested_by}</span>`:''}</div>
       </div>
       <a class="open-btn" href="${p.url}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Открыть карточку ↗</a>
       <span class="chev">▾</span>
