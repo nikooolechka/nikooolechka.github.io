@@ -2033,12 +2033,15 @@
         "posted_at": "2026-08-30T06:00:30.603825+00:00",
         "url": "https://vk.com/wall-239602265_84"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-10-26T06:00:18.380047+00:00"
+      },
       "tg": {
         "posted_at": "2026-09-08T06:04:05.734417+00:00",
         "url": "https://t.me/asfarm_ru/89"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/auto-уход-за-зубами-при-высок.jpg"
   },
   {
     "title": "Кровоточивость дёсен у детей причины и бережные методы ухода",
@@ -3192,8 +3195,8 @@
         "url": null
       },
       "tg": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-10-26T06:00:23.859252+00:00",
+        "url": "https://t.me/asfarm_ru/140"
       }
     }
   },
