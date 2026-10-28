@@ -2060,12 +2060,15 @@
         "posted_at": "2026-08-31T06:00:30.093938+00:00",
         "url": "https://vk.com/wall-239602265_85"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-10-28T06:00:18.838848+00:00"
+      },
       "tg": {
         "posted_at": "2026-09-09T06:01:56.082890+00:00",
         "url": "https://t.me/asfarm_ru/91"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/auto-кровоточивость-де-сен-у--2.jpg"
   },
   {
     "title": "Особенности гигиены полости рта после ортодонтического лечения и брекетов",
@@ -3262,8 +3265,8 @@
         "url": null
       },
       "tg": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-10-28T06:00:25.184945+00:00",
+        "url": "https://t.me/asfarm_ru/142"
       }
     }
   },
