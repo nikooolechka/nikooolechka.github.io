@@ -1,5 +1,5 @@
 {
-  "generated_at": "28.10.2026 23:46 МСК",
+  "generated_at": "29.10.2026 13:42 МСК",
   "services": [
     {
       "name": "Railway",
@@ -10,14 +10,14 @@
     },
     {
       "name": "Cloudflare Workers",
-      "value": "125 / 100k",
+      "value": "66 / 100k",
       "note": "Workers · приёмник+сторож остатков · /сут",
       "dot": "ok",
       "level": ""
     },
     {
       "name": "Scrapfly · оферты",
-      "value": "390",
+      "value": "420",
       "note": "/ 1000 осн. · сброс 15-го",
       "dot": "ok",
       "level": ""
