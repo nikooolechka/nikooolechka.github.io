@@ -2086,12 +2086,15 @@
         "posted_at": "2026-09-01T06:01:01.675690+00:00",
         "url": "https://vk.com/wall-239602265_86"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-10-30T06:00:20.794482+00:00"
+      },
       "tg": {
         "posted_at": "2026-09-10T06:01:06.767392+00:00",
         "url": "https://t.me/asfarm_ru/92"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/auto-особенности-гигиены-поло.jpg"
   },
   {
     "title": "Утренние сборы работающей мамы: гигиена вне дома за пару минут",
@@ -3331,8 +3334,8 @@
         "url": null
       },
       "tg": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-10-30T06:00:26.476814+00:00",
+        "url": "https://t.me/asfarm_ru/144"
       }
     }
   },
