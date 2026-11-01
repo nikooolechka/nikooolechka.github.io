@@ -2114,12 +2114,15 @@
         "posted_at": "2026-09-02T06:03:43.814896+00:00",
         "url": "https://vk.com/wall-239602265_87"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-11-01T06:00:14.442974+00:00"
+      },
       "tg": {
         "posted_at": "2026-09-11T06:01:04.739806+00:00",
         "url": "https://t.me/asfarm_ru/93"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/auto-утренние-сборы-работающе.jpg"
   },
   {
     "title": "Уход за зубами при простуде и капризах ребенка",
@@ -2386,7 +2389,10 @@
     },
     "channels": {
       "vc": {},
-      "vk": {},
+      "vk": {
+        "posted_at": "2026-11-01T06:00:21.063646+00:00",
+        "url": "https://vk.com/wall-239602265_100"
+      },
       "dzen": {},
       "tg": {
         "posted_at": "2026-09-23T06:03:42.454008+00:00",
@@ -3402,8 +3408,8 @@
         "url": null
       },
       "tg": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-11-01T06:00:21.866997+00:00",
+        "url": "https://t.me/asfarm_ru/146"
       }
     }
   },
