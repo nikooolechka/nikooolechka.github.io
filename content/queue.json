@@ -2462,7 +2462,10 @@
     },
     "channels": {
       "vc": {},
-      "vk": {},
+      "vk": {
+        "posted_at": "2026-11-04T06:00:26.889831+00:00",
+        "url": "https://vk.com/wall-239602265_105"
+      },
       "dzen": {},
       "tg": {
         "posted_at": "2026-09-26T06:01:16.521874+00:00",
@@ -3517,8 +3520,8 @@
         "url": null
       },
       "tg": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-11-04T06:00:28.016590+00:00",
+        "url": "https://t.me/asfarm_ru/149"
       }
     }
   },
