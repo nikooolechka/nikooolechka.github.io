@@ -342,7 +342,7 @@ function nicheblock(n){
   let h=`<div class="mpwrap">`+WARN+`<div class="mpstats">`;
   h+=`<div class="mpstat"><div class="k">Прямых конкурентов</div><div class="v">${rub(n.total)}</div></div>`;
   h+=`<div class="mpstat"><div class="k">Выручка ниши / мес</div><div class="v">${rub(n.win_rev)} <small>₽</small></div></div>`;
-  if(n.avg_price) h+=`<div class="mpstat"><div class="k">Средняя цена</div><div class="v">${rub(n.avg_price)} <small>₽</small></div></div>`;
+  if(n.avg_price) h+=`<div class="mpstat"><div class="k">Ср. цена лидеров (с СПП)</div><div class="v">${rub(n.avg_price)} <small>₽</small></div></div>`;
   if(n.our_rev!=null) h+=`<div class="mpstat"><div class="k">Этот товар / мес</div><div class="v">${rub(n.our_rev)} <small>₽</small></div></div>`;
   h+=`</div>`;
   h+=`<div class="mpnote">Ниша по типу товара: <b style="color:var(--txt)">${n.name||n.path||''}</b>${n.our_rank?` · этот товар <b style="color:var(--txt)">${n.our_rank}-е из ${n.total}</b> по выручке`:''}</div>`;
@@ -359,9 +359,9 @@ function nicheblock(n){
   }
   // свободные подниши рядом
   if(n.free&&n.free.items&&n.free.items.length){
-    h+=`<div class="mpsub"><span>Свободные подниши рядом · категория «${n.free.parent}»</span></div>`;
-    h+=n.free.items.map(f=>`<div class="nrow"><span class="q">${f.opp?'<span style="color:var(--gold)">★ </span>':''}${f.name}<em>${rub(f.brands)} брендов · рейтинг ${f.rating}</em></span><span class="pz">${rub(f.rev_per)} ₽/товар</span></div>`).join("");
-    h+=`<div class="mpnote" style="font-size:11.5px"><span style="color:var(--gold)">★</span> — окно: мало брендов + высокая выручка на товар (меньше конкуренции).</div>`;
+    h+=`<div class="mpsub"><span>Свободные подниши рядом · категория «${n.free.parent}»</span><span class="r">₽/товар = выручка на 1 товар в мес.</span></div>`;
+    h+=n.free.items.map(f=>`<div class="nrow"><span class="q">${f.opp?'<span style="color:var(--gold)">★ </span>':''}${f.name}<em>${rub(f.brands)} брендов · рейтинг ${f.rating}</em></span><span class="pz">${rub(f.rev_per)} ₽/товар/мес</span></div>`).join("");
+    h+=`<div class="mpnote" style="font-size:11.5px"><span style="color:var(--gold)">★</span> — окно: мало брендов + высокая выручка на товар в месяц (меньше конкуренции). «₽/товар/мес» = выручка подниши за месяц ÷ число продающихся товаров.</div>`;
   }
   h+=`</div>`; return h;
 }
