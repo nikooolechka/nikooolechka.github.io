@@ -1,7 +1,7 @@
 {
   "vk": {
     "subscribers": 47,
-    "posts": 92,
+    "posts": 93,
     "views": 3580,
     "url": "https://vk.com/asfarm_ru"
   },
@@ -20,16 +20,16 @@
   "tg": {
     "subscribers": 80,
     "posts": 126,
-    "views": 8204,
+    "views": 8215,
     "url": "https://t.me/asfarm_ru",
     "wcmp": {
       "subs": {
-        "cur": 77.43,
-        "prev": 71.0
+        "cur": 78.0,
+        "prev": 72.14
       },
       "views": {
-        "cur": 7862.57,
-        "prev": 7131.86
+        "cur": 7951.86,
+        "prev": 7242.43
       }
     }
   },
