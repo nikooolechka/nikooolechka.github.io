@@ -1,5 +1,5 @@
 {
-  "generated_at": "07.11.2026 13:52 МСК",
+  "generated_at": "07.11.2026 22:53 МСК",
   "services": [
     {
       "name": "Railway",
@@ -10,7 +10,7 @@
     },
     {
       "name": "Cloudflare Workers",
-      "value": "22 / 100k",
+      "value": "75 / 100k",
       "note": "Workers · приёмник+сторож остатков · /сут",
       "dot": "ok",
       "level": ""
@@ -24,10 +24,10 @@
     },
     {
       "name": "Scrapfly · соцсети",
-      "value": "900",
+      "value": "0",
       "note": "/ 1000 2-й акк · сброс 15-го",
-      "dot": "wip",
-      "level": "warn"
+      "dot": "ok",
+      "level": ""
     },
     {
       "name": "GitHub Actions",
