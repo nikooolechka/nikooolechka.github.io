@@ -2195,12 +2195,15 @@
         "posted_at": "2026-09-05T06:01:47.778214+00:00",
         "url": "https://vk.com/wall-239602265_90"
       },
-      "dzen": {},
+      "dzen": {
+        "released_at": "2026-11-07T06:00:14.659207+00:00"
+      },
       "tg": {
         "posted_at": "2026-09-14T06:01:03.693242+00:00",
         "url": "https://t.me/asfarm_ru/96"
       }
-    }
+    },
+    "_image_url": "https://nikooolechka.github.io/images/auto-детская-гигиена-в-рабоче.jpg"
   },
   {
     "title": "Смена средств гигиены по годам: от салфеток до ирригатора",
@@ -2536,7 +2539,10 @@
     },
     "channels": {
       "vc": {},
-      "vk": {},
+      "vk": {
+        "posted_at": "2026-11-07T06:00:21.381759+00:00",
+        "url": "https://vk.com/wall-239602265_108"
+      },
       "dzen": {},
       "tg": {
         "posted_at": "2026-09-29T06:01:00.264584+00:00",
@@ -3630,8 +3636,8 @@
         "url": null
       },
       "tg": {
-        "posted_at": null,
-        "url": null
+        "posted_at": "2026-11-07T06:00:22.330709+00:00",
+        "url": "https://t.me/asfarm_ru/152"
       }
     }
   },
