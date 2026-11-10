@@ -282,6 +282,8 @@ def main():
         else:
             it.pop("check_url", None)
     for it in data["items"]:
+        if it.get("status") == "paused":
+            continue  # приостановлено вручную — авто-обновлялка НЕ трогает
         m = CHECKS.get(it["id"])
         if not m:
             continue
