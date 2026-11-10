@@ -12,6 +12,12 @@ VC_REFRESH_TOKEN = os.environ.get("VC_REFRESH_TOKEN", "")
 VC_CREDS_PATH = os.environ.get("VC_CREDS_PATH", "/Users/nikol/Desktop/files/vc_creds.txt")
 USER_AGENT = "asfarm-poster/1.0"
 
+# --- ВРЕМЕННАЯ МЕРА (2026-11-10, владелец): убрать ВСЕ ссылки на маркетплейсы
+# (WB/Ozon/ЯМ/ДМ) из публикуемых постов во ВСЕХ каналах, пока нет ясности по
+# новому бренду. Остаются только картинка + текст/статья. Данные ссылок в
+# очереди СОХРАНЕНЫ — чтобы вернуть ссылки, поставить False.
+STRIP_MARKETPLACE_LINKS = True
+
 # --- ВКонтакте API ---
 # Токен сообщества с правами wall, manage. owner_id группы — ОТРИЦАТЕЛЬНЫЙ.
 VK_TOKEN = os.environ.get("VK_TOKEN", "")

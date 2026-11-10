@@ -34,6 +34,8 @@ def _paragraphs_html(body: str) -> str:
 
 
 def _links_html(links: dict) -> str:
+    if getattr(config, "STRIP_MARKETPLACE_LINKS", False):
+        return ""  # временная мера: ссылки на маркетплейсы убраны из постов
     if not links:
         return ""
     out = []

@@ -167,7 +167,7 @@ def do_channel_post(posts, channel, ClientCls, body_field, force=False):
             out = client.publish(
                 post["title"], body,
                 image_path=_abs_image(post.get("image")),
-                links=post.get("links"),
+                links=(None if getattr(config, "STRIP_MARKETPLACE_LINKS", False) else post.get("links")),
             )
         except Exception as e:
             print(f"{channel}: ошибка публикации «{post['id']}» ({e}); пробую следующий пост.")
