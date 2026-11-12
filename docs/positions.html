@@ -67,38 +67,43 @@ select option{background:#0e1420;color:var(--ink)}
   background:linear-gradient(180deg,rgba(34,211,238,.18),rgba(79,140,255,.12));
   border:1px solid rgba(34,211,238,.25);border-radius:7px;padding:4px 10px}
 
+.regrow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:14px}
 .reg{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
-  border-radius:var(--rad);margin-bottom:16px;overflow:hidden;box-shadow:var(--glow)}
-.reghd{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 18px;
+  border-radius:var(--rad);overflow:hidden;box-shadow:var(--glow);min-width:0}
+.reghd{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:11px 13px;
   border-bottom:1px solid var(--line2);position:relative}
-.reghd::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:3px;
+.reghd::before{content:"";position:absolute;left:0;top:9px;bottom:9px;width:3px;border-radius:3px;
   background:linear-gradient(180deg,var(--a1),var(--a2))}
-.reghd .rn{font-weight:700;font-size:16px;padding-left:8px}
-.reghd .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.chip{background:var(--chip);border:1px solid var(--line2);border-radius:999px;padding:3px 11px;font-size:12px;
-  color:var(--mut);font-variant-numeric:tabular-nums}
+.reghd .rn{font-weight:700;font-size:14.5px;padding-left:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reghd .meta{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.chip{background:var(--chip);border:1px solid var(--line2);border-radius:999px;padding:2px 8px;font-size:11px;
+  color:var(--mut);font-variant-numeric:tabular-nums;white-space:nowrap}
 .chip.our{background:var(--our);border-color:rgba(34,197,94,.3);color:var(--our-ink);font-weight:700}
 
-table{width:100%;border-collapse:collapse;font-size:14px}
-thead th{text-align:left;font-size:10.5px;letter-spacing:.9px;text-transform:uppercase;color:var(--faint);
-  padding:10px 18px;font-weight:700;background:rgba(255,255,255,.02)}
-tbody td{padding:9px 18px;border-top:1px solid var(--line2);vertical-align:middle}
+table{width:100%;border-collapse:collapse;font-size:12.5px;table-layout:fixed}
+thead th{text-align:left;font-size:9.5px;letter-spacing:.6px;text-transform:uppercase;color:var(--faint);
+  padding:7px 11px;font-weight:700;background:rgba(255,255,255,.02)}
+thead th.hp{width:36px;text-align:center;padding:7px 4px} thead th.hs{width:88px}
+tbody td{padding:6px 11px;border-top:1px solid var(--line2);vertical-align:middle;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 tbody tr:hover td{background:rgba(255,255,255,.022)}
-td.pos{width:66px;text-align:center}
+td.pos{width:36px;text-align:center;padding:6px 4px}
 .plain-pos{font-variant-numeric:tabular-nums;font-weight:700;color:#c4cede}
 td.nm{color:#d3dcea}
-td.sell{color:var(--faint);white-space:nowrap;max-width:230px;overflow:hidden;text-overflow:ellipsis;font-size:13px}
+td.sell{color:var(--faint);width:88px;font-size:11px}
 tr.our td{background:var(--our)}
 tr.our{box-shadow:inset 2px 0 0 var(--our-edge)}
 tr.our td.nm{color:var(--our-ink);font-weight:650}
 tr.our td.sell{color:#4fb978}
 tr.our:hover td{background:rgba(34,197,94,.16)}
-.ourpos{display:inline-block;min-width:30px;font-variant-numeric:tabular-nums;font-weight:800;color:#0a1a10;
-  background:linear-gradient(180deg,#36d96a,#1ea553);border-radius:8px;padding:2px 8px;box-shadow:0 2px 8px -2px rgba(34,197,94,.6)}
-.star{color:#ffd56b;margin-right:6px;text-shadow:0 0 8px rgba(255,200,80,.5)}
-.divrow td{background:rgba(255,255,255,.03);color:var(--faint);font-size:10.5px;text-transform:uppercase;
-  letter-spacing:1px;padding:6px 18px;font-weight:700;border-top:1px solid var(--line)}
-.nodata{padding:16px 18px;color:var(--faint);font-size:13.5px}
+.ourpos{display:inline-block;min-width:24px;font-variant-numeric:tabular-nums;font-weight:800;color:#0a1a10;
+  background:linear-gradient(180deg,#36d96a,#1ea553);border-radius:7px;padding:1px 5px;font-size:12px;box-shadow:0 2px 8px -2px rgba(34,197,94,.6)}
+.star{color:#ffd56b;margin-right:4px;text-shadow:0 0 8px rgba(255,200,80,.5)}
+.divrow td{background:rgba(255,255,255,.03);color:var(--faint);font-size:9.5px;text-transform:uppercase;
+  letter-spacing:.8px;padding:4px 11px;font-weight:700;border-top:1px solid var(--line);white-space:normal}
+.nodata{padding:13px;color:var(--faint);font-size:12.5px}
+@media(max-width:1000px){.regrow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.regrow{grid-template-columns:1fr}}
 
 .pcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-top:10px}
 .pcard{background:linear-gradient(180deg,var(--panel),var(--panel2));border:1px solid var(--line);
@@ -166,7 +171,14 @@ function render(){
   DATA.keys.filter(k=>!fk||k.key===fk).forEach(k=>{
     const sec=document.createElement('div');sec.className='keysec';
     sec.innerHTML=`<div class="keyhd"><h2><span class="q">«${esc(k.key)}»</span></h2>`+(k.group?`<span class="badge">${esc(k.group)}</span>`:'')+`</div>`;
-    k.regions.filter(r=>!fr||r.region===fr).forEach(r=>sec.appendChild(regionBlock(r)));
+    const regs=k.regions.filter(r=>!fr||r.region===fr);
+    for(let i=0;i<regs.length;i+=3){
+      const chunk=regs.slice(i,i+3);
+      const row=document.createElement('div');row.className='regrow';
+      row.style.gridTemplateColumns='repeat('+Math.min(3,chunk.length)+',minmax(0,1fr))';
+      chunk.forEach(r=>row.appendChild(regionBlock(r)));
+      sec.appendChild(row);
+    }
     C.appendChild(sec);
   });
 }
@@ -180,15 +192,16 @@ function regionBlock(r){
   const ours=r.rows.filter(x=>x.ours).map(x=>x.pos),best=ours.length?Math.min(...ours):null;
   let rows='';top.forEach(x=>rows+=rowHtml(x));
   if(below.length){rows+=`<tr class="divrow"><td colspan="3">наши ниже ТОП-15</td></tr>`;below.forEach(x=>rows+=rowHtml(x));}
-  box.innerHTML=`<div class="reghd"><span class="rn">${esc(r.region)}</span>
-    <span class="meta">${best!=null?`<span class="chip our">лучшее место: ${best}</span>`:''}<span class="chip">наших: ${ours.length}</span></span></div>
-    <table><thead><tr><th>Место</th><th>Товар</th><th>Продавец</th></tr></thead><tbody>${rows}</tbody></table>`;
+  box.innerHTML=`<div class="reghd"><span class="rn">${esc(r.region.split(',')[0])}</span>
+    <span class="meta">${best!=null?`<span class="chip our">★ ${best}</span>`:''}<span class="chip">${ours.length}</span></span></div>
+    <table><thead><tr><th class="hp">№</th><th>Товар</th><th class="hs">Продавец</th></tr></thead><tbody>${rows}</tbody></table>`;
   return box;
 }
 function rowHtml(x){
   const pos=x.ours?`<span class="ourpos">${x.pos}</span>`:`<span class="plain-pos">${x.pos}</span>`;
-  const nm=(x.ours?`<span class="star">★</span>`:'')+(x.ours&&x.art?esc(x.art)+' — ':'')+esc(x.name);
-  return `<tr class="${x.ours?'our':''}"><td class="pos">${pos}</td><td class="nm">${nm}</td><td class="sell">${esc(x.seller)}</td></tr>`;
+  const label=(x.ours&&x.art?esc(x.art)+' — ':'')+esc(x.name);
+  const nm=(x.ours?`<span class="star">★</span>`:'')+label;
+  return `<tr class="${x.ours?'our':''}"><td class="pos">${pos}</td><td class="nm" title="${label}">${nm}</td><td class="sell" title="${esc(x.seller)}">${esc(x.seller)}</td></tr>`;
 }
 function renderProduct(C,art,fk,fr){
   const h=document.createElement('div');h.className='keysec';
