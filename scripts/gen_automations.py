@@ -301,9 +301,35 @@ def update_services(data):
                 print("  actions calc:", str(e)[:70])
 
 
+def update_continuity_archive(data):
+    """Check the actual private weekly archive, without model or Railway calls."""
+    import base64
+    item = next((x for x in data.get('items', []) if x.get('id') == 'codex_continuity_archive'), None)
+    if item is None or item.get('status') == 'paused':
+        return
+    try:
+        response = _gh('https://api.github.com/repos/nikooolechka/asfarm-insurance/contents/last_backup.json?ref=continuity')
+        backup = json.loads(base64.b64decode(response['content']))
+        when = datetime.fromisoformat(backup['captured_at'])
+        age = (datetime.now(timezone.utc) - when).total_seconds() / 86400
+        manifests = backup.get('verification') or {}
+        if not backup.get('complete') or not manifests or not any(k.startswith('manifests/mac/') for k in manifests):
+            raise ValueError('неполный архив')
+        if age < -1:
+            raise ValueError('неверная дата архива')
+        stamp = when.astimezone(timezone(timedelta(hours=3))).strftime('%d.%m %H:%M')
+        item['status'] = 'ok' if age <= 9 else 'broken'
+        item['reason'] = ('Архив проверен ' + stamp + ' МСК · ' + str(len(manifests)) + ' снимка') if age <= 9 else ('Недельный архив просрочен: последний ' + stamp + ' МСК')
+    except Exception:
+        item['status'] = 'broken'
+        item['reason'] = 'Не удалось проверить приватный архив; свежесть не подтверждена'
+
+
+
 def main():
     data = json.load(open(DOCS, encoding="utf-8"))
     update_services(data)
+    update_continuity_archive(data)
     # ссылка «Проверить прогон» на каждую карточку: страница последнего запуска её
     # воркфлоу на GitHub (🟢 прошёл / 🔴 упал + время). Для ПК-парсеров цен (нет своего
     # облачного воркфлоу) — ведём на «Сторож цен», который и проверяет их свежесть.
