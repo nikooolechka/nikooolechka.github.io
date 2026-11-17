@@ -123,7 +123,11 @@ def _railway_cost(tok, ws):
                  "User-Agent": "Mozilla/5.0 (dashboard usage reader)"})
     with urllib.request.urlopen(req, timeout=25, context=_CTX) as r:
         d = json.loads(r.read().decode())
-    rows = (d.get("data") or {}).get("estimatedUsage") or []
+    if d.get("errors"):
+        raise RuntimeError("Railway API rejected usage query")
+    rows = (d.get("data") or {}).get("estimatedUsage")
+    if not isinstance(rows, list) or not rows:
+        raise RuntimeError("Railway usage measurements unavailable")
     mem = sum(x["estimatedValue"] for x in rows if x["measurement"] == "MEMORY_USAGE_GB")
     cpu = sum(x["estimatedValue"] for x in rows if x["measurement"] == "CPU_USAGE")
     CYCLE_MIN = 43800.0  # 730 ч — тарифный «месяц» Railway
@@ -155,10 +159,13 @@ def update_services(data):
             try:
                 est = _railway_cost(tok, "f77f76b2-43eb-48cb-b885-f260662b0eeb")
                 s["value"] = f"~${est:.2f}/мес"
-                s["note"] = "из $5 · списано $0 · сон"
+                s["note"] = "оценка ресурсов по API · Hobby $5/мес"
                 s["level"], s["dot"] = _lvl(est / 5.0)
                 print(f"  Railway: прогноз ~${est:.2f}/мес")
             except Exception as e:
+                s["value"] = "расход не проверен"
+                s["note"] = "нет подтверждённых данных API · Hobby $5/мес"
+                s["level"], s["dot"] = "warn", "wip"
                 print("  railway:", str(e)[:80])
         elif nm.startswith("Cloudflare"):  # Workers free 100k/сут — приёмник+сторож остатков (не Яндекс/GitHub)
             tok = os.environ.get("CF_TOKEN", "").strip(); acc = os.environ.get("CF_ACCOUNT", "").strip()
