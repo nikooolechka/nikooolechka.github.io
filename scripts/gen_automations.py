@@ -112,10 +112,14 @@ def _scrapfly(key):
 
 
 def _railway_cost(tok, ws):
-    # read-only токен → estimatedUsage (ГБ-мин RAM + vCPU-мин CPU за цикл) → $ по тарифу Railway.
-    # прямого поля "$" API не отдаёт (Railway сам так же считает из сырых цифр); совпадает с Estimated Bill ±копейки.
-    q = ('query{estimatedUsage(measurements:[MEMORY_USAGE_GB,CPU_USAGE],workspaceId:"%s")'
-         '{measurement estimatedValue}}') % ws
+    # Read queries only. Workspace tokens themselves also permit mutations.
+    import math
+    q = ('query{workspace(workspaceId:"%s"){plan customer{currentUsage '
+         'billingPeriod{start end} usageLimit{hardLimit softLimit} '
+         'subscriptions{status nextInvoiceCurrentTotal}}} '
+         'estimatedUsage(workspaceId:"%s",includeDeleted:true,'
+         'measurements:[MEMORY_USAGE_GB,CPU_USAGE,NETWORK_TX_GB,DISK_USAGE_GB,BACKUP_USAGE_GB])'
+         '{measurement estimatedValue}}') % (ws, ws)
     req = urllib.request.Request(
         "https://backboard.railway.com/graphql/v2",
         data=json.dumps({"query": q}).encode(),
@@ -125,13 +129,36 @@ def _railway_cost(tok, ws):
         d = json.loads(r.read().decode())
     if d.get("errors"):
         raise RuntimeError("Railway API rejected usage query")
-    rows = (d.get("data") or {}).get("estimatedUsage")
+    body = d.get("data") or {}
+    rows = body.get("estimatedUsage")
     if not isinstance(rows, list) or not rows:
         raise RuntimeError("Railway usage measurements unavailable")
-    mem = sum(x["estimatedValue"] for x in rows if x["measurement"] == "MEMORY_USAGE_GB")
-    cpu = sum(x["estimatedValue"] for x in rows if x["measurement"] == "CPU_USAGE")
-    CYCLE_MIN = 43800.0  # 730 ч — тарифный «месяц» Railway
-    return mem / CYCLE_MIN * 10.0 + cpu / CYCLE_MIN * 20.0  # $10/ГБ-мес RAM + $20/vCPU-мес CPU
+    # 30-day tariff month, not the length of this customer's billing cycle.
+    # GB-min / vCPU-min and egress GB. Backups use volume pricing.
+    rates = {"MEMORY_USAGE_GB": 10.0 / 43200, "CPU_USAGE": 20.0 / 43200,
+             "NETWORK_TX_GB": 0.05, "DISK_USAGE_GB": 0.15 / 43200,
+             "BACKUP_USAGE_GB": 0.15 / 43200}
+    def number(value):
+        if type(value) not in (int, float) or not math.isfinite(value) or value < 0:
+            raise RuntimeError("Invalid Railway billing value")
+        return value
+    forecast = 0.0
+    for x in rows:
+        measurement = x.get("measurement")
+        if measurement not in rates:
+            raise RuntimeError("Unsupported Railway billing measurement")
+        forecast += number(x.get("estimatedValue")) * rates[measurement]
+    if not {"MEMORY_USAGE_GB", "CPU_USAGE"}.issubset({x.get("measurement") for x in rows}):
+        raise RuntimeError("Incomplete Railway usage measurements")
+    workspace = body.get("workspace") or {}
+    customer = workspace.get("customer") or {}
+    subscriptions = [x for x in customer.get("subscriptions", []) if x.get("status") == "active"]
+    if not subscriptions or not workspace.get("plan"):
+        raise RuntimeError("Railway subscription data unavailable")
+    return {"forecast": forecast, "current": number(customer.get("currentUsage")),
+            "invoice": sum(number(x.get("nextInvoiceCurrentTotal")) for x in subscriptions) / 100.0,
+            "plan": workspace["plan"].capitalize(), "period": customer.get("billingPeriod"),
+            "limit": (customer.get("usageLimit") or {}).get("hardLimit")}
 
 
 def update_services(data):
@@ -152,16 +179,19 @@ def update_services(data):
                     print(f"  {nm}: {cur}/{lim}")
             except Exception as e:
                 print("  scrapfly", env, ":", str(e)[:60])
-        elif nm.startswith("Railway"):  # платный Hobby $5/мес — следим за $ через read-only токен
+        elif nm.startswith("Railway"):  # Счёт API и ресурсы показываем отдельно
             tok = os.environ.get("RAILWAY_TOKEN", "").strip()
-            if not tok:
-                continue
             try:
-                est = _railway_cost(tok, "f77f76b2-43eb-48cb-b885-f260662b0eeb")
-                s["value"] = f"~${est:.2f}/мес"
-                s["note"] = "оценка ресурсов по API · Hobby $5/мес"
-                s["level"], s["dot"] = _lvl(est / 5.0)
-                print(f"  Railway: прогноз ~${est:.2f}/мес")
+                if not tok:
+                    raise RuntimeError("Railway token missing")
+                bill = _railway_cost(tok, "f77f76b2-43eb-48cb-b885-f260662b0eeb")
+                s["value"] = f"${bill['invoice']:.2f} счёт"
+                limit = bill["limit"]
+                limit_note = f"лимит ${limit:g}" if limit is not None else "без жёсткого лимита"
+                s["note"] = (f"{bill['plan']} · ресурсы ${bill['current']:.2f} · "
+                             f"прогноз ~${bill['forecast']:.2f} · {limit_note}")
+                s["level"], s["dot"] = _lvl(bill["forecast"] / (limit or 5.0))
+                print(f"  Railway: счёт ${bill['invoice']:.2f}; ресурсы ~${bill['forecast']:.2f}")
             except Exception as e:
                 s["value"] = "расход не проверен"
                 s["note"] = "нет подтверждённых данных API · Hobby $5/мес"
