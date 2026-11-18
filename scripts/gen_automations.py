@@ -308,11 +308,13 @@ def update_continuity_archive(data):
     if item is None or item.get('status') == 'paused':
         return
     try:
-        response = _gh('https://api.github.com/repos/nikooolechka/asfarm-insurance/contents/last_backup.json?ref=continuity')
+        response = _gh('https://api.github.com/repos/nikooolechka/asfarm-insurance/contents/history/last_backup.json?ref=main')
         backup = json.loads(base64.b64decode(response['content']))
         when = datetime.fromisoformat(backup['captured_at'])
         age = (datetime.now(timezone.utc) - when).total_seconds() / 86400
         manifests = backup.get('verification') or {}
+        if backup.get('branch') != 'main' or backup.get('format') != 'asfarm-unified-archive-v1':
+            raise ValueError('не подтверждено объединение архива')
         if not backup.get('complete') or not manifests or not any(k.startswith('manifests/mac/') for k in manifests):
             raise ValueError('неполный архив')
         if age < -1:
