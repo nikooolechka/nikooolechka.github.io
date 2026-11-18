@@ -21,6 +21,7 @@ DOCS = os.path.join(HERE, "..", "docs", "automations.json")
 
 # id -> (repo, файл воркфлоу, макс. возраст успешного прогона в часах)
 CHECKS = {
+    "wb_search_positions": (OZ, "wb_search_positions.yml", 30),
     "price_wb":        (OZ, "wb_prices.yml", 30),
     "dm_prices":       (OZ, "dm_prices.yml", 30),
     "price_watchdog":  (OZ, "price_watchdog.yml", 20),
