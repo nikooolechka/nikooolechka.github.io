@@ -1337,6 +1337,16 @@
       "launched": "2026-11-19",
       "link": "https://docs.google.com/spreadsheets/d/1Gz0zU-fT34Tr3LG-WSMZFVy5sgAFgjyC880_79S3Wms/edit#gid=191126721",
       "link_label": "Сводка ИП за ноябрь"
+    },
+    {
+      "id": "ip_december_scale_same_tab_20261119",
+      "name": "Декабрьская сводка ИП под ноябрьской",
+      "category": "В работе и планах",
+      "status": "planned",
+      "schedule": "По запросу",
+      "details": "Задача (дословно): «очень полезно. завтра попрошу еще с учетом потребности сделать такую же таблицу ниже с учетом декабря. в этой же вкладке.». Та же вкладка и тот же формат. Для каждого артикула к оставшемуся долгу прибавляется декабрьская потребность.",
+      "link": "https://docs.google.com/spreadsheets/d/1Gz0zU-fT34Tr3LG-WSMZFVy5sgAFgjyC880_79S3Wms/edit#gid=191126721",
+      "link_label": "Рабочая сводка ИП"
     }
   ],
   "drift": [
