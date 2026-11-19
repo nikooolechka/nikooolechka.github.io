@@ -22,7 +22,6 @@ DOCS = os.path.join(HERE, "..", "docs", "automations.json")
 # id -> (repo, файл воркфлоу, макс. возраст успешного прогона в часах)
 CHECKS = {
     # WB positions are orchestrated by n8n; the old GitHub workflow is disabled.
-    "price_wb":        (OZ, "wb_prices.yml", 30),
     "oz_reviews_weekly": (OZ, "oz_reviews_weekly.yml", 200),
     "oferta":          (OZ, "check.yml", 30),
     "gab_wb":          (OZ, "wb_gabariti_monitor.yml", 200),
@@ -218,38 +217,21 @@ def update_services(data):
             if up:
                 s["value"], s["dot"], s["level"] = "онлайн", "ok", ""
             else:
-                s["value"], s["dot"], s["level"] = "по расписанию", "ok", ""  # жив, но из облака не пингуется
+                s["value"], s["dot"], s["level"] = "связь не подтверждена", "wip", "warn"  # жив, но из облака не пингуется
             print("  Удалённый ПК:", s["value"])
         elif nm.startswith("Anthropic"):  # у Anthropic нет API остатка баланса → живой пинг: ключ отвечает / кредиты кончились
             key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
             if not key:
                 continue
-            body = json.dumps({"model": "claude-haiku-4-5", "max_tokens": 1,
-                               "messages": [{"role": "user", "content": "."}]}).encode()
-            req = urllib.request.Request(
-                "https://api.anthropic.com/v1/messages", data=body,
-                headers={"x-api-key": key, "anthropic-version": "2023-06-01",
-                         "content-type": "application/json"})
+            req=urllib.request.Request("https://api.anthropic.com/v1/models",headers={"x-api-key":key,"anthropic-version":"2023-06-01"})
             try:
-                with urllib.request.urlopen(req, timeout=25, context=_CTX) as r:
-                    r.read()
-                s["value"], s["note"] = "есть кредиты", "запас Claude (дайджест на Gemini)"
-                s["dot"], s["level"] = "ok", ""
-                print("  Anthropic: есть кредиты")
-            except urllib.error.HTTPError as e:
-                try:
-                    txt = e.read().decode("utf-8", "ignore")
-                except Exception:
-                    txt = ""
-                if "credit balance is too low" in txt:
-                    s["value"], s["note"] = "кредиты кончились", "не критично: дайджест на Gemini, оферты — фолбэк"
-                    s["dot"], s["level"] = "wip", "warn"
-                else:
-                    s["value"], s["note"] = "ошибка проверки", f"HTTP {e.code}"
-                    s["dot"], s["level"] = "wip", "warn"
-                print("  Anthropic:", s["value"])
-            except Exception as e:
-                print("  anthropic:", str(e)[:60])  # сеть/таймаут — статус не трогаем
+                with urllib.request.urlopen(req,timeout=25,context=_CTX)as r: models=json.loads(r.read())
+                if not isinstance(models.get('data'),list):raise ValueError('Invalid models response')
+                s['value'],s['note']='API доступен','авторизация проверена; остаток кредитов API не раскрывает'
+                s['dot'],s['level']='ok',''
+            except Exception:
+                s['value'],s['note']='доступ не подтверждён','проверка авторизации не прошла; причина в журнале'
+                s['dot'],s['level']='wip','warn'
         elif nm == "GitHub Actions":
             # GitHub убил billing-эндпоинт (404). Считаем сами: сумма длительностей
             # прогонов ПРИВАТНЫХ репо за текущий месяц, каждый округляем вверх до минуты
@@ -320,6 +302,46 @@ def update_continuity_archive(data):
 
 
 
+N8N_CHECKS = {'price_wb': ['eOJAWTlgXtZBwIPJ', 3], 'price_watchdog': ['4XHP8gqRcTWGR8LZ', 30], 'unanswered_qa_monitor': ['R8x57gHdbp4A7RYD', 4], 'reviews_weekly': ['3oxxCbBaLIT6ITQL', 28], 'reviews_archive': ['3oxxCbBaLIT6ITQL', 28], 'gab_unit': ['dSxunW3dt5TpcNZb', 7], 'gab_oz_card': ['SjwRoQCRBllf8om0', 30], 'arrivals': ['jEn2seCVh1XlqkVc', 30], 'dategot_sync_n8n_20261119': ['dXJlpENkRQ0CEpda', 3], 'mail_forward_n8n_20261119': ['LxAAMuHLDsrvyJoi', 1], 'ga_cert_monitor': ['dwiak6nGkkFx7JdZ', 200], 'ga_offer': ['tqALHHSSHHdXf929', 3], 'ga_report_alert': ['ubPaNtrpARTtkc5U', 4], 'ga_notifications_monitor': ['Lv6Q6eKBi5na3FHk', 1], 'ga_cards_status_monitor': ['XnZojrVU76Ato8Qk', 30], 'ga_parity_monitor': ['ekU6bakxvo704Zzq', 30], 'newcomers_monitor': ['O2CQYfWAgZSlwUJk', 30], 'plesen': ['8LMzBViIfuBqbxQO', 150], 'dm_prices': ['fkl7F5jB2uJHIRwb', 30], 'wb_search_positions': ['pVe3jJdcr0Kse1cF', 28], 'oz_search_positions': ['oW0mLAopPBkYTHf3', 24], 'search_positions_watchdog_20261119': ['9WgDdRI7W6ygT8gh', 1]}
+def n8n_api(path):
+    key=os.environ.get('N8N_API_KEY','').strip()
+    if not key:raise RuntimeError('Missing n8n access')
+    req=urllib.request.Request(os.environ.get('N8N_BASE','http://82.148.225.41:5678/api/v1/')+path,headers={'X-N8N-API-KEY':key})
+    with urllib.request.urlopen(req,timeout=25,context=_CTX)as r:return json.loads(r.read())
+def n8n_result_error(ex):
+    rd=ex.get('data',{}).get('resultData',{})
+    if ex.get('status')!='success' or rd.get('error'):return 'прогон завершился ошибкой'
+    last=rd.get('lastNodeExecuted');runs=rd.get('runData',{})
+    for name,attempts in runs.items():
+        if name!=last and not any('stdout'in (i.get('json')or{})for a in attempts for branch in a.get('data',{}).get('main',[])for i in (branch or[])):continue
+        for a in attempts:
+            if a.get('error'):return 'ошибка узла '+name
+            for branch in a.get('data',{}).get('main',[]):
+                for item in branch or[]:
+                    j=item.get('json')or{}
+                    if 'stdout'in j:
+                        try:j=json.loads(j['stdout'])
+                        except Exception:continue
+                    if j.get('ok')is False or j.get('error')or j.get('apiError')or (isinstance(j.get('failed'),int)and j['failed']>0):return 'исполнитель не подтвердил конечный результат'
+                    if j.get('status')in ['waiting_api_window','api_rate_limited','waiting_shared_api_window']:return 'получение данных продолжается с учётом лимита API'
+    return ''
+def check_n8n(wid,max_age_h):
+    try:
+        w=n8n_api('workflows/'+wid)
+        if not w.get('active'):return ('broken','процесс n8n выключен')
+        runs=n8n_api('executions?workflowId='+wid+'&limit=2').get('data',[])
+        if not runs:return ('wip','новый процесс; штатный запуск ещё не наблюдался')
+        latest=runs[0]
+        if latest.get('status')in ['running','waiting','new']:
+            if len(runs)<2:return ('wip','идёт проверка')
+            latest=runs[1]
+        when=datetime.fromisoformat(latest['startedAt'].replace('Z','+00:00'))
+        if (datetime.now(timezone.utc)-when).total_seconds()>max_age_h*3600:return ('broken','нет своевременного запуска n8n')
+        ex=n8n_api('executions/'+str(latest['id'])+'?includeData=true');err=n8n_result_error(ex)
+        if err:return ('wip'if err.startswith('получение')else'broken',err)
+        return ('ok','n8n: результат проверен '+when.astimezone(timezone(timedelta(hours=3))).strftime('%d.%m %H:%M'))
+    except Exception:return ('wip','доступ к проверке n8n не подтверждён')
+
 def main():
     data = json.load(open(DOCS, encoding="utf-8"))
     update_services(data)
@@ -328,8 +350,6 @@ def main():
     # воркфлоу на GitHub (🟢 прошёл / 🔴 упал + время). Для ПК-парсеров цен (нет своего
     # облачного воркфлоу) — ведём на «Сторож цен», который и проверяет их свежесть.
     CHECK_EXTRA = {
-        "price_oz": (OZ, "price_watchdog.yml"),
-        "price_ym": (OZ, "price_watchdog.yml"),
         "oz_reviews_auto": (OZ, "oz_reviews_weekly.yml"),
     }
     for it in data["items"]:
@@ -341,6 +361,11 @@ def main():
     for it in data["items"]:
         if it.get("status") == "paused":
             continue  # приостановлено вручную — авто-обновлялка НЕ трогает
+        nm=N8N_CHECKS.get(it['id'])
+        if nm:
+            it['status'],it['reason']=check_n8n(*nm)
+            it['check_url']='http://82.148.225.41:5678/workflow/'+nm[0]
+            continue
         m = CHECKS.get(it["id"])
         if not m:
             continue
