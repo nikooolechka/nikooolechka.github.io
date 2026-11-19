@@ -206,19 +206,31 @@ def update_services(data):
             except Exception as e:
                 print("  cloudflare:", str(e)[:80])
         elif nm.startswith("Удал"):  # Удалённый ПК — связь (из облака порты часто закрыты фаерволом → НЕ красним ложно)
-            host = os.environ.get("REMOTE_PC_HOST", "").strip()
-            up = False
-            if host:
-                for port in (3380, 3389, 22):
-                    try:
-                        socket.create_connection((host, port), timeout=6).close(); up = True; break
-                    except Exception:
-                        pass
-            if up:
-                s["value"], s["dot"], s["level"] = "онлайн", "ok", ""
-            else:
-                s["value"], s["dot"], s["level"] = "связь не подтверждена", "wip", "warn"  # жив, но из облака не пингуется
-            print("  Удалённый ПК:", s["value"])
+            try:
+                from google.oauth2 import service_account
+                from google.auth.transport.requests import Request
+                from zoneinfo import ZoneInfo
+                import re as _re
+                sa=json.loads(os.environ['GSHEETS_SA_JSON'])
+                creds=service_account.Credentials.from_service_account_info(sa,scopes=['https://www.googleapis.com/auth/spreadsheets.readonly'])
+                creds.refresh(Request())
+                u='https://sheets.googleapis.com/v4/spreadsheets/1Gz0zU-fT34Tr3LG-WSMZFVy5sgAFgjyC880_79S3Wms/values/'+urllib.parse.quote('Лист1!A4:C4')
+                req=urllib.request.Request(u,headers={'Authorization':'Bearer '+creds.token})
+                with urllib.request.urlopen(req,timeout=20,context=_CTX)as r: cells=json.loads(r.read()).get('values',[[]])[0]
+                states=[]
+                now=datetime.now(ZoneInfo('Europe/Moscow'))
+                for name,index in [('AF-BOT',2),('Lazareva',0)]:
+                    v=str(cells[index]if len(cells)>index else'')
+                    m=_re.search(r'(\d{4}-\d{2}-\d{2})[ T](\d{2}:\d{2}:\d{2})',v)
+                    stamp=datetime.fromisoformat(m.group(1)+'T'+m.group(2)).replace(tzinfo=ZoneInfo('Europe/Moscow'))if m else None
+                    age=(now-stamp).total_seconds()if stamp else None
+                    states.append((name,age is not None and -30<=age<=600))
+                s['value']=' · '.join(name+(': на связи'if live else': нет свежего сигнала')for name,live in states)
+                s['note']='Сигналы агентов C4/A4, до 10 минут. AF-BOT основной, Lazareva резерв; это не проверка формы 1С.'
+                s['dot'],s['level']=('ok','')if all(live for _,live in states)else('wip','warn')
+            except Exception:
+                s['value'],s['dot'],s['level']='связь не подтверждена','wip','warn'
+            print('  Удалённые ПК:',s['value'])
         elif nm.startswith("Anthropic"):  # у Anthropic нет API остатка баланса → живой пинг: ключ отвечает / кредиты кончились
             key = os.environ.get("ANTHROPIC_API_KEY", "").strip()
             if not key:
@@ -302,7 +314,7 @@ def update_continuity_archive(data):
 
 
 
-N8N_CHECKS = {'price_wb': ['eOJAWTlgXtZBwIPJ', 3], 'price_watchdog': ['4XHP8gqRcTWGR8LZ', 30], 'unanswered_qa_monitor': ['R8x57gHdbp4A7RYD', 4], 'reviews_weekly': ['3oxxCbBaLIT6ITQL', 28], 'reviews_archive': ['3oxxCbBaLIT6ITQL', 28], 'gab_unit': ['dSxunW3dt5TpcNZb', 7], 'gab_oz_card': ['SjwRoQCRBllf8om0', 30], 'arrivals': ['jEn2seCVh1XlqkVc', 30], 'dategot_sync_n8n_20261119': ['dXJlpENkRQ0CEpda', 3], 'mail_forward_n8n_20261119': ['LxAAMuHLDsrvyJoi', 1], 'ga_cert_monitor': ['dwiak6nGkkFx7JdZ', 200], 'ga_offer': ['tqALHHSSHHdXf929', 3], 'ga_report_alert': ['ubPaNtrpARTtkc5U', 4], 'ga_notifications_monitor': ['Lv6Q6eKBi5na3FHk', 1], 'ga_cards_status_monitor': ['XnZojrVU76Ato8Qk', 30], 'ga_parity_monitor': ['ekU6bakxvo704Zzq', 30], 'newcomers_monitor': ['O2CQYfWAgZSlwUJk', 30], 'plesen': ['8LMzBViIfuBqbxQO', 150], 'dm_prices': ['fkl7F5jB2uJHIRwb', 30], 'wb_search_positions': ['pVe3jJdcr0Kse1cF', 28], 'oz_search_positions': ['oW0mLAopPBkYTHf3', 24], 'search_positions_watchdog_20261119': ['9WgDdRI7W6ygT8gh', 1]}
+N8N_CHECKS = {'price_wb': ['eOJAWTlgXtZBwIPJ', 3], 'price_watchdog': ['4XHP8gqRcTWGR8LZ', 30], 'unanswered_qa_monitor': ['R8x57gHdbp4A7RYD', 4], 'reviews_weekly': ['3oxxCbBaLIT6ITQL', 28], 'reviews_archive': ['3oxxCbBaLIT6ITQL', 28], 'gab_unit': ['dSxunW3dt5TpcNZb', 7], 'gab_oz_card': ['SjwRoQCRBllf8om0', 30], 'arrivals': ['jEn2seCVh1XlqkVc', 30], 'dategot_sync_n8n_20261119': ['dXJlpENkRQ0CEpda', 3], 'mail_forward_n8n_20261119': ['LxAAMuHLDsrvyJoi', 1], 'ga_cert_monitor': ['dwiak6nGkkFx7JdZ', 200], 'ga_offer': ['tqALHHSSHHdXf929', 3], 'ga_report_alert': ['ubPaNtrpARTtkc5U', 4], 'ga_notifications_monitor': ['Lv6Q6eKBi5na3FHk', 1], 'ga_cards_status_monitor': ['XnZojrVU76Ato8Qk', 30], 'ga_parity_monitor': ['ekU6bakxvo704Zzq', 30], 'newcomers_monitor': ['O2CQYfWAgZSlwUJk', 30], 'plesen': ['8LMzBViIfuBqbxQO', 150], 'dm_prices': ['fkl7F5jB2uJHIRwb', 30], 'price_history_n8n_20261119': ['JIGzZSPtaMRT4gbF', 30], 'wb_search_positions': ['pVe3jJdcr0Kse1cF', 28], 'oz_search_positions': ['oW0mLAopPBkYTHf3', 24], 'search_positions_watchdog_20261119': ['9WgDdRI7W6ygT8gh', 1]}
 def n8n_api(path):
     key=os.environ.get('N8N_API_KEY','').strip()
     if not key:raise RuntimeError('Missing n8n access')
